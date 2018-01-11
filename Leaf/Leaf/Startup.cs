@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Leaf.Models;
 using Leaf.Services;
+using NonFactors.Mvc.Grid;
 
 namespace Leaf
 {
@@ -36,6 +37,7 @@ namespace Leaf
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
+            services.AddMvcGrid();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

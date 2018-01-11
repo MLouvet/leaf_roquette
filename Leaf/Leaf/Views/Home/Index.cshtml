@@ -1,7 +1,30 @@
-﻿@{
+﻿
+@using NonFactors.Mvc.Grid;
+@model IEnumerable<Tache>
+@{
     ViewData["Title"] = "Accueil";
 }
 
+<div>
+    Updates
+</div>
+<div>
+    Tâches personnelles
+
+
+    @(Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(model => model.ChargeEstimee).Titled("Charge");
+            columns.Add(model => model.Nom).Titled("Tâche");
+        })
+        .Filterable()
+        .Sortable()
+        .Pageable()
+    )
+
+</div>
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
     <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>

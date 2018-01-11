@@ -12,7 +12,8 @@ namespace Leaf.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            IDal d = new Dal();
+            return View(d.GetTaches(null));
         }
 
         public IActionResult About()
