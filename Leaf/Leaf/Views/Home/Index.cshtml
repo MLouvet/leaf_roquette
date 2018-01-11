@@ -17,7 +17,8 @@
         .Build(columns =>
         {
             columns.Add(model => model.ChargeEstimee).Titled("Charge");
-            columns.Add(model => model.Nom).Titled("Tâche");
+            columns.Add(model => model.Nom).Titled("Tâche").Sortable(true);
+            columns.Add(model => model.Debut).Titled("Date de début").Sortable(true);
         })
         .Filterable()
         .Sortable()
