@@ -9,14 +9,16 @@ namespace Leaf.Models.AccountViewModels
     public class LoginViewModel
     {
         [Required]
+        [Display(Name = "Adresse e-mail")]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
+        [Display(Name = "Mot de passe")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Retenir mes identifiants sur cette machine")]
         public bool RememberMe { get; set; }
     }
 }
