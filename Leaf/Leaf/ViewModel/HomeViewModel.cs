@@ -1,14 +1,15 @@
 ﻿using Leaf.Models;
+using Leaf.ScaffoldedModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Leaf.ViewModel
+namespace Leaf
 {
     public class HomeViewModel
     {
-        private List<Notification> notifications;
-        private List<Tache> taches;
+        public List<Notification> notifications;
+        public List<Tache> taches;
     }
 }

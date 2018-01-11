@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Leaf.Models;
 
@@ -12,8 +8,11 @@ namespace Leaf.Controllers
     {
         public IActionResult Index()
         {
-            IDal d = new Dal();
-            return View(d.GetTaches(null));
+            //    IDal d = new Dal();
+            //    Collaborateurs c = null;
+            HomeViewModel model = new HomeViewModel();
+
+            return View(model);
         }
 
         public IActionResult About()
