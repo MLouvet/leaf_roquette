@@ -5,6 +5,10 @@
     <UserSecretsId>aspnet-Leaf-84BEB9C2-D4E8-4A71-B545-9920DB4611C1</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove=".sql" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.2.0" />
