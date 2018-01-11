@@ -15,6 +15,7 @@ namespace Leaf.Models
         public virtual DbSet<SuperAdmin> SuperAdmin { get; set; }
         public virtual DbSet<Tache> Tache { get; set; }
 
+        public LeafDbContext() : base() { }
         public LeafDbContext(DbContextOptions<LeafDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
