@@ -1,1 +1,1 @@
-INSERT INTO [dbo].[SuperAdmin] ([Id]) VALUES (9)
+INSERT INTO [Leaf].[SuperAdmin] ([Id]) VALUES (9)

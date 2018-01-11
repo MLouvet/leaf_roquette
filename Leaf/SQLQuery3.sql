@@ -1,4 +1,4 @@
-/* Drop all Foreign Key constraints */
+﻿/* Drop all Foreign Key constraints */
 DECLARE @name VARCHAR(128)
 DECLARE @constraint VARCHAR(254)
 DECLARE @SQL VARCHAR(254)
