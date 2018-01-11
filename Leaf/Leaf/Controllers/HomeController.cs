@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Leaf.Models;
+using Leaf.ScaffoldedModels;
+using System.Collections.Generic;
 
 namespace Leaf.Controllers
 {
@@ -11,6 +13,8 @@ namespace Leaf.Controllers
             //    IDal d = new Dal();
             //    Collaborateurs c = null;
             HomeViewModel model = new HomeViewModel();
+            model.notifications = new List<Notification>();
+            model.taches = new List<Tache>();
 
             return View(model);
         }
