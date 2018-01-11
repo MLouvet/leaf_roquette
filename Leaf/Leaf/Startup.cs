@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Leaf.Data;
 using Leaf.Models;
 using Leaf.Services;
 
@@ -26,11 +25,11 @@ namespace Leaf
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<LeafDbContext>(options =>
+                options.UseSqlServer(@"Data Source = (LocalDb)\MSSQLLocalDB;Database=mainDb; Integrated Security = True"));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<LeafDbContext>()
                 .AddDefaultTokenProviders();
 
             // Add application services.
