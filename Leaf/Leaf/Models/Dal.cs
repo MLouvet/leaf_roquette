@@ -11,7 +11,22 @@ namespace Leaf.Models
 
         public Dal() { bdd = new LeafDbContext(); }
 
+        public List<Notification> DeleteNotification(Collaborateurs c, Notification n)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Notification> GetNotifications(Collaborateurs c)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Notification> GetRecentNotifications(Collaborateurs c, int n)
         {
             throw new NotImplementedException();
         }
@@ -37,6 +52,11 @@ namespace Leaf.Models
                 IdProjNavigation = p2
             };
             return new List<Tache>() { t1, t2 };
+        }
+
+        public List<Notification> ReadNotification(Collaborateurs c, Notification n)
+        {
+            throw new NotImplementedException();
         }
     }
 }
