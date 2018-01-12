@@ -33,7 +33,10 @@ namespace Leaf.Web.Models
 
         public Collaborateurs GetCollaborateurs(int id)
         {
-            return bdd.Collaborateurs.Where(c => c.Id == id).First();
+            IEnumerable<Collaborateurs> co = bdd.Collaborateurs.Where(c => c.Id == id);
+            if (co.Count() == 0)
+                return new Collaborateurs();
+            return co.First();
         }
 
         public List<Notification> GetNotifications(Collaborateurs c)
@@ -43,7 +46,10 @@ namespace Leaf.Web.Models
 
         public Projet GetProjet(int id)
         {
-            return bdd.Projet.Where(p => p.Id == id).First();
+            IEnumerable<Projet> pr = bdd.Projet.Where(p => p.Id == id);
+            if (pr.Count() == 0)
+                return new Projet();
+            return pr.First();
         }
 
         public List<Notification> GetRecentNotifications(Collaborateurs c, int n)
@@ -59,7 +65,10 @@ namespace Leaf.Web.Models
 
         public Tache GetTache(int id)
         {
-            return bdd.Tache.Where(t => t.Id == id).First();
+            IEnumerable<Tache> ta = bdd.Tache.Where(t => t.Id == id);
+            if (ta.Count() == 0)
+                return new Tache();
+            return ta.First();
         }
 
         public List<Tache> GetTaches(Collaborateurs c)
