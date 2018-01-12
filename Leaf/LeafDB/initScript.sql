@@ -87,16 +87,6 @@ CREATE TABLE [Collaborateurs] (
 );
 GO
 
-CREATE TABLE [Notification] (
-    [Id]           INT           IDENTITY (1, 1) NOT NULL,
-    [message]      VARCHAR (MAX) NOT NULL,
-    [lue]          BIT           NOT NULL,
-    [horodatage]   DATETIME      NOT NULL,
-    [destinataire] INT           NOT NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [Fk_notification_to] FOREIGN KEY ([destinataire]) REFERENCES [Collaborateurs] ([Id])
-);
-GO
 
 CREATE TABLE [Admin] (
     [Id] INT NOT NULL,
@@ -144,6 +134,22 @@ CREATE TABLE [Tache] (
 );
 GO
 
+
+CREATE TABLE [Notification] (
+    [Id]           INT           IDENTITY (1, 1) NOT NULL,
+    [message]      VARCHAR (MAX) NOT NULL,
+	[idProjet]	   INT,
+	[idTache]	   INT,
+    [lue]          BIT           NOT NULL,
+    [horodatage]   DATETIME      NOT NULL,
+    [destinataire] INT           NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [Fk_notification_to] FOREIGN KEY ([destinataire]) REFERENCES [Collaborateurs] ([Id]),
+	CONSTRAINT [Fk_projet_id] FOREIGN KEY ([idProjet]) REFERENCES [Projet] ([Id]),
+	CONSTRAINT [Fk_tache_id] FOREIGN KEY ([idTache]) REFERENCES [Tache] ([Id])
+);
+GO
+
 /* Insertion de données */
 
 INSERT INTO [Roles] ([nom]) VALUES (N'CHEF_PROJET')
@@ -175,9 +181,9 @@ INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [prog
 SET IDENTITY_INSERT [dbo].[Tache] OFF
 
 SET IDENTITY_INSERT [dbo].[Notification] ON
-INSERT INTO [dbo].[Notification] ([Id], [message], [lue], [horodatage], [destinataire]) VALUES (2, N'Tâche en retard', 0, N'2017-09-24 00:00:00', 2)
-INSERT INTO [dbo].[Notification] ([Id], [message], [lue], [horodatage], [destinataire]) VALUES (3, N'Tâche ajoutée', 0, N'2017-10-01 00:00:00', 2)
-INSERT INTO [dbo].[Notification] ([Id], [message], [lue], [horodatage], [destinataire]) VALUES (6, N'Projet commencé', 0, N'2017-03-03 00:00:00', 2)
+INSERT INTO [dbo].[Notification] ([Id], [message], [idProjet], [idTache], [lue], [horodatage], [destinataire]) VALUES (2, N'Tâche en retard', 1,1,1, N'2017-09-24 00:00:00', 2)
+INSERT INTO [dbo].[Notification] ([Id], [message], [idProjet], [idTache], [lue], [horodatage], [destinataire]) VALUES (3, N'Tâche ajoutée', 1,4,0, N'2017-10-01 00:00:00', 2)
+INSERT INTO [dbo].[Notification] ([Id], [message], [idProjet], [idTache], [lue], [horodatage], [destinataire]) VALUES (6, N'Projet commencé', 1,NULL,1, N'2017-03-03 00:00:00', 2)
 SET IDENTITY_INSERT [dbo].[Notification] OFF
 
 INSERT INTO [Admin] ([Id]) VALUES (8)
