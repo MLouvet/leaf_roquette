@@ -7,6 +7,7 @@ namespace Leaf.Web.Models
     public interface IDal : IDisposable
     {
         List<Tache> GetTaches(Collaborateurs c);
+        Tache GetTache(int id);
         List<Notification> GetNotifications(Collaborateurs c);
         void DeleteNotification(Collaborateurs c, Notification n);
         void ReadNotification(Notification n);

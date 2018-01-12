@@ -38,7 +38,7 @@ namespace Leaf.Web.Models
 
         public List<Notification> GetNotifications(Collaborateurs c)
         {
-            return bdd.Notification.Where(n => n.DestinataireNavigation == c).ToList();
+            return bdd.Notification.Where(n => n.DestinataireNavigation.Id == c.Id).ToList();
         }
 
         public Projet GetProjet(int id)
@@ -55,6 +55,11 @@ namespace Leaf.Web.Models
                 ret.Add(bdd.Notification.Where(notif => notif.DestinataireNavigation == c).OrderByDescending(no => no.Id).ToList()[i - n]);
             }
             return ret;
+        }
+
+        public Tache GetTache(int id)
+        {
+            return bdd.Tache.Where(t => t.Id == id).First();
         }
 
         public List<Tache> GetTaches(Collaborateurs c)

@@ -24,7 +24,7 @@ namespace Leaf.Web.Controllers
             Collaborateurs c = d.GetCollaborateurs(2);
             HomeViewModel model = new HomeViewModel
             {
-                notifications = c.Notification.ToList(),
+                notifications = d.GetNotifications(c).ToList(),
                 taches = d.GetTaches(c)
             };
 

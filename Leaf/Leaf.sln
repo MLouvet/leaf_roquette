@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "LeafDB", "LeafDB\LeafDB.sqlproj", "{C6B4F453-DDB5-4EE8-B651-CEFFC103C3FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leaf.DAL", "Leaf.DAL\Leaf.DAL.csproj", "{E4D55B70-5F70-4311-AEB0-AEF85D7E1DF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Leaf.DAL", "Leaf.DAL\Leaf.DAL.csproj", "{E4D55B70-5F70-4311-AEB0-AEF85D7E1DF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leaf.Web", "Leaf.Web\Leaf.Web.csproj", "{EDE3FC66-13AA-43CE-8F36-F38825F379B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Leaf.Web", "Leaf.Web\Leaf.Web.csproj", "{EDE3FC66-13AA-43CE-8F36-F38825F379B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

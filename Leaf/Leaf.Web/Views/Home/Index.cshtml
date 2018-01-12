@@ -5,29 +5,35 @@
 }
 
 <div>
-    <h2 style="text-align:center">Updates</h2>
-    @*@({
-        for (int i = 0; i < Model.notifications.Count; i++)
-            Html.LabelFor(model => model.notifications[i]);
-    })*@
+    @*<h2 style="text-align:center">Mises à jour récentes sur vos projets</h2>*@
+    @(Html
+        .Grid(Model.notifications)
+        .Build(columns =>
+        {
+            columns.Add(notif => notif.Message).Titled("Mises à jour récentes sur vos projets");
+        })
+        .Empty("Aucune donnée trouvée")
+    )
 </div>
 <div>
     <h1>Tâches personnelles</h1>
 
 
     @(Html
-                .Grid(Model.taches)
-                .Build(columns =>
-                {
-                    columns.Add(model => model.IdProjNavigation.Nom).Titled("Projet");
-                    columns.Add(model => model.Nom).Titled("Tâche").Sortable(true);
-                    columns.Add(model => model.Debut).Titled("Date de début").Sortable(true);
-                    columns.Add(model => (((DateTime)model.Fin) - ((DateTime)model.Debut)).Days + " jours").Titled("Durée");
-                    columns.Add(model => (DateTime.Today - ((DateTime)model.Fin)).Days + " jours").Titled("Temps restant").Sortable(true);
-                })
-                .Filterable()
-                .Sortable()
-                .Pageable()
+    .Grid(Model.taches)
+    .Build(columns =>
+    {
+        columns.Add(task => task.IdProjNavigation.Nom).Titled("Projet");
+        columns.Add(task => Html.ActionLink(task.Nom, "Show", "Task", new { id = task.Id })).Titled("Tâche").Sortable(true);
+        columns.Add(task => task.Debut).Titled("Date de début").Sortable(true);
+        columns.Add(task => task.Progres > 0 ? "Démarée" : "A démarrer").Sortable(true);
+        columns.Add(task => (((DateTime)task.Fin) - ((DateTime)task.Debut)).Days + " jours").Titled("Durée");
+        columns.Add(task => (DateTime.Today - ((DateTime)task.Fin)).Days + " jours").Titled("Temps restant").Sortable(true);
+    })
+    .Filterable()
+    .Sortable()
+    .Pageable()
+    .Empty("Aucune donnée trouvée")
     )
 
 </div>
