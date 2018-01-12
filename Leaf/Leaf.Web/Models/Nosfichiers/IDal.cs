@@ -12,6 +12,7 @@ namespace Leaf.Web.Models
         void ReadNotification(Notification n);
         void UnreadNotification(Notification n);
         List<Notification> GetRecentNotifications(Collaborateurs c, int n);
-
+        Collaborateurs GetCollaborateurs(int id);
+        Projet GetProjet(int id);
     }
 }

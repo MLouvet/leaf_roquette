@@ -1,4 +1,5 @@
 ﻿using Leaf.DAL.ScaffoldedModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,9 +7,18 @@ namespace Leaf.Web.Models
 {
     public class Dal : IDal
     {
-        private LeafContext bdd;
+        private static LeafContext bdd = null;
 
-        //public Dal() { bdd = new LeafContext(); }
+        public Dal()
+        {
+            if (bdd == null)
+                throw new NullReferenceException("Please set LeafContext with the controller of the first page seen");
+        }
+
+        public static void SetBDD(LeafContext leafContext)
+        {
+            bdd = leafContext;
+        }
 
         public void DeleteNotification(Collaborateurs c, Notification n)
         {
@@ -21,9 +31,19 @@ namespace Leaf.Web.Models
             bdd.Dispose();
         }
 
+        public Collaborateurs GetCollaborateurs(int id)
+        {
+            return bdd.Collaborateurs.Where(c => c.Id == id).First();
+        }
+
         public List<Notification> GetNotifications(Collaborateurs c)
         {
             return bdd.Notification.Where(n => n.DestinataireNavigation == c).ToList();
+        }
+
+        public Projet GetProjet(int id)
+        {
+            return bdd.Projet.Where(p => p.Id == id).First();
         }
 
         public List<Notification> GetRecentNotifications(Collaborateurs c, int n)
@@ -57,7 +77,7 @@ namespace Leaf.Web.Models
             //    Nom = "Ajout de l'interface",
             //    IdProjNavigation = p2
             //};
-            return bdd.Tache.Where(t => t.Collab == c).ToList();
+            return bdd.Tache.Where(t => t.Collab.Id == c.Id).ToList();
             //return new List<Tache>() { t1, t2 };
         }
 
