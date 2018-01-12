@@ -16,13 +16,13 @@ using Leaf.Services;
 using Leaf.Web.Services;
 using Leaf.Web.Models;
 
-namespace Leaf.Controllers
+namespace Leaf.Web.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
-        private readonly SignInManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;

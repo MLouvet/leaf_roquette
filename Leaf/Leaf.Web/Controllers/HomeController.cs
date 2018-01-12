@@ -10,18 +10,26 @@ namespace Leaf.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private LeafContext _context;
+        private LeafContext bdd;
 
         public HomeController(LeafContext context)
         {
-            _context = context;
+            bdd = context;
+
         }
 
         // GET: Clients
         public IActionResult Index()
         {
-            var clientList = (from c in _context.Client select c).ToList();
-            return View();
+            //IDal d = new Dal();
+            Collaborateurs c = null;
+            HomeViewModel model = new HomeViewModel
+            {
+                notifications = new List<Notification>(),
+                taches = new List<Tache>()
+            };
+
+            return View(model);
         }
 
         public IActionResult About()

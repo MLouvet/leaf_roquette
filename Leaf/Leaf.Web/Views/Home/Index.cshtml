@@ -1,0 +1,33 @@
+﻿@using NonFactors.Mvc.Grid;
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Accueil";
+}
+
+<div>
+    <h2 style="text-align:center">Updates</h2>
+    @*@({
+        for (int i = 0; i < Model.notifications.Count; i++)
+            Html.LabelFor(model => model.notifications[i]);
+    })*@
+</div>
+<div>
+    <h1>Tâches personnelles</h1>
+
+
+    @(Html
+                .Grid(Model.taches)
+                .Build(columns =>
+                {
+                    columns.Add(model => model.IdProjNavigation.Nom).Titled("Projet");
+                    columns.Add(model => model.Nom).Titled("Tâche").Sortable(true);
+                    columns.Add(model => model.Debut).Titled("Date de début").Sortable(true);
+                    columns.Add(model => (((DateTime)model.Fin) - ((DateTime)model.Debut)).Days + " jours").Titled("Durée");
+                    columns.Add(model => (DateTime.Today - ((DateTime)model.Fin)).Days + " jours").Titled("Temps restant").Sortable(true);
+                })
+                .Filterable()
+                .Sortable()
+                .Pageable()
+    )
+
+</div>
