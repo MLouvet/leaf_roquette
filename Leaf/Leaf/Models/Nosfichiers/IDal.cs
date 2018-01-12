@@ -10,6 +10,7 @@ namespace Leaf.Models
     {
         List<Tache> GetTaches(Collaborateurs c);
         List<Notification> GetNotifications(Collaborateurs c);
+        Collaborateurs GetCollaborateur(int id);
         void DeleteNotification(Collaborateurs c, Notification n);
         void ReadNotification(Notification n);
         void UnreadNotification(Notification n);

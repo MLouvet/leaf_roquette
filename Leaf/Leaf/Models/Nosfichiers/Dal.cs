@@ -23,6 +23,13 @@ namespace Leaf.Models
             bdd.Dispose();
         }
 
+        public Collaborateurs GetCollaborateur(int idCollab)
+        {
+            IEnumerable<Collaborateurs> collab = bdd.Collaborateurs.Where(i => i.Id == idCollab);
+            if (collab.Count() == 1) return collab.First();
+            else return null;
+        }
+
         public List<Notification> GetNotifications(Collaborateurs c)
         {
             return bdd.Notification.Where(n => n.DestinataireNavigation == c).ToList();
