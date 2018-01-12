@@ -169,6 +169,12 @@ SET IDENTITY_INSERT [Projet] ON
 INSERT INTO [Projet] ([Id], [nom], [debut], [echeance], [client], [responsable]) VALUES (1, N'Overwatch', N'2013-05-14', N'2019-06-14', 2, 2)
 SET IDENTITY_INSERT [Projet] OFF
 
+SET IDENTITY_INSERT [dbo].[Tache] ON
+INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache], [depends]) VALUES (1, N'Ajout de l''interface', N'2017-09-24', N'2017-09-28', 3, 0, 1, 2, 1, 1)
+INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache], [depends]) VALUES (4, N'Implémenter back-face culling', N'2017-10-01', N'2017-10-09', 2, 1, 1, 2, NULL, NULL)
+SET IDENTITY_INSERT [dbo].[Tache] OFF
+
+
 INSERT INTO [Admin] ([Id]) VALUES (8)
 INSERT INTO [Admin] ([Id]) VALUES (9)
 INSERT INTO [SuperAdmin] ([Id]) VALUES (9)
