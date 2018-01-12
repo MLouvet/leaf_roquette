@@ -174,6 +174,11 @@ INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [prog
 INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache], [depends]) VALUES (4, N'Implémenter back-face culling', N'2017-10-01', N'2017-10-09', 2, 1, 1, 2, NULL, NULL)
 SET IDENTITY_INSERT [dbo].[Tache] OFF
 
+SET IDENTITY_INSERT [dbo].[Notification] ON
+INSERT INTO [dbo].[Notification] ([Id], [message], [lue], [horodatage], [destinataire]) VALUES (2, N'Tâche en retard', 0, N'2017-09-24 00:00:00', 2)
+INSERT INTO [dbo].[Notification] ([Id], [message], [lue], [horodatage], [destinataire]) VALUES (3, N'Tâche ajoutée', 0, N'2017-10-01 00:00:00', 2)
+INSERT INTO [dbo].[Notification] ([Id], [message], [lue], [horodatage], [destinataire]) VALUES (6, N'Projet commencé', 0, N'2017-03-03 00:00:00', 2)
+SET IDENTITY_INSERT [dbo].[Notification] OFF
 
 INSERT INTO [Admin] ([Id]) VALUES (8)
 INSERT INTO [Admin] ([Id]) VALUES (9)
