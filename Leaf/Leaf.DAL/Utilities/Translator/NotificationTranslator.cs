@@ -12,7 +12,7 @@ namespace Leaf.DAL.Utilities.Translator
             return new DTO.Notification
             {
                 Destinataire = pNotification.Destinataire,
-                DestinataireNavigation = CollaborateursTranslator.DalToDto(pNotification.DestinataireNavigation),
+                //DestinataireNavigation = CollaborateursTranslator.DalToDto(pNotification.DestinataireNavigation),
                 Horodatage = pNotification.Horodatage,
                 Id = pNotification.Id,
                 Lue = pNotification.Lue,

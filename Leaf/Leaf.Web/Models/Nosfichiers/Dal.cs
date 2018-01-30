@@ -95,6 +95,11 @@ namespace Leaf.Web.Models
             //return new List<Tache>() { t1, t2 };
         }
 
+        public Admin GetAdmin(int pId)
+        {
+            return bdd.Admin.Where(a => a.Id == pId).Single();
+        }
+
         public void ReadNotification(Notification n)
         {
             n.Lue = true;

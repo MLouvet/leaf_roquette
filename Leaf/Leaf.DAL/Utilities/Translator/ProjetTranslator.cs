@@ -18,7 +18,7 @@ namespace Leaf.DAL.Utilities.Translator
                 Id = pProjet.Id,
                 Nom = pProjet.Nom,
                 Responsable = pProjet.Responsable,
-                ResponsableNavigation = CollaborateursTranslator.DalToDto(pProjet.ResponsableNavigation),
+                //ResponsableNavigation = CollaborateursTranslator.DalToDto(pProjet.ResponsableNavigation),
                 Tache = TacheTranslator.DalToDto(pProjet.Tache)
             };
         }

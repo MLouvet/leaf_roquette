@@ -20,7 +20,7 @@ namespace Leaf.DAL.Utilities.Translator
                 Prenom = pCollaborateurs.Prenom,
                 Projet = ProjetTranslator.DalToDto(pCollaborateurs.Projet),
                 Statut = pCollaborateurs.Statut,
-                StatutNavigation = RolesTranslator.DalToDto(pCollaborateurs.StatutNavigation),
+                StatutNavigation = pCollaborateurs.StatutNavigation == null ? null : RolesTranslator.DalToDto(pCollaborateurs.StatutNavigation),
                 Tache = TacheTranslator.DalToDto(pCollaborateurs.Tache)
             };
         }

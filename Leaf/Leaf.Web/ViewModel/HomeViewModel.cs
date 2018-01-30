@@ -1,4 +1,4 @@
-﻿using Leaf.DAL.ScaffoldedModels;
+﻿using Leaf.DAL.DTO;
 using System.Collections.Generic;
 
 namespace Leaf

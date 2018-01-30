@@ -12,21 +12,21 @@ namespace Leaf.DAL.Utilities.Translator
             return new DTO.Tache
             {
                 ChargeEstimee = pTache.ChargeEstimee,
-                Collab = CollaborateursTranslator.DalToDto(pTache.Collab),
+                //Collab = CollaborateursTranslator.DalToDto(pTache.Collab),
                 CollabId = pTache.CollabId,
                 Debut = pTache.Debut,
                 Depends = pTache.Depends,
-                DependsNavigation = DalToDto(pTache.DependsNavigation),
+                //DependsNavigation = DalToDto(pTache.DependsNavigation),
                 Fin = pTache.Fin,
                 Id = pTache.Id,
                 IdProj = pTache.IdProj,
-                IdProjNavigation = ProjetTranslator.DalToDto(pTache.IdProjNavigation),
-                InverseDependsNavigation = DalToDto(pTache.InverseDependsNavigation),
-                InverseSuperTacheNavigation = DalToDto(pTache.InverseSuperTacheNavigation),
+                //IdProjNavigation = ProjetTranslator.DalToDto(pTache.IdProjNavigation),
+                //InverseDependsNavigation = DalToDto(pTache.InverseDependsNavigation),
+                //InverseSuperTacheNavigation = DalToDto(pTache.InverseSuperTacheNavigation),
                 Nom = pTache.Nom,
                 Progres = pTache.Progres,
                 SuperTache = pTache.SuperTache,
-                SuperTacheNavigation = DalToDto(pTache.SuperTacheNavigation)
+                //SuperTacheNavigation = DalToDto(pTache.SuperTacheNavigation)
             };
         }
 
