@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Leaf.Models;
-using Leaf.Models.ManageViewModels;
+using Leaf.Web.Models.ManageViewModels;
 using Leaf.Services;
+using Leaf.Web.Services;
+using Leaf.Web.Models;
 
 namespace Leaf.Controllers
 {
@@ -20,7 +22,7 @@ namespace Leaf.Controllers
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;

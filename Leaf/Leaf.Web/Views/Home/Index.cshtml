@@ -1,0 +1,39 @@
+﻿@using NonFactors.Mvc.Grid;
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Accueil";
+}
+
+<div>
+    @*<h2 style="text-align:center">Mises à jour récentes sur vos projets</h2>*@
+    @(Html
+        .Grid(Model.notifications)
+        .Build(columns =>
+        {
+            columns.Add(notif => notif.Message).Titled("Mises à jour récentes sur vos projets");
+        })
+        .Empty("Aucune donnée trouvée")
+    )
+</div>
+<div>
+    <h1>Tâches personnelles</h1>
+
+
+    @(Html
+    .Grid(Model.taches)
+    .Build(columns =>
+    {
+        columns.Add(task => task.IdProjNavigation.Nom).Titled("Projet");
+        columns.Add(task => task.Nom).Titled("Tâche").RenderedAs(task => Html.ActionLink(task.Nom, "Show", "Task", new { id = task.Id })).Sortable(true);
+        columns.Add(task => task.Debut).Titled("Date de début").Sortable(true);
+        columns.Add(task => task.Progres > 0 ? "Démarée" : "A démarrer").Sortable(true);
+        columns.Add(task => (((DateTime)task.Fin) - ((DateTime)task.Debut)).Days + " jours").Titled("Durée");
+        columns.Add(task => (DateTime.Today - ((DateTime)task.Fin)).Days + " jours").Titled("Temps restant").Sortable(true);
+    })
+    .Filterable()
+    .Sortable()
+    .Pageable()
+    .Empty("Aucune donnée trouvée")
+    )
+
+</div>
