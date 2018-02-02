@@ -15,5 +15,6 @@ namespace Leaf.Web.Models
         List<Notification> GetRecentNotifications(Collaborateurs c, int n);
         Collaborateurs GetCollaborateurs(int id);
         Projet GetProjet(int id);
+        List<Projet> GetByCollaborateur(Collaborateurs collaborateur);
     }
 }
