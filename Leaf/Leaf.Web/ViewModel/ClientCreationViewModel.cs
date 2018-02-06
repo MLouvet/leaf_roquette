@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Leaf.DAL.DTO;
 
 namespace Leaf
 {
-    public class ClientViewModel
+    public class ClientCreationViewModel
     {
-        public List<DAL.DTO.Client> clients;
+        public DAL.DTO.Client clientnew;
     }
 }

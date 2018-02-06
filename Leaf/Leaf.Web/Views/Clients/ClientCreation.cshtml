@@ -1,0 +1,57 @@
+﻿@model ClientCreationViewModel
+@{
+    ViewData["Title"] = "Client";
+}
+
+<div>
+    @*<h2 style="text-align:center">Model.client.Nom</h2>*@
+</div>
+
+<div>
+    <form method="post">
+        <fieldset>
+            <legend>Client</legend>
+            <div>
+                <div>
+                    <label for="clientName">Nom du Client: </label>
+                    <input type="text" name="clientName" value="@Model.clientnew.Compagnie"/>
+                    <!-- "At"Html.ValidationMessage("Model.clientnew.Nom")-->
+                </div>
+                <div>
+                    <label for="clientAdresse">Adresse: </label>
+                    <input type="text" name="clientAdresse" value="@Model.clientnew.Adresse" />
+                    <!--"At"Html.ValidationMessage("Model.clientnew.Adresse")-->
+                </div>
+            </div>
+            <br />
+            <br />
+            <legend>Référent Client</legend>
+            <br />
+            <br />
+            <div>
+                <div>
+                    <label for="referentName">Nom du référent:</label>
+                    <input type="text" name="referentName" value="@Model.clientnew.Nom"/>
+                </div>
+                <div>
+                    <label for="referentSurname">Prénom du référent:</label>
+                    <input type="text" name="referentName" value="@Model.clientnew." />
+                </div>
+                <div>
+                    <label for="referentTelephone">Téléphone: </label>
+                    <input type="text" name="referentTelephone" value="@Model.clientnew.Telephone" />
+                </div>
+                <div>
+                    <label for="referentMail">E-Mail: </label>
+                    <input type="text" name="referentMail" value="@Model.clientnew.Mail" />
+                </div>
+            </div>
+            <div>
+                <label>&nbsp;</label>
+                <input type="submit" value="Créer client" class="submit" />
+                <input type="button" value="Annuler" class="cancel" />
+            </div>
+        </fieldset>
+    </form>
+
+</div>

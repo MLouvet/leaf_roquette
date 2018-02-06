@@ -11,12 +11,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Leaf.Web.Controllers
 {
-    public class ClientController : Controller
+    public class ClientListController : Controller
     {
         private static ClientService _clientService;
         private static CollaborateursService _collaborateurService;
 
-        public ClientController(LeafContext context)
+        public ClientListController(LeafContext context)
         {
             Dal.SetBDD(context);
             _clientService = new ClientService(context);
@@ -27,7 +27,7 @@ namespace Leaf.Web.Controllers
         {
 
             var collaborateur = _collaborateurService.GetById(2);
-            var model = new ClientViewModel
+            var model = new ClientListViewModel
             {
                 clients = _clientService.GetByCollaborateur(collaborateur)
             };
