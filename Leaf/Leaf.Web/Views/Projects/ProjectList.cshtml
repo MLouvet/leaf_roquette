@@ -1,10 +1,27 @@
-﻿@Model  ProjectViewModel
+﻿@using NonFactors.Mvc.Grid;
+@model ProjectViewModel
 @{
     ViewData["Title"] = "Mes Projets";
 }
 
 <div>
-    @*<h2 style="text-align:center">ProjectList</h2>*@
+    @*<h2 style="text-align:center">Mes projets </h2>*@
+    @*<br/>*@
+    @*<br/>*@
+    @*<br/>*@
+    @(Html
+        .Grid(Model.projets)
+        .Build(columns =>
+        {
+            columns.Add(project => project.Nom).Titled("Projet").RenderedAs(project => Html.ActionLink(project.Nom, "Show", "project", new { id = project.Id })).Sortable(true);
+            columns.Add(project => project.Client).Titled("Client").RenderedAs(project => Html.ActionLink(project.Nom, "Show", "project", new { id = project.ClientNavigation.Id })).Sortable(true);
+            columns.Add(project => project.Responsable).Titled("Responsable").Sortable(true);
+        })
+        .Filterable()
+        .Sortable()
+        .Pageable()
+        .Empty("Aucune projet à afficher")
+    )
 
 </div>
 
