@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Leaf.Models;
 using Leaf.Web.Models.AccountViewModels;
 using Leaf.Services;
-using Leaf.Web.Controllers;
 using Leaf.Web.Services;
 using Leaf.Web.Models;
+using Leaf.DAL.ScaffoldedModels;
 
 namespace Leaf.Web.Controllers
 {
@@ -28,12 +27,14 @@ namespace Leaf.Web.Controllers
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            LeafContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            Dal.SetBDD(context, userManager);
         }
 
         [TempData]

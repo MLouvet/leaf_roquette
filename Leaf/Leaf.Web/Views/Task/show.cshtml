@@ -1,0 +1,22 @@
+﻿@model Leaf.DAL.ScaffoldedModels.Tache
+
+<h4>Tache</h4>
+<hr />
+
+
+<div class="row">
+    
+    <div class="column">
+        <h2>Image projet - @Model.IdProjNavigation.Nom</h2>
+        <h2>@Model.Nom</h2>
+    </div>
+    <div class="column" >
+        <h2>Affectée à : @Model.Collab.Nom</h2>
+        <h2>Valider tâche/modifier avancement</h2>
+        <p>Charge estime : @Model.ChargeEstimee jours</p>
+        <p>Charge consommée : @(Model.Progres * 2 / 3) jours</p>
+        <p>Charge estimée restante : @(Model.ChargeEstimee / 3) jours</p>
+        <p>Avancement : @Model.Progres%</p>
+        <p>Reste à faire : @(100 - Model.Progres)%</p>
+    </div>
+</div>

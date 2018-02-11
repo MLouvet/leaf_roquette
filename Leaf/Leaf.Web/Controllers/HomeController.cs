@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Leaf.DAL.ScaffoldedModels;
 using Leaf.DAL.Services;
 using Leaf.Web.Models;
-using Microsoft.AspNetCore.Http;
+using Leaf.Web.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Leaf.Web.Controllers
 {
@@ -16,9 +18,13 @@ namespace Leaf.Web.Controllers
         private static CollaborateursService _collaborateursService;
         private static TacheService _tacheService;
 
-        public HomeController(LeafContext context)
+        public HomeController(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IEmailSender emailSender,
+            ILogger<AccountController> logger,
+            LeafContext context)
         {
-            Dal.SetBDD(context);
+            Dal.SetBDD(context, userManager);
             _notificationService = new NotificationService(context);
             _collaborateursService = new CollaborateursService(context);
             _tacheService = new TacheService(context);
