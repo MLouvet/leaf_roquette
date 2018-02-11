@@ -45,6 +45,7 @@ namespace Leaf.Web.Controllers
             //{
             //    t.IdProjNavigation = d.GetProjet(t.IdProj);
             //}
+            //TODO change 2 in getById by current collab Id
             var collaborateurs = _collaborateursService.GetById(2);
             var model = new HomeViewModel
             {

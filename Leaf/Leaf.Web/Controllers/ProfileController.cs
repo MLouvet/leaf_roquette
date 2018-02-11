@@ -21,6 +21,7 @@ namespace Leaf.Web.Controllers
         public IActionResult Profile()
         {
             IDal d = new Dal();
+            // TODO changer 2 en numéro actuel du collab connecté
             Collaborateurs c = d.GetCollaborateurs(2);
             ProfileViewModel model = new ProfileViewModel
             {

@@ -155,6 +155,22 @@ namespace Leaf.Web.Models
             bdd.SaveChanges();
         }
 
+        public List<Projet> GetByCollaborateur(Collaborateurs collaborateur)
+        {
+            var projetList = new List<Projet>();
+
+            foreach (var projet in bdd.Projet.ToList())
+            {
+                foreach (var tache in bdd.Tache.Where(t => t.IdProj == projet.Id && t.CollabId == collaborateur.Id).ToList())
+                {
+                    projetList.Add(projet);
+                    break;
+                }
+            }
+
+            return projetList;
+        }
+
         public Collaborateurs GetCollaborateurs(string email)
         {
             foreach (Collaborateurs c in bdd.Collaborateurs)

@@ -16,5 +16,6 @@ namespace Leaf.Web.Models
         Collaborateurs GetCollaborateurs(int id);
         Collaborateurs GetCollaborateurs(string email);
         Projet GetProjet(int id);
+        List<Projet> GetByCollaborateur(Collaborateurs collaborateur);
     }
 }

@@ -1,0 +1,24 @@
+﻿@using NonFactors.Mvc.Grid;
+@model ClientViewModel
+@{
+    ViewData["Title"] = "Liste de mes clients";
+}
+
+<div>
+    @*<h2 style="text-align:center"> Liste de mes clients </h2>*@
+    @*<br/>*@
+    @*<br/>*@
+    @*<br/>*@
+    @(Html
+        .Grid(Model.clients)
+        .Build(columns =>
+        {
+            columns.Add(client => client.Nom).Titled("Client").RenderedAs(client => Html.ActionLink(client.Nom, "Show", "client", new { id = client.Id })).Sortable(true);
+        })
+        .Filterable()
+        .Sortable()
+        .Pageable()
+        .Empty("Aucune client à afficher")
+    )
+
+</div>

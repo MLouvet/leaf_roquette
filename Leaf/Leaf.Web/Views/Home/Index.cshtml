@@ -26,7 +26,7 @@
         columns.Add(task => task.IdProjNavigation.Nom).Titled("Projet");
         columns.Add(task => task.Nom).Titled("Tâche").RenderedAs(task => Html.ActionLink(task.Nom, "Show", "Task", new { id = task.Id })).Sortable(true);
         columns.Add(task => task.Debut).Titled("Date de début").Sortable(true);
-        columns.Add(task => task.Progres > 0 ? "Démarée" : "A démarrer").Sortable(true);
+        columns.Add(task => task.Progres > 0 ? "Démarrée" : "À démarrer").Sortable(true);
         columns.Add(task => (((DateTime)task.Fin) - ((DateTime)task.Debut)).Days + " jours").Titled("Durée");
         columns.Add(task => (DateTime.Today - ((DateTime)task.Fin)).Days + " jours").Titled("Temps restant").Sortable(true);
     })
