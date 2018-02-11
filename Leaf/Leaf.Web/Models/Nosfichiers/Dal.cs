@@ -170,15 +170,5 @@ namespace Leaf.Web.Models
 
             return projetList;
         }
-
-        public Collaborateurs GetCollaborateurs(string email)
-        {
-            foreach (Collaborateurs c in bdd.Collaborateurs)
-            {
-                if (c.Mail == email)
-                    return c;
-            }
-            return null;
-        }
     }
 }
