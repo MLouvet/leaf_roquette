@@ -46,9 +46,26 @@ namespace Leaf.Web.Controllers
             //    t.IdProjNavigation = d.GetProjet(t.IdProj);
             //}
             //TODO change 2 in getById by current collab Id
-            var collaborateurs = _collaborateursService.GetById(2);
+           
+            /*
+             * 
+             * 
+             * 
+             * 
+             * 
+             * Exemple d'accès aux données de l'utilisateur, ici
+             *
+             * 
+             * 
+             */
+            Collaborateurs c = new Dal().GetCollaborateurs(HttpContext.User.Identity.Name);
+
+
+
+            var collaborateurs = _collaborateursService.GetById(c.Id);
             var model = new HomeViewModel
             {
+                displayName = c.Prenom + " " + c.Nom,
                 notifications = _notificationService.GetNotificationsByCollaborateurs(collaborateurs),
                 taches = _tacheService.GetByCollaborateurs(collaborateurs)
             };

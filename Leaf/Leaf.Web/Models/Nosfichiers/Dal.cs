@@ -170,5 +170,10 @@ namespace Leaf.Web.Models
 
             return projetList;
         }
+
+        public Collaborateurs GetCollaborateurs(string email)
+        {
+            return bdd.Collaborateurs.Where(c => c.Mail == email).FirstOrDefault();
+        }
     }
 }
