@@ -8,6 +8,5 @@ namespace Leaf
     public class ProjectViewModel
     {
         public List<Projet> projets;
-        public List<Client> clients;
     }
 }

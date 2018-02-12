@@ -23,7 +23,7 @@ namespace Leaf.Web.Controllers
         }
 
         // GET: Clients
-        public IActionResult Profile(int id)
+        public IActionResult Profile()
         {
             //IDal d = new Dal();
             // TODO changer 2 en numéro actuel du collab connecté
