@@ -12,5 +12,6 @@ namespace Leaf.DAL.DTO
         public DateTime? Horodatage { get; set; }
         public int? Destinataire { get; set; }
         public Collaborateurs DestinataireNavigation { get; set; }
+        //public Tache TacheNavigation { get; set; }
     }
 }

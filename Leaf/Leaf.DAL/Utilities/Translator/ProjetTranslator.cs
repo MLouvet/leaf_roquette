@@ -12,7 +12,7 @@ namespace Leaf.DAL.Utilities.Translator
             return new DTO.Projet
             {
                 Client = pProjet.Client,
-                ClientNavigation = ClientTranslator.DalToDto(pProjet.ClientNavigation),
+                //ClientNavigation = ClientTranslator.DalToDto(pProjet.ClientNavigation),
                 Debut = pProjet.Debut,
                 Echeance = pProjet.Echeance,
                 Id = pProjet.Id,

@@ -11,12 +11,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Leaf.Web.Controllers
 {
-    public class ClientListController : Controller
+    public class ClientsController : Controller
     {
         private static ClientService _clientService;
         private static CollaborateursService _collaborateurService;
 
-        public ClientListController(LeafContext context)
+        public ClientsController(LeafContext context)
         {
             Dal.SetBDD(context);
             _clientService = new ClientService(context);

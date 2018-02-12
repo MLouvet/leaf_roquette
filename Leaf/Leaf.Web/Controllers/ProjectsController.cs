@@ -12,12 +12,12 @@ using Leaf.DAL.Services;
 
 namespace Leaf.Web.Controllers
 {
-    public class ProjectController : Controller
+    public class ProjectsController : Controller
     {
         private static ProjetService _projetService;
         private static CollaborateursService _collaborateursService;
          
-        public ProjectController(LeafContext context)
+        public ProjectsController(LeafContext context)
         {
             Dal.SetBDD(context);
             _projetService = new ProjetService(context);
@@ -25,7 +25,7 @@ namespace Leaf.Web.Controllers
         }
 
         // GET: /<controller>/
-        public IActionResult Index()
+        public IActionResult ProjectList()
         {
             //IDal d = new Dal();
             // TODO changer 2 en numéro actuel du collab connecté

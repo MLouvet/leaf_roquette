@@ -16,7 +16,8 @@ namespace Leaf.DAL.Utilities.Translator
                 Horodatage = pNotification.Horodatage,
                 Id = pNotification.Id,
                 Lue = pNotification.Lue,
-                Message = pNotification.Message
+                Message = pNotification.Message,
+                //Tâche = pNotification.TacheNavigation[pNotification.IdTache];
             };
         }
 
