@@ -60,16 +60,23 @@ namespace Leaf.Web.Models
                 foreach (Collaborateurs c in l)
                 {
                     var user = new ApplicationUser { UserName = c.Mail, Email = c.Mail };
-                    var result = await userManager.CreateAsync(user, c.Mdp);
-
-                    if (!result.Succeeded)
+                    try
                     {
-                        foreach (IdentityError e in result.Errors)
+                        var result = await userManager.CreateAsync(user, c.Mdp);
+                        if (!result.Succeeded)
                         {
-                            Console.Write("ERRRREUUUUURRRSS ########### ");
-                            Console.WriteLine(e.Description); //La console n'affichera rien
+                            foreach (IdentityError e in result.Errors)
+                            {
+                                Console.Write("ERRRREUUUUURRRSS ########### ");
+                                Console.WriteLine(e.Description); //La console n'affichera rien
+                            }
                         }
                     }
+                    catch (Exception)
+                    {
+                    }
+
+                    
                 }
                 userManagerLoaded = true;
             }

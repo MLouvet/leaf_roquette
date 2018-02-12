@@ -6,9 +6,11 @@ using Leaf.DAL.ScaffoldedModels;
 using Leaf.DAL.Services;
 using Leaf.Web.Models;
 using Leaf.Web.Services;
+using Leaf.Web.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using static Leaf.Web.ViewModel.LoginPartialViewModel;
 
 namespace Leaf.Web.Controllers
 {
@@ -46,7 +48,7 @@ namespace Leaf.Web.Controllers
             //    t.IdProjNavigation = d.GetProjet(t.IdProj);
             //}
             //TODO change 2 in getById by current collab Id
-           
+
             /*
              * 
              * 
@@ -63,8 +65,20 @@ namespace Leaf.Web.Controllers
 
 
             var collaborateurs = _collaborateursService.GetById(c.Id);
+            Statut status;
+            if (collaborateurs.Statut == "CHEF_PROJET")
+                status = Statut.ChefDeProjet;
+            else if (collaborateurs.Statut == "COLLABORATEUR")
+                status = Statut.Collaborateur;
+            else if (collaborateurs.Statut == "ADMIN")
+                status = Statut.Admin;
+            else
+                status = Statut.SuperAdmin;
+
             var model = new HomeViewModel
             {
+
+                statut = status,
                 displayName = c.Prenom + " " + c.Nom,
                 notifications = _notificationService.GetNotificationsByCollaborateurs(collaborateurs),
                 taches = _tacheService.GetByCollaborateurs(collaborateurs)

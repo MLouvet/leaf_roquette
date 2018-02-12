@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Leaf.Web.ViewModel
+@model LoginPartialViewModel
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -36,7 +38,7 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
-                @await Html.PartialAsync("_LoginPartial")
+                @await Html.PartialAsync("_LoginPartial", Model);
             </div>
         </div>
     </nav>
@@ -48,7 +50,7 @@
                 &copy; 2018 - Leaf - <a href="#"> À propos</a>
                 @if (User.Identity.IsAuthenticated)
                 {
-                                     <a href="#" style="float:right">Signaler un problème - "@(User.Identity.Name)"</a>
+                    <a href="#" style="float:right">Signaler un problème - "@(User.Identity.Name)"</a>
                 }
                 else
                 {<a href="#" style="float:right">Signaler un problème - "Not logged"</a>}

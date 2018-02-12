@@ -1,6 +1,8 @@
+@using Leaf.Web.ViewModel
 @using Microsoft.AspNetCore.Identity
 @using Leaf.Web.Models
 
+@model LoginPartialViewModel
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -11,7 +13,27 @@
             <li><a asp-area="" asp-controller="Projects" asp-action="ProjectList" asp-route-id="@UserManager.GetUserName(User)">Projets</a></li>
             <li><a asp-area="" asp-controller="Profile" asp-action="Profile" asp-route-id="@UserManager.GetUserName(User)">Notifications</a></li>
             <li>
-                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                @switch (Model.statut)
+                {
+                    case LoginPartialViewModel.Statut.Admin:
+                    case LoginPartialViewModel.Statut.SuperAdmin:
+                        <img height="50" src="~/images/admin.png" />
+
+                        break;
+                    case LoginPartialViewModel.Statut.Collaborateur:
+                        <img height="50" src="~/images/collaborateur.png" />
+                        break;
+                    case LoginPartialViewModel.Statut.ChefDeProjet:
+                        <img height="50" src="~/images/chef.png" />
+                        break;
+                    default:
+                        <img height="50" src="~/images/unknownStatus.png" />
+
+                        break;
+                }
+            </li>
+            <li>
+                <a asp-area="" @*asp-controller="Manage" asp-action="Index" title="Manage" *@>Hello @UserManager.GetUserName(User)!</a>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
