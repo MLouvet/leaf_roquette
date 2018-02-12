@@ -23,7 +23,7 @@ namespace Leaf.Web.Controllers
             _collaborateurService = new CollaborateursService(context);
         }
 
-        public IActionResult Profile()
+        public IActionResult Index()
         {
 
             var collaborateur = _collaborateurService.GetById(2);
