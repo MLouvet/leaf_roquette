@@ -34,7 +34,7 @@ namespace Leaf.Web.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
-            Dal.SetBDD(context, userManager);
+            Dal.SetBDD(context, userManager, signInManager);
         }
 
         [TempData]

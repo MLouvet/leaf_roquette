@@ -16,12 +16,14 @@ namespace Leaf.Web.Controllers
     {
         private static ProjetService _projetService;
         private static CollaborateursService _collaborateursService;
-         
+        private static ClientService _clientService;
+
         public ProjectsController(LeafContext context)
         {
             Dal.SetBDD(context);
             _projetService = new ProjetService(context);
             _collaborateursService = new CollaborateursService(context);
+            _clientService = new ClientService(context);
         }
 
         // GET: /<controller>/
@@ -33,13 +35,21 @@ namespace Leaf.Web.Controllers
             //List<DAL.DTO.Projet> p = d.;
 
             // TODO changer 2 en numéro actuel du collab connecté
-            Collaborateurs c = new Dal().GetCollaborateurs(HttpContext.User.Identity.Name);
+            Dal d = new Dal();
+            Collaborateurs c = d.GetCollaborateurs(HttpContext.User.Identity.Name);
             var collaborateurs = _collaborateursService.GetById(c.Id);
 
             var model = new ProjectViewModel
             {
                 projets = _projetService.GetByCollaborateur(collaborateurs)
+                //clients = 
             };
+            /*foreach(var projet in model.projets)
+            {
+                projet.ClientNavigation = _clientService.GetById(projet.Client)
+            }*/
+
+            
 
             return View(model);
         }

@@ -15,6 +15,7 @@
         {
             columns.Add(project => project.Nom).Titled("Projet").RenderedAs(project => Html.ActionLink(project.Nom, "Show", "project", new { id = project.Id })).Sortable(true);
             //columns.Add(project => project.Client).Titled("Client").RenderedAs(project => Html.ActionLink(project.Nom, "Clients", "Index", new { id = project.ClientNavigation.Id })).Sortable(true);
+            //columns.Add(project => project.ClientNavigation.Nom).Titled("Client").Sortable(true);
             columns.Add(project => project.ResponsableNavigation.Nom).Titled("Responsable").Sortable(true);
         })
         .Filterable()

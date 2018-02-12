@@ -27,7 +27,7 @@ namespace Leaf.Web.Models
             bdd = leafContext;
         }
 
-        public static async void SetBDD(LeafContext leafContext, UserManager<ApplicationUser> userManager)
+        public static async void SetBDD(LeafContext leafContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             bdd = leafContext;
             if (!userManagerLoaded)
@@ -36,15 +36,28 @@ namespace Leaf.Web.Models
                 var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
                 optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
 
+                //If logged in
+                if (signInManager.Context.User.Identity.IsAuthenticated)
+                {
+                    await signInManager.SignOutAsync();
+                }
+
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
                     foreach (ApplicationUser user in context.Users)
                     {
-                        await userManager.DeleteAsync(user);
+                        try
+                        {
+                            await userManager.DeleteAsync(user);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
                     }
                 }
-
-                foreach (Collaborateurs c in leafContext.Collaborateurs)
+                var l = leafContext.Collaborateurs.ToList();
+                foreach (Collaborateurs c in l)
                 {
                     var user = new ApplicationUser { UserName = c.Mail, Email = c.Mail };
                     var result = await userManager.CreateAsync(user, c.Mdp);
@@ -56,7 +69,6 @@ namespace Leaf.Web.Models
                             Console.Write("ERRRREUUUUURRRSS ########### ");
                             Console.WriteLine(e.Description); //La console n'affichera rien
                         }
-                        throw new Exception("Erreurs d'identité");
                     }
                 }
                 userManagerLoaded = true;
@@ -173,7 +185,11 @@ namespace Leaf.Web.Models
 
         public Collaborateurs GetCollaborateurs(string email)
         {
-            return bdd.Collaborateurs.Where(c => c.Mail == email).FirstOrDefault();
+            var list =  bdd.Collaborateurs.Where(c => c.Mail == email);
+            if (list.Count() == 0)
+                return null;
+            else
+                return list.First();
         }
     }
 }

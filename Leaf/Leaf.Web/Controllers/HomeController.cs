@@ -24,7 +24,7 @@ namespace Leaf.Web.Controllers
             ILogger<AccountController> logger,
             LeafContext context)
         {
-            Dal.SetBDD(context, userManager);
+            Dal.SetBDD(context, userManager, signInManager);
             _notificationService = new NotificationService(context);
             _collaborateursService = new CollaborateursService(context);
             _tacheService = new TacheService(context);
