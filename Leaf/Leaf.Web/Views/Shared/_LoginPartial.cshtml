@@ -8,8 +8,8 @@
 {
     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
-            <li><a asp-area="" asp-controller="Projects" asp-action="ProjectList">Projets</a></li>
-            <li><a asp-area="" asp-controller="Profile" asp-action="Profile" asp-route-id="2">Notifications</a></li>
+            <li><a asp-area="" asp-controller="Projects" asp-action="ProjectList" asp-route-id="@UserManager.GetUserName(User)">Projets</a></li>
+            <li><a asp-area="" asp-controller="Profile" asp-action="Profile" asp-route-id="@UserManager.GetUserName(User)">Notifications</a></li>
             <li>
                 <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>

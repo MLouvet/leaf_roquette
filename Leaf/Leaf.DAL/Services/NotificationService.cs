@@ -22,5 +22,18 @@ namespace Leaf.DAL.Services
 
             return notifList;
         }
+
+
+        public List<Notification> DeleteNotification(List<Notification> notifList, int id)
+        {
+            foreach(var notif in notifList)
+            {
+                if (notif.Id == id)
+                {
+                    notifList.Remove(notif);
+                }
+            }
+            return notifList;
+        }
     }
 }
