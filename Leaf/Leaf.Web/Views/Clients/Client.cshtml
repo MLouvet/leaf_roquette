@@ -1,0 +1,29 @@
+﻿@model ClientViewModel
+@{
+    ViewData["Title"] = Model.client.Compagnie;
+}
+
+<div>
+    <h2>Client : @Model.client.Compagnie</h2>
+</div>
+
+<div>
+    <h3>Information sur le client:</h3>
+    <br/>
+    <br/>
+    @Model.client.Adresse
+    <br/>
+</div>
+
+<div>
+    <h3>Contact client:</h3>
+    <br/>
+    <br/>
+    @Model.client.Nom
+    <br />
+    @Model.client.Mail
+    <br />
+    @Model.client.Telephone
+    <br />
+</div>
+

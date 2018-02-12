@@ -9,6 +9,6 @@ namespace Leaf
 {
     public class ClientViewModel : LoginPartialViewModel
     {
-        public Client client;
+        public DAL.DTO.Client client;
     }
 }

@@ -8,28 +8,26 @@ using Leaf.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-
-namespace Leaf.Web.Controllers
+namespace Leaf
 {
-    public class ClientsController : Controller
+    public class ClientController : Controller
     {
         private static ClientService _clientService;
         private static CollaborateursService _collaborateurService;
 
-        public ClientsController(LeafContext context)
+        public ClientController(LeafContext context)
         {
             Dal.SetBDD(context);
             _clientService = new ClientService(context);
             _collaborateurService = new CollaborateursService(context);
         }
 
-        public IActionResult Index()
+        public IActionResult Profile()
         {
 
-            var collaborateur = _collaborateurService.GetById(2);
-            var model = new ClientListViewModel
+            var model = new ClientCreationViewModel
             {
-                clients = _clientService.GetByCollaborateur(collaborateur)
+                clientnew = _clientService.GetById(2)
             };
 
             return View(model);

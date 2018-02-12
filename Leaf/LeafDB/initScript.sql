@@ -181,7 +181,7 @@ INSERT INTO [dbo].[Collaborateurs] ([Id], [nom], [prenom], [identifiant], [mdp],
 SET IDENTITY_INSERT [Collaborateurs] OFF
 
 SET IDENTITY_INSERT [Projet] ON
-INSERT INTO [dbo].[Projet] ([Id], [nom], [debut], [echeance], [client], [responsable]) VALUES (1, N'Overwatch', N'2013-05-14', N'2019-06-14', 2, 2)
+INSERT INTO [dbo].[Projet] ([Id], [nom], [debut], [echeance], [client], [responsable]) VALUES (1, N'Overwatch', N'2013-05-14', N'2019-06-14', 4, 2)
 INSERT INTO [dbo].[Projet] ([Id], [nom], [debut], [echeance], [client], [responsable]) VALUES (2, N'Monster Hunter World', N'2013-06-15', N'2018-12-31', 6, 7)
 SET IDENTITY_INSERT [Projet] OFF
 

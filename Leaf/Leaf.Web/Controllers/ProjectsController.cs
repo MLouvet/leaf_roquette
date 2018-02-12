@@ -27,7 +27,7 @@ namespace Leaf.Web.Controllers
         }
 
         // GET: /<controller>/
-        public IActionResult ProjectList(int id)
+        public IActionResult ProjectList()
         {
             //IDal d = new Dal();
             // TODO changer 2 en numéro actuel du collab connecté
@@ -42,12 +42,12 @@ namespace Leaf.Web.Controllers
             var model = new ProjectViewModel
             {
                 projets = _projetService.GetByCollaborateur(collaborateurs)
-                //clients = 
             };
-            /*foreach(var projet in model.projets)
+            foreach(var projet in model.projets)
             {
-                projet.ClientNavigation = _clientService.GetById(projet.Client)
-            }*/
+                projet.ClientNavigation = _clientService.GetById(projet.Client);
+                projet.ResponsableNavigation = _collaborateursService.GetById(projet.Responsable);
+            }
 
             
 

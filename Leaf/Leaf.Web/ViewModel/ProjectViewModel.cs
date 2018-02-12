@@ -10,6 +10,5 @@ namespace Leaf
     public class ProjectViewModel : LoginPartialViewModel
     {
         public List<Projet> projets;
-        public List<Client> clients;
     }
 }

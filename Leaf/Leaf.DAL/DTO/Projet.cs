@@ -10,8 +10,8 @@ namespace Leaf.DAL.DTO
         public string Nom { get; set; }
         public DateTime? Debut { get; set; }
         public DateTime? Echeance { get; set; }
-        public int? Client { get; set; }
-        public int? Responsable { get; set; }
+        public int Client { get; set; }
+        public int Responsable { get; set; }
 
         public Client ClientNavigation { get; set; }
         public Collaborateurs ResponsableNavigation { get; set; }
