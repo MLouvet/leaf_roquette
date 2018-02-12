@@ -18,11 +18,11 @@ namespace Leaf.Web.Controllers
         }
 
         // GET: Clients
-        public IActionResult Profile()
+        public IActionResult Profile(int id)
         {
             IDal d = new Dal();
             // TODO changer 2 en numéro actuel du collab connecté
-            Collaborateurs c = d.GetCollaborateurs(2);
+            Collaborateurs c = d.GetCollaborateurs(id);
             ProfileViewModel model = new ProfileViewModel
             {
                 notifications = d.GetNotifications(c),

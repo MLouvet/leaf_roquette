@@ -5,11 +5,15 @@ using System.Threading.Tasks;
 using Leaf.DAL.ScaffoldedModels;
 using Leaf.Models;
 using Leaf.Services;
+using Leaf.Web.Data;
 using Leaf.Web.Models;
 using Leaf.Web.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NonFactors.Mvc.Grid;
@@ -21,6 +25,7 @@ namespace Leaf.Web
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Dal.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -31,9 +36,29 @@ namespace Leaf.Web
             //Add framework services
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<LeafContext>()                
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+                // configure identity options
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 3;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+
 
             services.AddApplicationInsightsTelemetry(Configuration);
             services.AddSingleton(Configuration);

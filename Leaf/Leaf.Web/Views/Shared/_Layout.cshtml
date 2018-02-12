@@ -46,7 +46,12 @@
         <footer>
             <p>
                 &copy; 2018 - Leaf - <a href="#"> À propos</a>
-                <a href="#" style="float:right">Signaler un problème</a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                                     <a href="#" style="float:right">Signaler un problème - "@(User.Identity.Name)"</a>
+                }
+                else
+                {<a href="#" style="float:right">Signaler un problème - "Not logged"</a>}
             </p>
         </footer>
     </div>

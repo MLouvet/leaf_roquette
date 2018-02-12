@@ -1,4 +1,9 @@
 ﻿using Leaf.DAL.ScaffoldedModels;
+using Leaf.Web.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +13,8 @@ namespace Leaf.Web.Models
     public class Dal : IDal
     {
         private static LeafContext bdd = null;
+        private static bool userManagerLoaded = false;
+        public static IConfiguration Configuration { get; set; }
 
         public Dal()
         {
@@ -18,6 +25,42 @@ namespace Leaf.Web.Models
         public static void SetBDD(LeafContext leafContext)
         {
             bdd = leafContext;
+        }
+
+        public static async void SetBDD(LeafContext leafContext, UserManager<ApplicationUser> userManager)
+        {
+            bdd = leafContext;
+            if (!userManagerLoaded)
+            {
+                //Cleaning previous data loaded
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+
+                using (var context = new ApplicationDbContext(optionsBuilder.Options))
+                {
+                    foreach (ApplicationUser user in context.Users)
+                    {
+                        await userManager.DeleteAsync(user);
+                    }
+                }
+
+                foreach (Collaborateurs c in leafContext.Collaborateurs)
+                {
+                    var user = new ApplicationUser { UserName = c.Mail, Email = c.Mail };
+                    var result = await userManager.CreateAsync(user, c.Mdp);
+
+                    if (!result.Succeeded)
+                    {
+                        foreach (IdentityError e in result.Errors)
+                        {
+                            Console.Write("ERRRREUUUUURRRSS ########### ");
+                            Console.WriteLine(e.Description); //La console n'affichera rien
+                        }
+                        throw new Exception("Erreurs d'identité");
+                    }
+                }
+                userManagerLoaded = true;
+            }
         }
 
         public void DeleteNotification(Collaborateurs c, Notification n)
@@ -126,6 +169,11 @@ namespace Leaf.Web.Models
             }
 
             return projetList;
+        }
+
+        public Collaborateurs GetCollaborateurs(string email)
+        {
+            return bdd.Collaborateurs.Where(c => c.Mail == email).FirstOrDefault();
         }
     }
 }
