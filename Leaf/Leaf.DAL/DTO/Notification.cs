@@ -8,7 +8,7 @@ namespace Leaf.DAL.DTO
     {
         public int Id { get; set; }
         public string Message { get; set; }
-        public bool? Lue { get; set; }
+        public bool Lue { get; set; }
         public DateTime? Horodatage { get; set; }
         public int? Destinataire { get; set; }
         public Collaborateurs DestinataireNavigation { get; set; }

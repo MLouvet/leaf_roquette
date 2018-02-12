@@ -25,7 +25,7 @@ namespace Leaf.Web.Controllers
         }
 
         // GET: /<controller>/
-        public IActionResult ProjectList()
+        public IActionResult ProjectList(int id)
         {
             //IDal d = new Dal();
             // TODO changer 2 en numéro actuel du collab connecté
@@ -33,7 +33,8 @@ namespace Leaf.Web.Controllers
             //List<DAL.DTO.Projet> p = d.;
 
             // TODO changer 2 en numéro actuel du collab connecté
-            var collaborateurs = _collaborateursService.GetById(2);
+            Collaborateurs c = new Dal().GetCollaborateurs(HttpContext.User.Identity.Name);
+            var collaborateurs = _collaborateursService.GetById(c.Id);
 
             var model = new ProjectViewModel
             {
