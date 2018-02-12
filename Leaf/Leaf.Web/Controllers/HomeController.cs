@@ -65,20 +65,20 @@ namespace Leaf.Web.Controllers
 
 
             var collaborateurs = _collaborateursService.GetById(c.Id);
-            Statut status;
+            StatutEnum status;
             if (collaborateurs.Statut == "CHEF_PROJET")
-                status = Statut.ChefDeProjet;
+                status = StatutEnum.ChefDeProjet;
             else if (collaborateurs.Statut == "COLLABORATEUR")
-                status = Statut.Collaborateur;
+                status = StatutEnum.Collaborateur;
             else if (collaborateurs.Statut == "ADMIN")
-                status = Statut.Admin;
+                status = StatutEnum.Admin;
             else
-                status = Statut.SuperAdmin;
+                status = StatutEnum.SuperAdmin;
 
             var model = new HomeViewModel
             {
 
-                statut = status,
+                Statut = status,
                 displayName = c.Prenom + " " + c.Nom,
                 notifications = _notificationService.GetNotificationsByCollaborateurs(collaborateurs),
                 taches = _tacheService.GetByCollaborateurs(collaborateurs)

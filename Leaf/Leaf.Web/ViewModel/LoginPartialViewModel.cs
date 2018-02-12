@@ -10,14 +10,16 @@ namespace Leaf.Web.ViewModel
     {
 
         public Collaborateurs collaborateur;
-        public enum Statut
+        private static StatutEnum staticStatut = StatutEnum.Unknown;
+        public enum StatutEnum
         {
             Admin = 2, SuperAdmin = 3, Collaborateur = 1, ChefDeProjet = 0, Unknown
         }
-        public Statut statut;
+        private StatutEnum statut;
+        public StatutEnum Statut { get { return statut; } set { staticStatut = statut = value; } }
         public LoginPartialViewModel()
         {
-            statut = Statut.Unknown;
+            Statut = staticStatut;
         }
     }
 }

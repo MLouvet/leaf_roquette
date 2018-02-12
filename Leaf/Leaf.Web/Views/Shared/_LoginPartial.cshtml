@@ -13,17 +13,17 @@
             <li><a asp-area="" asp-controller="Projects" asp-action="ProjectList">Projets</a></li>
             <li><a asp-area="" asp-controller="Profile" asp-action="Profile">Notifications</a></li>
             <li>
-                @switch (Model.statut)
+                @switch (Model.Statut)
                 {
-                    case LoginPartialViewModel.Statut.Admin:
-                    case LoginPartialViewModel.Statut.SuperAdmin:
+                    case LoginPartialViewModel.StatutEnum.Admin:
+                    case LoginPartialViewModel.StatutEnum.SuperAdmin:
                         <img height="50" src="~/images/admin.png" />
 
                         break;
-                    case LoginPartialViewModel.Statut.Collaborateur:
+                    case LoginPartialViewModel.StatutEnum.Collaborateur:
                         <img height="50" src="~/images/collaborateur.png" />
                         break;
-                    case LoginPartialViewModel.Statut.ChefDeProjet:
+                    case LoginPartialViewModel.StatutEnum.ChefDeProjet:
                         <img height="50" src="~/images/chef.png" />
                         break;
                     default:
