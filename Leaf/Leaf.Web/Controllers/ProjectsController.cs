@@ -7,6 +7,7 @@ using Leaf.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Leaf.DAL.ScaffoldedModels;
 using Leaf.DAL.Services;
+using Leaf.DAL;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,16 +15,9 @@ namespace Leaf.Web.Controllers
 {
     public class ProjectsController : Controller
     {
-        private static ProjetService _projetService;
-        private static CollaborateursService _collaborateursService;
-        private static ClientService _clientService;
-
         public ProjectsController(LeafContext context)
         {
             Dal.SetBDD(context);
-            _projetService = new ProjetService(context);
-            _collaborateursService = new CollaborateursService(context);
-            _clientService = new ClientService(context);
         }
 
         // GET: /<controller>/
@@ -35,18 +29,18 @@ namespace Leaf.Web.Controllers
             //List<DAL.DTO.Projet> p = d.;
 
             // TODO changer 2 en numéro actuel du collab connecté
-            Dal d = new Dal();
-            Collaborateurs c = d.GetCollaborateurs(HttpContext.User.Identity.Name);
-            var collaborateurs = _collaborateursService.GetById(c.Id);
+            Dal dal = new Dal();
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+            var collaborateurs = dal.GetCollaborateurs(c.Id);
 
             var model = new ProjectViewModel
             {
-                projets = _projetService.GetByCollaborateur(collaborateurs)
+                projets = dal.GetProjetByCollaborateur(collaborateurs).ToList()
             };
             foreach(var projet in model.projets)
             {
-                projet.ClientNavigation = _clientService.GetById(projet.Client);
-                projet.ResponsableNavigation = _collaborateursService.GetById(projet.Responsable);
+                projet.ClientNavigation = dal.GetClient(projet.Client);
+                projet.ResponsableNavigation = dal.GetCollaborateurs(projet.Responsable);
             }
 
             

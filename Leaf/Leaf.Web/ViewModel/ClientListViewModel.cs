@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Leaf.DAL.DTO;
+﻿using System.Collections.Generic;
+using Leaf.DAL.ScaffoldedModels;
 using Leaf.Web.ViewModel;
 
 namespace Leaf
 {
     public class ClientListViewModel : LoginPartialViewModel
     {
-        public List<DAL.DTO.Client> clients;
+        public List<Client> clients;
     }
 }

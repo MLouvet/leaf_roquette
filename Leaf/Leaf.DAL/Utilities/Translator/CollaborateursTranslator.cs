@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leaf.DAL.ScaffoldedModels;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -7,9 +8,9 @@ namespace Leaf.DAL.Utilities.Translator
 {
     public class CollaborateursTranslator
     {
-        public static DTO.Collaborateurs DalToDto(ScaffoldedModels.Collaborateurs pCollaborateurs)
+        public static Collaborateurs DalToDto(ScaffoldedModels.Collaborateurs pCollaborateurs)
         {
-            return new DTO.Collaborateurs
+            return new Collaborateurs
             {
                 Admin = pCollaborateurs.Admin,
                 Id = pCollaborateurs.Id,
@@ -25,9 +26,9 @@ namespace Leaf.DAL.Utilities.Translator
             };
         }
 
-        public static ICollection<DTO.Collaborateurs> DalToDto(ICollection<ScaffoldedModels.Collaborateurs> pCollaborateurs)
+        public static ICollection<Collaborateurs> DalToDto(ICollection<ScaffoldedModels.Collaborateurs> pCollaborateurs)
         {
-            var collabList = new Collection<DTO.Collaborateurs>();
+            var collabList = new Collection<Collaborateurs>();
             foreach (var collab in pCollaborateurs)
             {
                 collabList.Add(DalToDto(collab));

@@ -7,26 +7,26 @@ using Leaf.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Leaf.DAL.ScaffoldedModels;
 using Leaf.DAL.Services;
+using Leaf.DAL;
 
 namespace Leaf.Web.Controllers
 {
     public class ClientsController : Controller
     {
-        private static ClientService _clientService;
 
         public ClientsController(LeafContext context)
         {
             Dal.SetBDD(context);
-            _clientService = new ClientService(context);
         }
 
         public IActionResult Client(int? id)
         {
             if(id.HasValue)
             {
+                IDal dal = new Dal();
                 var model = new ClientViewModel
                 {
-                    client = _clientService.GetById((int)id)
+                    client = dal.GetClient((int)id)
                 };
                 return View(model);
             }

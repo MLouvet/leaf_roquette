@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Leaf.DAL;
 using Leaf.DAL.ScaffoldedModels;
-using Leaf.Models;
-using Leaf.Services;
 using Leaf.Web.Data;
 using Leaf.Web.Models;
 using Leaf.Web.Services;
@@ -26,6 +21,7 @@ namespace Leaf.Web
         {
             Configuration = configuration;
             Dal.Configuration = configuration;
+            LeafContext.SetConfiguration(configuration);
         }
 
         public IConfiguration Configuration { get; }

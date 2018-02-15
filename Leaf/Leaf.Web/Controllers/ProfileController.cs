@@ -7,32 +7,28 @@ using Leaf.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Leaf.DAL.Services;
+using Leaf.DAL;
 
 namespace Leaf.Web.Controllers
 {
     public class ProfileController : Controller
     {
 
-        private static CollaborateursService _collaborateursService;
-        private static NotificationService _notificationService;
         public ProfileController(LeafContext context)
         {
             Dal.SetBDD(context);
-            _collaborateursService = new CollaborateursService(context);
-            _notificationService = new NotificationService(context);
         }
 
         // GET: Clients
         public IActionResult Profile()
         {
-            //IDal d = new Dal();
+            IDal dal = new Dal();
             // TODO changer 2 en numéro actuel du collab connecté
-            Collaborateurs c = new Dal().GetCollaborateurs(HttpContext.User.Identity.Name);
-            var collaborateurs = _collaborateursService.GetById(c.Id);
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
             ProfileViewModel model = new ProfileViewModel
             {
-                notifications = _notificationService.GetNotificationsByCollaborateurs(collaborateurs)
-                //taches = _notificationService.GetTaches(collaborateurs)
+                notifications = dal.GetNotifications(c).ToList(),
+                taches = dal.GetTaches(c).ToList()
             };
 
             /*foreach (Tache t in model.taches)

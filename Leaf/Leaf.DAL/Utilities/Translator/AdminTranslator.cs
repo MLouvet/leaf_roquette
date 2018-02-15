@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leaf.DAL.ScaffoldedModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,9 +7,9 @@ namespace Leaf.DAL.Utilities.Translator
 {
     public class AdminTranslator
     {
-        public static DTO.Admin DalToDto(ScaffoldedModels.Admin pAdmin)
+        public static Admin DalToDto(ScaffoldedModels.Admin pAdmin)
         {
-            return new DTO.Admin
+            return new Admin
             {
                 Id = pAdmin.Id,
                 IdNavigation = CollaborateursTranslator.DalToDto(pAdmin.IdNavigation),

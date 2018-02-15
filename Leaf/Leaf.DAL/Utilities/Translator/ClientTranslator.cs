@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leaf.DAL.ScaffoldedModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,9 +7,9 @@ namespace Leaf.DAL.Utilities.Translator
 {
     public class ClientTranslator
     {
-        public static DTO.Client DalToDto(ScaffoldedModels.Client pClient)
+        public static Client DalToDto(ScaffoldedModels.Client pClient)
         {
-            return new DTO.Client
+            return new Client
             {
                 Adresse = pClient.Adresse,
                 Compagnie = pClient.Compagnie,

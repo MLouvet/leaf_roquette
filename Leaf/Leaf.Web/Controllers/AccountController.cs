@@ -11,6 +11,8 @@ using Leaf.Services;
 using Leaf.Web.Services;
 using Leaf.Web.Models;
 using Leaf.DAL.ScaffoldedModels;
+using Leaf.DAL;
+using Leaf.Web.Data;
 
 namespace Leaf.Web.Controllers
 {
@@ -34,7 +36,7 @@ namespace Leaf.Web.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
-            Dal.SetBDD(context, userManager, signInManager);
+            new Dal().SetAndInitBDD(context, userManager, signInManager);
         }
 
         [TempData]

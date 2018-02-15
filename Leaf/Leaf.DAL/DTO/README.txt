@@ -1,0 +1,1 @@
+﻿Please use the Scaffolded Models, they are strictly identicals to the DTO and can be updated as the database evolves with retyping every property.

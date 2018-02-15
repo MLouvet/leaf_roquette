@@ -1,4 +1,4 @@
-﻿using Leaf.DAL.DTO;
+﻿using Leaf.DAL.ScaffoldedModels;
 using Leaf.Web.ViewModel;
 using System.Collections.Generic;
 

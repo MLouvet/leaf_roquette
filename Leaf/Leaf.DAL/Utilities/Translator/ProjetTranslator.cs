@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leaf.DAL.ScaffoldedModels;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -7,9 +8,9 @@ namespace Leaf.DAL.Utilities.Translator
 {
     public class ProjetTranslator
     {
-        public static DTO.Projet DalToDto(ScaffoldedModels.Projet pProjet)
+        public static Projet DalToDto(ScaffoldedModels.Projet pProjet)
         {
-            return new DTO.Projet
+            return new Projet
             {
                 Client = pProjet.Client,
                 //ClientNavigation = ClientTranslator.DalToDto(pProjet.ClientNavigation),
@@ -23,9 +24,9 @@ namespace Leaf.DAL.Utilities.Translator
             };
         }
 
-        public static ICollection<DTO.Projet> DalToDto(ICollection<ScaffoldedModels.Projet> pProjet)
+        public static ICollection<Projet> DalToDto(ICollection<ScaffoldedModels.Projet> pProjet)
         {
-            var projetList = new Collection<DTO.Projet>();
+            var projetList = new Collection<Projet>();
             foreach (var projet in pProjet)
             {
                 projetList.Add(DalToDto(projet));

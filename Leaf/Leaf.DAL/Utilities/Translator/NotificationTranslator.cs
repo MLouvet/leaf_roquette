@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leaf.DAL.ScaffoldedModels;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -7,9 +8,9 @@ namespace Leaf.DAL.Utilities.Translator
 {
     public class NotificationTranslator
     {
-        public static DTO.Notification DalToDto(ScaffoldedModels.Notification pNotification)
+        public static Notification DalToDto(ScaffoldedModels.Notification pNotification)
         {
-            return new DTO.Notification
+            return new Notification
             {
                 Destinataire = pNotification.Destinataire,
                 //DestinataireNavigation = CollaborateursTranslator.DalToDto(pNotification.DestinataireNavigation),
@@ -21,9 +22,9 @@ namespace Leaf.DAL.Utilities.Translator
             };
         }
 
-        public static ICollection<DTO.Notification> DalToDto(ICollection<ScaffoldedModels.Notification> pNotification)
+        public static ICollection<Notification> DalToDto(ICollection<ScaffoldedModels.Notification> pNotification)
         {
-            var notifList = new Collection<DTO.Notification>();
+            var notifList = new Collection<Notification>();
             foreach(var notif in pNotification)
             {
                 notifList.Add(DalToDto(notif));

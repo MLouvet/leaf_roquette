@@ -7,11 +7,15 @@ namespace Leaf.DAL.ScaffoldedModels
 {
     public partial class LeafContext : DbContext
     {
-        private IConfiguration _config;
-
-        public LeafContext(IConfiguration config) : base()
+        private static IConfiguration _config = null;
+        public LeafContext(DbContextOptions<LeafContext> options)
+            : base(options)
         {
-            _config = config;
+        }
+
+        public static void SetConfiguration(IConfiguration configuration)
+        {
+            _config = configuration;
         }
 
         public virtual DbSet<Admin> Admin { get; set; }
@@ -25,11 +29,7 @@ namespace Leaf.DAL.ScaffoldedModels
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer(_config.GetConnectionString("LeafDB"));
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
