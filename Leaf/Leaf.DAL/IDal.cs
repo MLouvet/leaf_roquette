@@ -31,6 +31,11 @@ namespace Leaf.DAL
         /// <returns>The wanted admin, or null if not found.</returns>
         Admin GetAdmin(int id);
 
+        /// <summary>
+        /// Gets a client by its id or null if not found
+        /// </summary>
+        /// <param name="id">Client's id</param>
+        /// <returns>The wanted client, or null if not found.</returns>
         Client GetClient(int id);
 
         /// <summary>
@@ -61,12 +66,12 @@ namespace Leaf.DAL
         Tache GetTache(int id);
 
         /// <summary>
-        /// Modifies the database's state relative to this notifcation.
+        /// Modifies the database's state relative to this notification.
         /// </summary>
         /// <param name="n">Notification to mark as read</param>
         void ReadNotification(Notification n);
         /// <summary>
-        /// Modifies the database's state relative to this notifcation.
+        /// Modifies the database's state relative to this notification.
         /// </summary>
         /// <param name="n">Notification to mark as unread</param>
         void UnreadNotification(Notification n);
@@ -74,24 +79,43 @@ namespace Leaf.DAL
 
         #region Collections
         /// <summary>
+        /// Gets all the clients known, might be an empty collection.
+        /// </summary>
+        /// <returns>clients</returns>
+        List<Client> Clients { get; }
+
+        /// <summary>
+        /// Gets all the clients of the collaborator, or an empty collection if he is not found.
+        /// </summary>
+        /// <param name="c">Collaborator whose clients are seeked.</param>
+        /// <returns>Notifications of the collaborator or an empty collection.</returns>
+        List<Client> GetClients(Collaborateurs c);
+
+        /// <summary>
         /// Gets all the notifications of the collaborator, or an empty collection if he is not found.
         /// </summary>
-        /// <param name="c">Collaborator whose notifcations are seeked.</param>
+        /// <param name="c">Collaborator whose notifications are seeked.</param>
         /// <returns>Notifications of the collaborator or an empty collection.</returns>
         List<Notification> GetNotifications(Collaborateurs c);
         /// <summary>
         /// Gets the n last notifications of the collaborator, or an empty collection if he is not found.
         /// </summary>
-        /// <param name="c">Collaborator whose notifcations are seeked.</param>
+        /// <param name="c">Collaborator whose notifications are seeked.</param>
         /// <param name="n">Maximum number of notification to be retrieved</param>
         /// <returns>n last notifications of the collaborator or an empty collection.</returns>
         List<Notification> GetRecentNotifications(Collaborateurs c, int n);
+        /// <summary>
+        /// Gets all the projects known, might be an empty collection.
+        /// </summary>
+        /// <returns>Projects</returns>
+        List<Projet> Projets { get; }
+
         /// <summary>
         /// Gets all the projects to which a collaborator participates, might be an empty collection.
         /// </summary>
         /// <param name="collaborateur">Collaborator participating</param>
         /// <returns>Projects related to collaborator</returns>
-        List<Projet> GetProjetByCollaborateur(Collaborateurs collaborateur);
+        List<Projet> GetProjets(Collaborateurs collaborateur);
 
         /// <summary>
         /// Gets all the tasks to which a collaborator participates, might be an empty collection.

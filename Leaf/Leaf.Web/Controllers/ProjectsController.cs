@@ -35,7 +35,7 @@ namespace Leaf.Web.Controllers
 
             var model = new ProjectViewModel
             {
-                projets = dal.GetProjetByCollaborateur(collaborateurs).ToList()
+                projets = dal.GetProjets(collaborateurs).ToList()
             };
             foreach(var projet in model.projets)
             {

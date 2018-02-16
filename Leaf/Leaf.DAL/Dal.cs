@@ -263,7 +263,7 @@ namespace Leaf.DAL
         }
 
 
-        public List<Projet> GetProjetByCollaborateur(Collaborateurs collaborateur)
+        public List<Projet> GetProjets(Collaborateurs collaborateur)
         {
             var projetList = new List<Projet>();
             if (collaborateur == null)
@@ -280,6 +280,42 @@ namespace Leaf.DAL
 
             return projetList;
         }
+
+        public List<Client> Clients => bdd.Client.ToList();
+
+        public List<Client> GetClients(Collaborateurs collaborateur)
+        {
+            var clientList = new List<Client>();
+            var projetList = new List<Projet>();
+
+            foreach (var projet in bdd.Projet.ToList())
+            {
+                if (projet.Responsable == collaborateur.Id)
+                {
+                    projetList.Add(projet);
+                    break;
+                }
+
+                foreach (var tache in bdd.Tache.Where(t => t.IdProj == projet.Id && t.CollabId == collaborateur.Id))
+                {
+                    projetList.Add(projet);
+                    break;
+                }
+            }
+
+            projetList = projetList.Distinct().ToList();
+
+            foreach (var projet in projetList)
+            {
+                clientList.Add((projet.ClientNavigation));
+            }
+
+            clientList.Distinct().ToList();
+
+            return clientList;
+        }
+
+        public List<Projet> Projets => bdd.Projet.ToList();
         #endregion
 
         #endregion
