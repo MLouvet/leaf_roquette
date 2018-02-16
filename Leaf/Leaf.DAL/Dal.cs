@@ -71,7 +71,8 @@ namespace Leaf.DAL
 
                 foreach (var projet in projetList)
                 {
-                    clientList.Add(/*ClientTranslator.DalToDto*/(projet.ClientNavigation));
+                    Client clientTemp = GetById(/*ClientTranslator.DalToDto*/(projet.Client));
+                    clientList.Add(clientTemp);
                 }
 
                 clientList.Distinct().ToList();

@@ -6,6 +6,6 @@ namespace Leaf
 {
     public class ClientListViewModel : LoginPartialViewModel
     {
-        public List<Client> clients;
+        public List<Leaf.DAL.ScaffoldedModels.Client> clients;
     }
 }

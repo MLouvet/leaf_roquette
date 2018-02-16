@@ -5,15 +5,28 @@
 }
 
 <div>
-    @*<h2 style="text-align:center"> Liste de mes clients </h2>*@
-    @*<br/>*@
-    @*<br/>*@
-    @*<br/>*@
+    <h2 style="text-align:center"> Liste de mes clients </h2>
+    <br />
+    <li>
+        @switch (Model.Statut)
+        {
+            case ClientListViewModel.StatutEnum.Admin:
+            case ClientListViewModel.StatutEnum.SuperAdmin:
+            case ClientListViewModel.StatutEnum.ChefDeProjet:
+                <input type="button" onclick="location.href = '@Url.Action("ClientCreation", "Clients"); return false;" value="Créer un client"/>
+                break;
+            case ClientListViewModel.StatutEnum.Collaborateur:
+            default:
+                break;
+        }
+    </li>
+
+    <br/>
     @(Html
         .Grid(Model.clients)
         .Build(columns =>
         {
-            columns.Add(client => client.Nom).Titled("Client").RenderedAs(client => Html.ActionLink(client.Nom, "Show", "client", new { id = client.Id })).Sortable(true);
+            columns.Add(client => client.Nom).Titled("Client").RenderedAs(client => Html.ActionLink(client.Compagnie, "Client", "Clients", new { client.Id })).Sortable(true);
         })
         .Filterable()
         .Sortable()
