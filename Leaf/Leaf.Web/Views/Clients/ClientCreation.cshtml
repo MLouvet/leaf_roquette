@@ -4,10 +4,56 @@
 }
 
 <div>
-    @*<h2 style="text-align:center">Model.client.Nom</h2>*@
+    <h2 style="text-align:center">Créer un nouveau client</h2>
 </div>
 
-<div>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+            <h4>Compagnie: </h4>
+            <hr />
+            <div asp-validation-summary="All" class="="text-danger"></div>   
+            <div class="form-group">
+                <label asp-for="Company"></label>
+                <input asp-for="Company"  class="form-control" />
+                <span asp-validation-for="Company" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Adress" ></label>
+                <input asp-for="Adress" class="form-control" />
+                <span asp-validation-for="Adress" class="text-danger"></span>
+            </div>
+            <br />
+            <h4>Référent client:</h4>
+            <br />
+            <div class="form-group">
+                <label asp-for="ReferentName"></label>
+                <input asp-for="ReferentName" class="form-control" />
+                <span asp-validation-for="ReferentName" class="text-danger"></span>
+            </div>
+            <!--
+            <div class="form-group">
+                <label asp-for="clientnew.Prenom"></label>
+                <input asp-for="clientnew.Prenom" class="text-danger" />
+                <span asp-validation-for="referentSurname" class="text-danger"></span>
+            </div>
+            -->
+            <div class="form-group">
+                <label asp-for="ReferentPhone"></label>
+                <input asp-for="ReferentPhone" class="form-control" />
+                <span asp-validation-for="ReferentPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReferentMail"></label>
+                <input asp-for="ReferentMail" class="form-control" />
+                <span asp-validation-for="ReferentMail" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-default">Ajouter le client</button>
+            <input type="button" value="Annuler" class="btn btn-default cancel" />
+        </form>
+    
+    </div>
+    <!--
     <form method="post">
         <fieldset>
             <legend>Client</legend>
@@ -15,12 +61,12 @@
                 <div>
                     <label for="clientName">Nom du Client: </label>
                     <input type="text" name="clientName" value="@Model.clientnew.Compagnie"/>
-                    <!-- "At"Html.ValidationMessage("Model.clientnew.Nom")-->
+                    "At"Html.ValidationMessage("Model.clientnew.Nom")
                 </div>
                 <div>
                     <label for="clientAdresse">Adresse: </label>
                     <input type="text" name="clientAdresse" value="@Model.clientnew.Adresse" />
-                    <!--"At"Html.ValidationMessage("Model.clientnew.Adresse")-->
+                    "At"Html.ValidationMessage("Model.clientnew.Adresse")
                 </div>
             </div>
             <br />
@@ -53,5 +99,10 @@
             </div>
         </fieldset>
     </form>
+    -->
 
 </div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

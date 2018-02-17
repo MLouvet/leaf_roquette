@@ -55,7 +55,7 @@ namespace Leaf.Web.Controllers
 
             var model = new ClientCreationViewModel
             {
-                clientnew = new Leaf.DAL.ScaffoldedModels.Client()
+                clientnew = new Client()
             };
 
             return View(model);
