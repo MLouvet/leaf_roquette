@@ -48,7 +48,7 @@ namespace Leaf.Web.Controllers
         {
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-            
+
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -80,7 +80,11 @@ namespace Leaf.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    IDal dal = new Dal();
+                    if (dal.GetCollaborateurs(model.Email) == null)
+                        ModelState.AddModelError(string.Empty, "Identifiant inconnu.");
+                    else
+                        ModelState.AddModelError(string.Empty, "Mot de passe invalide.");
                     return View(model);
                 }
             }
