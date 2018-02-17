@@ -21,152 +21,12 @@ namespace Leaf.DAL
         private static ProjetService projetService;
         private static TacheService tacheService;
 
-        #region Services
-        public class AdminService : BaseService
-        {
-            public AdminService(LeafContext context) : base(context) { }
-            public static Admin GetById(int pId) => (_context.Admin.Where(a => a.Id == pId).Single());
-        }
-
-        public class ClientService : BaseService
-        {
-            public ClientService(LeafContext context) : base(context) { }
-
-            /// <summary>
-            /// Get a client based on its id
-            /// </summary>
-            /// <param name="pId"> The ID of the client to get </param>
-            /// <returns>The client DTO</returns>
-            public Client GetById(int pId)
-            {
-                return /*ClientTranslator.DalToDto*/(_context.Client.Where(c => c.Id == pId).SingleOrDefault());
-            }
-
-            /// <summary>
-            /// Return the list of Clients where the collab is a project manager or assigner to
-            /// </summary>
-            /// <param name="collaborateur"></param>
-            /// <returns>the list of client where the current collab has work in common with (project or task in a project)</returns>
-            public List<Client> GetByCollaborateur(Collaborateurs collaborateur)
-            {
-                var clientList = new List<Client>();
-                var projetList = new List<Projet>();
-
-                foreach (var projet in _context.Projet.ToList())
-                {
-                    if (projet.Responsable == collaborateur.Id)
-                    {
-                        projetList.Add(projet);
-                        break;
-                    }
-
-                    foreach (var tache in _context.Tache.Where(t => t.IdProj == projet.Id && t.CollabId == collaborateur.Id).ToList())
-                    {
-                        projetList.Add(projet);
-                        break;
-                    }
-                }
-
-                projetList.Distinct().ToList();
-
-                foreach (var projet in projetList)
-                {
-                    clientList.Add(/*ClientTranslator.DalToDto*/(projet.ClientNavigation));
-                }
-
-                clientList.Distinct().ToList();
-
-                return clientList;
-            }
-
-            /// <summary>
-            /// Get a list of all the client in the database
-            /// </summary>
-            /// <returns>A list of Client</returns>
-            public List<Client> GetAllClient()
-            {
-                var clientList = new List<Client>();
-
-                foreach (var client in _context.Client.ToList())
-                {
-                    clientList.Add(/*ClientTranslator.DalToDto*/(client));
-                }
-
-                return clientList;
-            }
-        }
-
-        public class CollaborateursService : BaseService
-        {
-            public CollaborateursService(LeafContext context) : base(context) { }
-            public Collaborateurs GetById(int pId) => (_context.Collaborateurs.Where(c => c.Id == pId).SingleOrDefault());
-        }
-
-        public class NotificationService : BaseService
-        {
-            public NotificationService(LeafContext context) : base(context) { }
-            public List<Notification> GetNotificationsByCollaborateurs(Collaborateurs pCollaborateurs)
-            {
-                return _context.Notification.Where(n => n.DestinataireNavigation.Id == pCollaborateurs.Id).ToList();
-            }
-
-            public List<Notification> DeleteNotification(List<Notification> notifList, int id)
-            {
-                //TODO Actually save the database data
-                foreach (var notif in notifList)
-                {
-                    if (notif.Id == id)
-                    {
-                        notifList.Remove(notif);
-                    }
-                }
-                return notifList;
-            }
-        }
-
-        public class ProjetService : BaseService
-        {
-            public ProjetService(LeafContext context) : base(context) { }
-
-            /// <summary>
-            /// Return all the projetct's DTO's
-            /// </summary>
-            /// <returns>return a list of DTO projects</returns>
-            public List<Projet> GetAllProjets() => _context.Projet.ToList();
-            public Projet GetProjetsById(int pId) => _context.Projet.Where(t => t.Id == pId).SingleOrDefault();
-
-            public List<Projet> GetByCollaborateur(Collaborateurs collaborateur)
-            {
-                var projetList = new List<Projet>();
-
-                foreach (var projet in _context.Projet.ToList())
-                {
-                    foreach (var tache in _context.Tache.Where(t => t.IdProj == projet.Id && t.CollabId == collaborateur.Id).ToList())
-                    {
-                        projetList.Add(projet);
-                        break;
-                    }
-                }
-
-                return projetList;
-            }
-        }
-
-        public class TacheService : BaseService
-        {
-            public TacheService(LeafContext context) : base(context) { }
-
-            public Tache GetById(int pId) => _context.Tache.Where(t => t.Id == pId).SingleOrDefault();
-
-            public List<Tache> GetByCollaborateurs(Collaborateurs pCollaborateur) => _context.Tache.Where(t => t.Collab.Id == pCollaborateur.Id).ToList();
-        }
-
-        #endregion
+      
 
         public Dal()
         {
             var optionsBuilder = new DbContextOptionsBuilder<LeafContext>();
-            optionsBuilder.UseSqlServer(Dal.Configuration.GetConnectionString("LeafDB"));
+            optionsBuilder.UseSqlServer(Configuration.GetConnectionString("LeafDB"));
             SetBDD(bdd = new LeafContext(optionsBuilder.Options));
         }
         public static void SetBDD(LeafContext leafContext)
@@ -317,6 +177,148 @@ namespace Leaf.DAL
 
         public List<Projet> Projets => bdd.Projet.ToList();
         #endregion
+
+        #endregion
+
+        #region Services
+        private class AdminService : BaseService
+        {
+            public AdminService(LeafContext context) : base(context) { }
+            public static Admin GetById(int pId) => (_context.Admin.Where(a => a.Id == pId).Single());
+        }
+
+        private class ClientService : BaseService
+        {
+            public ClientService(LeafContext context) : base(context) { }
+
+            /// <summary>
+            /// Get a client based on its id
+            /// </summary>
+            /// <param name="pId"> The ID of the client to get </param>
+            /// <returns>The client DTO</returns>
+            public Client GetById(int pId)
+            {
+                return /*ClientTranslator.DalToDto*/(_context.Client.Where(c => c.Id == pId).SingleOrDefault());
+            }
+
+            /// <summary>
+            /// Return the list of Clients where the collab is a project manager or assigner to
+            /// </summary>
+            /// <param name="collaborateur"></param>
+            /// <returns>the list of client where the current collab has work in common with (project or task in a project)</returns>
+            public List<Client> GetByCollaborateur(Collaborateurs collaborateur)
+            {
+                var clientList = new List<Client>();
+                var projetList = new List<Projet>();
+
+                foreach (var projet in _context.Projet.ToList())
+                {
+                    if (projet.Responsable == collaborateur.Id)
+                    {
+                        projetList.Add(projet);
+                        break;
+                    }
+
+                    foreach (var tache in _context.Tache.Where(t => t.IdProj == projet.Id && t.CollabId == collaborateur.Id).ToList())
+                    {
+                        projetList.Add(projet);
+                        break;
+                    }
+                }
+
+                projetList.Distinct().ToList();
+
+                foreach (var projet in projetList)
+                {
+                    clientList.Add(/*ClientTranslator.DalToDto*/(projet.ClientNavigation));
+                }
+
+                clientList.Distinct().ToList();
+
+                return clientList;
+            }
+
+            /// <summary>
+            /// Get a list of all the client in the database
+            /// </summary>
+            /// <returns>A list of Client</returns>
+            public List<Client> GetAllClient()
+            {
+                var clientList = new List<Client>();
+
+                foreach (var client in _context.Client.ToList())
+                {
+                    clientList.Add(/*ClientTranslator.DalToDto*/(client));
+                }
+
+                return clientList;
+            }
+        }
+
+        private class CollaborateursService : BaseService
+        {
+            public CollaborateursService(LeafContext context) : base(context) { }
+            public Collaborateurs GetById(int pId) => (_context.Collaborateurs.Where(c => c.Id == pId).SingleOrDefault());
+        }
+
+        private class NotificationService : BaseService
+        {
+            public NotificationService(LeafContext context) : base(context) { }
+            public List<Notification> GetNotificationsByCollaborateurs(Collaborateurs pCollaborateurs)
+            {
+                return _context.Notification.Where(n => n.DestinataireNavigation.Id == pCollaborateurs.Id).ToList();
+            }
+
+            public List<Notification> DeleteNotification(List<Notification> notifList, int id)
+            {
+                //TODO Actually save the database data
+                foreach (var notif in notifList)
+                {
+                    if (notif.Id == id)
+                    {
+                        notifList.Remove(notif);
+                    }
+                }
+                return notifList;
+            }
+        }
+
+        private class ProjetService : BaseService
+        {
+            public ProjetService(LeafContext context) : base(context) { }
+
+            /// <summary>
+            /// Return all the projetct's DTO's
+            /// </summary>
+            /// <returns>return a list of DTO projects</returns>
+            public List<Projet> GetAllProjets() => _context.Projet.ToList();
+            public Projet GetProjetsById(int pId) => _context.Projet.Where(t => t.Id == pId).SingleOrDefault();
+
+            public List<Projet> GetByCollaborateur(Collaborateurs collaborateur)
+            {
+                var projetList = new List<Projet>();
+
+                foreach (var projet in _context.Projet.ToList())
+                {
+                    foreach (var tache in _context.Tache.Where(t => t.IdProj == projet.Id && t.CollabId == collaborateur.Id).ToList())
+                    {
+                        projetList.Add(projet);
+                        break;
+                    }
+                }
+
+                return projetList;
+            }
+        }
+
+        private class TacheService : BaseService
+        {
+            public TacheService(LeafContext context) : base(context) { }
+
+            public Tache GetById(int pId) => _context.Tache.Where(t => t.Id == pId).SingleOrDefault();
+
+            public List<Tache> GetByCollaborateurs(Collaborateurs pCollaborateur) => _context.Tache.Where(t => t.Collab.Id == pCollaborateur.Id).ToList();
+        }
 
         #endregion
     }
