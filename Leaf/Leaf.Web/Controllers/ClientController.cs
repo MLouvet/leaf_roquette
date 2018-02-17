@@ -18,12 +18,12 @@ namespace Leaf
             Dal.SetBDD(context);
         }
 
-        public IActionResult Profile()
+        public IActionResult Profile(int? id)
         {
             IDal dal = new Dal();
             var model = new ClientCreationViewModel
             {
-                clientnew = dal.GetClient(2)
+                clientnew = dal.GetClient(/*(int) id*/ 2)
             };
 
             return View(model);

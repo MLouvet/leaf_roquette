@@ -11,7 +11,7 @@ namespace Leaf
             Dal.SetBDD(context);
         }
 
-        public IActionResult Profile()
+        public IActionResult ClientCreation()
         {
 
             //DAL.DTO.Client clientTemp = new DAL.DTO.Client();

@@ -33,5 +33,32 @@ namespace Leaf.Web.Controllers
 
             return View("Error");
         }
+
+        public IActionResult ClientList()
+        {
+            Dal dal = new Dal();
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+            var collaborateurs = dal.GetCollaborateurs(c.Id);
+
+            var model = new ClientListViewModel
+            {
+                clients = dal.GetClients(collaborateurs)
+            };
+            return View(model);
+        }
+
+        public IActionResult ClientCreation()
+        {
+            Dal dal = new Dal();
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+            var collaborateurs = dal.GetCollaborateurs(c.Id);
+
+            var model = new ClientCreationViewModel
+            {
+                clientnew = new Leaf.DAL.ScaffoldedModels.Client()
+            };
+
+            return View(model);
+        }
     }
 }
