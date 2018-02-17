@@ -13,7 +13,7 @@
             case ClientListViewModel.StatutEnum.Admin:
             case ClientListViewModel.StatutEnum.SuperAdmin:
             case ClientListViewModel.StatutEnum.ChefDeProjet:
-                <input type="button" onclick="location.href = '@Url.Action("ClientCreation", "Clients"); return false;" value="Créer un client"/>
+                <input type="button" onclick="location.href='@Url.Action("ClientCreation", "Clients", null)'" value="Créer un client"/>
                 break;
             case ClientListViewModel.StatutEnum.Collaborateur:
             default:

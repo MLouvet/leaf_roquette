@@ -76,6 +76,8 @@ namespace Leaf.DAL
                 }
 
                 clientList.Distinct().ToList();
+                if (clientList == null || clientList.Count <= 0)
+                    return _context.Client.ToList();
 
                 return clientList;
             }
@@ -289,26 +291,31 @@ namespace Leaf.DAL
             var clientList = new List<Client>();
             var projetList = new List<Projet>();
 
+            var temp = new List<Projet>();
+            temp = bdd.Projet.ToList();
+            var inTemp = temp.Count;
+
             foreach (var projet in bdd.Projet.ToList())
             {
                 if (projet.Responsable == collaborateur.Id)
                 {
                     projetList.Add(projet);
-                    break;
+                    continue;
                 }
 
-                foreach (var tache in bdd.Tache.Where(t => t.IdProj == projet.Id && t.CollabId == collaborateur.Id))
+                foreach (var tache in bdd.Tache.Where(t => t.IdProj == projet.Id && t.CollabId == collaborateur.Id).ToList())
                 {
                     projetList.Add(projet);
                     break;
                 }
             }
 
-            projetList = projetList.Distinct().ToList();
+            projetList.Distinct().ToList();
 
             foreach (var projet in projetList)
             {
-                clientList.Add((projet.ClientNavigation));
+                Client clientTemp = bdd.Client.Where((client => client.Id == projet.Client)).SingleOrDefault();
+                clientList.Add(clientTemp);
             }
 
             clientList.Distinct().ToList();

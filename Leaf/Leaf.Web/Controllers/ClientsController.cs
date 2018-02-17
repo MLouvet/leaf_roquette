@@ -39,14 +39,25 @@ namespace Leaf.Web.Controllers
             Dal dal = new Dal();
             Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
             var collaborateurs = dal.GetCollaborateurs(c.Id);
-            List<Leaf.DAL.ScaffoldedModels.Client> clientsTemp = new List<Leaf.DAL.ScaffoldedModels.Client>();
-            clientsTemp.Add(dal.GetClient(2));
 
             var model = new ClientListViewModel
             {
                 clients = dal.GetClients(collaborateurs)
-                //clients = clientsTemp
             };
+            return View(model);
+        }
+
+        public IActionResult ClientCreation()
+        {
+            Dal dal = new Dal();
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+            var collaborateurs = dal.GetCollaborateurs(c.Id);
+
+            var model = new ClientCreationViewModel
+            {
+                clientnew = new Leaf.DAL.ScaffoldedModels.Client()
+            };
+
             return View(model);
         }
     }
