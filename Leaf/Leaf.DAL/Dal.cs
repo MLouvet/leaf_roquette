@@ -168,6 +168,15 @@ namespace Leaf.DAL
             temp = bdd.Projet.ToList();
             var inTemp = temp.Count;
 
+            //Si c'est un admin ou un chef de projet, on retourne tous les clients
+            if(collaborateur.Statut == "ADMIN" || collaborateur.Statut == "CHEF_PROJET")
+            {
+                foreach (var client in bdd.Client)
+                    clientList.Add(client);
+
+                return clientList;
+            }
+
             foreach (var projet in bdd.Projet.ToList())
             {
                 if (projet.Responsable == collaborateur.Id)
@@ -231,6 +240,8 @@ namespace Leaf.DAL
             {
                 var clientList = new List<Client>();
                 var projetList = new List<Projet>();
+
+                
 
                 foreach (var projet in _context.Projet.ToList())
                 {
