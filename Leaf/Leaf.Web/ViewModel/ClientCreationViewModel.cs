@@ -21,12 +21,12 @@ namespace Leaf
         [Display(Name = "Adresse de l'entreprise: ")]
         public string Adress { get; set; }
 
-        //CCompany referent info
+        //Company referent info
         [Required(ErrorMessage = "Le nom du référent est requis")]
         [Display(Name = "Nom du référent: ")]
         public string ReferentName { get; set; }
 
-        [Required(ErrorMessage = "Le prénom du référent est requis")]
+        //[Required(ErrorMessage = "Le prénom du référent est requis")]
         [Display(Name = "Prénom du référent: ")]
         public string ReferentSurname { get; set; }
 

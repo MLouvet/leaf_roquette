@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+        <form asp-controller="Clients" asp-action="AddClient" method="post">
             <h4>Compagnie: </h4>
             <hr />
             <div asp-validation-summary="All" class="="text-danger"></div>   
@@ -22,7 +22,7 @@
                 <label asp-for="Adress" ></label>
                 <input asp-for="Adress" class="form-control" />
                 <span asp-validation-for="Adress" class="text-danger"></span>
-            </div>
+            </div>      
             <br />
             <h4>Référent client:</h4>
             <br />
