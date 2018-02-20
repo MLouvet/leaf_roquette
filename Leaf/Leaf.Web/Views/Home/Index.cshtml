@@ -5,6 +5,7 @@
 }
 
 <div>
+    
     @*<h2 style="text-align:center">Mises à jour récentes sur vos projets</h2>*@
     @(Html
         .Grid(Model.notifications)
@@ -33,5 +34,6 @@
                 .Pageable()
                 .Empty("Aucune donnée trouvée")
     )
-
-</div>
+    @Html.TextBoxFor(m => m.StartDate, String.Format("{0:d}", DateTime.Today.ToShortDateString()),
+              new { @class = "datefield", type = "date" }) @*// This will make every input element with the type "date" into a DatePicker element*@
+        </div>

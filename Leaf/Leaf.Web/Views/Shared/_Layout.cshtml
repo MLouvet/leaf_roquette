@@ -19,6 +19,12 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    <link href="~/css/jquery-ui-combined/core.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/jquery-ui-combined/datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/jquery-ui-combined/theme.css" rel="stylesheet" type="text/css" />
+
+    <script src="~/lib/jquery-ui-combined/jquery-ui-1.12.1.js" type="text/javascript"></script>
+    <script src="~/js/DatePickerReady.js" type="text/javascript"></script>
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -84,6 +90,7 @@
     <script>
         $('.mvc-grid').mvcgrid();
     </script>
+    <script type="text/javascript" src="~/lib/jquery-unobstrusive-ajax/jquery.unobtrusive-ajax.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
