@@ -66,6 +66,22 @@ namespace Leaf.DAL
             return true;
         }
 
+        /// <summary>
+        /// Save  a new client in base if its calid
+        /// </summary>
+        /// <param name="c">The client to add</param>
+        /// <returns> True if the object has been added, else false</returns>
+        public bool SaveNewClient(Client c)
+        {
+            if(c.Compagnie != null && c.Adresse != null && c.Mail != null && c.Telephone != null
+                && c.Nom != null)
+            {
+                bdd.Client.Add(c);
+                bdd.SaveChanges();
+                return true;
+            }
+            return false;
+        }
 
         public Admin GetAdmin(int pId)                        =>              bdd.Admin.Where(a => a.Id == pId).SingleOrDefault();
         public Client GetClient(int id)                       =>              bdd.Client.Where(c => c.Id == id).SingleOrDefault();
@@ -152,6 +168,15 @@ namespace Leaf.DAL
             temp = bdd.Projet.ToList();
             var inTemp = temp.Count;
 
+            //Si c'est un admin ou un chef de projet, on retourne tous les clients
+            if(collaborateur.Statut == "ADMIN" || collaborateur.Statut == "CHEF_PROJET")
+            {
+                foreach (var client in bdd.Client)
+                    clientList.Add(client);
+
+                return clientList;
+            }
+
             foreach (var projet in bdd.Projet.ToList())
             {
                 if (projet.Responsable == collaborateur.Id)
@@ -215,6 +240,8 @@ namespace Leaf.DAL
             {
                 var clientList = new List<Client>();
                 var projetList = new List<Projet>();
+
+                
 
                 foreach (var projet in _context.Projet.ToList())
                 {
