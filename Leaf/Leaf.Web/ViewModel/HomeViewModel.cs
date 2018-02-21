@@ -12,8 +12,6 @@ namespace Leaf
         public string displayName;
         public List<Notification> notifications;
         public List<Tache> taches;
-        [DisplayName("Start Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateTime StartDate { get; set; }
+        
     }
 }

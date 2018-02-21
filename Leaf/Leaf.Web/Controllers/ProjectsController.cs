@@ -32,7 +32,7 @@ namespace Leaf.Web.Controllers
             Dal dal = new Dal();
             Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
 
-            var model = new ProjectViewModel
+            var model = new ProjectsViewModel
             {
                 projets = dal.GetProjets(c).ToList()
             };
@@ -43,6 +43,28 @@ namespace Leaf.Web.Controllers
             }
 
             return View(model);
+        }
+
+        public IActionResult Project(int? id)
+        {
+            Dal dal = new Dal();
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+
+            Projet projectToDisplay = dal.GetProjet((int)id);
+            projectToDisplay.ClientNavigation = dal.GetClient(projectToDisplay.Client);
+            projectToDisplay.ResponsableNavigation = dal.GetCollaborateurs(projectToDisplay.Responsable);
+
+            if (id.HasValue)
+            {
+                var model = new ProjectViewModel
+                {
+                    Project = projectToDisplay
+                };
+
+                return View("Project", model);
+            }
+
+            return View("Error");
         }
     }
 }

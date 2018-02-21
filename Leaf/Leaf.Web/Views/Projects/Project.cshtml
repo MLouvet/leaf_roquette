@@ -1,0 +1,20 @@
+﻿@model ProjectViewModel
+@{
+    ViewData["Title"] = Model.Project.Nom;
+}
+
+<h2>Projet:  @Model.Project.Nom</h2>
+
+<div>
+    Responsable du projet: @Model.Project.ResponsableNavigation.Nom
+    <br />
+    Client du projet: @Model.Project.ClientNavigation.Compagnie
+    <br />
+    <br />
+    Date de début du projet: @Model.Project.Debut
+    <br />
+    Date de fin de  projet: @Model.Project.Echeance
+    <br />
+    <br />
+</div>
+
