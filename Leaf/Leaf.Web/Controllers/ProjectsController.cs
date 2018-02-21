@@ -31,19 +31,16 @@ namespace Leaf.Web.Controllers
             // TODO changer 2 en numéro actuel du collab connecté
             Dal dal = new Dal();
             Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
-            var collaborateurs = dal.GetCollaborateurs(c.Id);
 
             var model = new ProjectViewModel
             {
-                projets = dal.GetProjets(collaborateurs).ToList()
+                projets = dal.GetProjets(c).ToList()
             };
             foreach(var projet in model.projets)
             {
                 projet.ClientNavigation = dal.GetClient(projet.Client);
                 projet.ResponsableNavigation = dal.GetCollaborateurs(projet.Responsable);
             }
-
-            
 
             return View(model);
         }

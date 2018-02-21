@@ -56,23 +56,51 @@ namespace Leaf.Web.Controllers
 
             var model = new ClientCreationViewModel
             {
-                clientnew = new Client()
+                clientnew = new Client(),
+                isModification = false
             };
 
             return View(model);
         }
 
+        public IActionResult ClientModification(int? id)
+        {
+            Dal dal = new Dal();
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+
+            Leaf.DAL.ScaffoldedModels.Client clientModif;
+            clientModif = dal.GetClient((int)id);
+
+            var model = new ClientCreationViewModel
+            {
+                clientnew = clientModif,
+                Company = clientModif.Compagnie,
+                Adress = clientModif.Adresse,
+                ReferentName = clientModif.Nom,
+                //ReferentSurname = clientModif.Prenom,
+                ReferentMail = clientModif.Mail,
+                ReferentPhone = clientModif.Telephone,
+                isModification = true
+            };
+
+            return View("ClientModification", model);
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public IActionResult AddClient(ClientCreationViewModel model)
+        public IActionResult SaveNewClient(ClientCreationViewModel model)
         {
             Dal dal = new Dal();
 
             if (ModelState.IsValid)
             {
                 var newClient = new Leaf.DAL.ScaffoldedModels.Client { Compagnie = model.Company, Adresse = model.Adress, Nom = model.ReferentName, Telephone = model.ReferentPhone, Mail = model.ReferentMail, Projet = new List<Projet>() };
-                var result = dal.SaveNewClient(newClient);
+
+                bool result;
+
+                result = dal.SaveNewClient(newClient);
+
                 if(result)
                 {
                     Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
@@ -86,6 +114,42 @@ namespace Leaf.Web.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult SaveClient(ClientCreationViewModel model, int? id)
+        {
+            Dal dal = new Dal();
+
+            if (ModelState.IsValid)
+            {
+                model.clientnew = dal.GetClient((int)id);
+
+                model.clientnew.Adresse = model.Adress;
+                model.clientnew.Compagnie = model.Company;
+                model.clientnew.Nom = model.ReferentName;
+                model.clientnew.Telephone = model.ReferentPhone;
+                model.clientnew.Mail = model.ReferentMail;
+
+                bool result;
+
+                result = dal.ModifyClient(model.clientnew);
+
+                if (result)
+                {
+                    Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+                    var returnModel = new ClientListViewModel
+                    {
+                        clients = dal.GetClients(c)
+                    };
+                    return View("ClientList", returnModel);
+                }
+
+            }
+
+            return View("ClientModification", model);
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

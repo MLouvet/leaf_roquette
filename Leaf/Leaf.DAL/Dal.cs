@@ -83,6 +83,23 @@ namespace Leaf.DAL
             return false;
         }
 
+        /// <summary>
+        /// Modify a client in the database
+        /// </summary>
+        /// <param name="c">The new client values</param>
+        /// <returns>True if the operation succeded</returns>
+        public bool ModifyClient(Client c)
+        {
+            Client entity = bdd.Client.Find(c.Id);
+            if (entity == null)
+                return false;
+
+            bdd.Entry(entity).CurrentValues.SetValues(c);
+            var temp = bdd.Client.Find(c.Id);
+            int id = temp.Id;
+            return true;
+        }
+
         public Admin GetAdmin(int pId)                        =>              bdd.Admin.Where(a => a.Id == pId).SingleOrDefault();
         public Client GetClient(int id)                       =>              bdd.Client.Where(c => c.Id == id).SingleOrDefault();
         public Collaborateurs GetCollaborateurs(int id)       =>      bdd.Collaborateurs.Where(c => c.Id == id).SingleOrDefault();

@@ -1,28 +1,28 @@
 ﻿@model ClientCreationViewModel
 @{
-    ViewData["Title"] = "Client";
+    ViewData["Title"] = "Modification Client";
 }
 
 <div>
-    <h2 style="text-align:center">Créer un nouveau client</h2>
+    <h2 style="text-align:center">Modifier le client @Model.Company</h2>
 </div>
 
 <div class="row">
     <div class="col-md-6">
-        <form asp-controller="Clients" asp-action="SaveNewClient" method="post">
+        <form asp-controller="Clients" asp-action="SaveClient" asp-route-id="@Model.clientnew.Id" method="post">
             <h4>Compagnie: </h4>
             <hr />
-            <div asp-validation-summary="All" class="="text-danger"></div>   
+            <div asp-validation-summary="All" class="=" text-danger"></div>
             <div class="form-group">
                 <label asp-for="Company"></label>
-                <input asp-for="Company"  class="form-control" />
+                <input asp-for="Company" class="form-control" />
                 <span asp-validation-for="Company" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Adress" ></label>
+                <label asp-for="Adress"></label>
                 <input asp-for="Adress" class="form-control" />
                 <span asp-validation-for="Adress" class="text-danger"></span>
-            </div>      
+            </div>
             <br />
             <h4>Référent client:</h4>
             <br />
@@ -49,13 +49,12 @@
                 <span asp-validation-for="ReferentMail" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-default">Ajouter le client</button>
-            
+            <button type="submit" class="btn btn-default">Modifier le client</button>
+
             <input type="button" value="Annuler" class="btn btn-default cancel" onclick="location.href='@Url.Action("ClientList", "Clients", null)'" />
         </form>
-    
-    </div>
 
+    </div>
 </div>
 
 @section Scripts {

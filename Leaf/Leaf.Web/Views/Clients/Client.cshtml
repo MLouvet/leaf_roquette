@@ -7,6 +7,20 @@
     <h2>Client : @Model.client.Compagnie</h2>
 </div>
 
+
+<div>
+        @switch (Model.Statut)
+        {
+            case ClientListViewModel.StatutEnum.Admin:
+            case ClientListViewModel.StatutEnum.SuperAdmin:
+            case ClientListViewModel.StatutEnum.ChefDeProjet:
+                <input type="button" onclick="location.href='@Url.Action("ClientModification", "Clients", new { id = Model.client.Id })'" value="Modifier un client" />
+                break;
+            case ClientListViewModel.StatutEnum.Collaborateur:
+            default:
+                break;
+        }
+</div>
 <div>
     <h3>Information sur le client:</h3>
     <br/>

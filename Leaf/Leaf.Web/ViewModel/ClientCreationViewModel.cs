@@ -12,6 +12,9 @@ namespace Leaf
     {
         public Client clientnew;
 
+        //Boolean, if it's a modification, it's true
+        public bool isModification { get; set; }
+
         //Company info
         [Required(ErrorMessage = "Le nom de la compagnie est requis")]
         [Display(Name = "Entreprise: ")]
@@ -26,7 +29,7 @@ namespace Leaf
         [Display(Name = "Nom du référent: ")]
         public string ReferentName { get; set; }
 
-        //[Required(ErrorMessage = "Le prénom du référent est requis")]
+        /*[Required(ErrorMessage = "Le prénom du référent est requis")]*/
         [Display(Name = "Prénom du référent: ")]
         public string ReferentSurname { get; set; }
 
