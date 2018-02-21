@@ -95,6 +95,7 @@ namespace Leaf.DAL
                 return false;
 
             bdd.Entry(entity).CurrentValues.SetValues(c);
+            bdd.SaveChanges();
             var temp = bdd.Client.Find(c.Id);
             int id = temp.Id;
             return true;
