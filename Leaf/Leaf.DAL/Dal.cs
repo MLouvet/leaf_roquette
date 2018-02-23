@@ -97,8 +97,73 @@ namespace Leaf.DAL
             bdd.Entry(entity).CurrentValues.SetValues(c);
             bdd.SaveChanges();
             var temp = bdd.Client.Find(c.Id);
-            int id = temp.Id;
             return true;
+        }
+
+        /// <summary>
+        /// Save a new Project in the DB
+        /// </summary>
+        /// <param name="project">The new Project to add</param>
+        /// <returns>true if adding was successful, false in an other case</returns>
+        public bool SaveNewProject(Projet project)
+        {
+            if(project.Nom != null && project.Debut != null && project.Echeance != null
+                && bdd.Client.Find(project.Client) != null && bdd.Collaborateurs.Find(project.Responsable) != null)
+            {
+                project.ClientNavigation = bdd.Client.Find(project.Client);
+                project.ResponsableNavigation = bdd.Collaborateurs.Find(project.Responsable);
+                project.Tache = new List<Tache>();
+                //Projet entity = bdd.Projet.Find(project.Id);
+                bdd.Projet.Add(project);
+                bdd.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Modify existing values for a project in the DB based on the ID
+        /// </summary>
+        /// <param name="project">The value which should replace the existing ones</param>
+        /// <returns>True is the values have been correctly added</returns>
+        public bool ModifyProject(Projet project)
+        {
+            Projet entity = bdd.Projet.Find(project.Id);
+            if (entity == null)
+                return false;
+
+            entity.Nom = project.Nom;
+            entity.Debut = project.Debut;
+            entity.Echeance = project.Echeance;
+
+            entity.Client = project.Client;
+            entity.ClientNavigation = bdd.Client.Find(project.Client);
+            entity.Responsable = project.Responsable;
+            entity.ResponsableNavigation = bdd.Collaborateurs.Find(project.Responsable);
+
+            if (entity.ResponsableNavigation == null || entity.ClientNavigation == null)
+                return false;
+
+            bdd.Entry(entity).CurrentValues.SetValues(project);
+            bdd.SaveChanges();
+            var temp = bdd.Client.Find(project.Id);
+            return true;
+        }
+
+        /// <summary>
+        /// Tells if the current user is the manager for the project
+        /// </summary>
+        /// <param name="name">The name/email of th user</param>
+        /// <param name="projectId">the id of the project displayed</param>
+        /// <returns>true if the urrentuser is the project manager</returns>
+        public bool IsProjectManager(string name, int projectId)
+        {
+            if (this.GetCollaborateurs(name).Id == bdd.Projet.Find(projectId).Responsable)
+            {
+                return true;
+            }
+            return false;
         }
 
         public Admin GetAdmin(int pId)                        =>              bdd.Admin.Where(a => a.Id == pId).SingleOrDefault();

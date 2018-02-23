@@ -5,10 +5,21 @@
 }
 
 <div>
-    @*<h2 style="text-align:center">Mes projets </h2>*@
-    @*<br/>*@
-    @*<br/>*@
-    @*<br/>*@
+    <h2 style="text-align:center">Mes projets </h2>
+    <br/>
+    @switch (Model.Statut)
+    {
+        case ProjectsViewModel.StatutEnum.Admin:
+        case ProjectsViewModel.StatutEnum.SuperAdmin:
+        case ProjectsViewModel.StatutEnum.ChefDeProjet:
+            <input type="button" onclick="location.href='@Url.Action("ProjectCreation", "Projects", null)'" value="Créer un projet" />
+            break;
+        case ProjectsViewModel.StatutEnum.Collaborateur:
+        default:
+            break;
+    }
+    <br/>
+    <br/>
     @(Html
         .Grid(Model.projets)
         .Build(columns =>

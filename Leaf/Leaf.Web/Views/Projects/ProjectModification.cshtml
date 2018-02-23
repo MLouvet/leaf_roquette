@@ -1,15 +1,15 @@
 ﻿@model ProjectViewModel
 @{
-    ViewData["Title"] = "Client";
+    ViewData["Title"] = "Modificationdu projet";
 }
 
 <div>
-    <h2 style="text-align:center">Créer un nouveau Projet</h2>
+    <h2 style="text-align:center">Modifier le projet @Model.ProjectName </h2>
 </div>
 
 <div class="row">
     <div class="col-md-6">
-        <form asp-controller="Projects" asp-action="SaveNewProject" method="post">
+        <form asp-controller="Projects" asp-action="SaveProjectModification" asp-route-id="@Model.Project.Id" method="post">
             <h4>Compagnie: </h4>
             <hr />
             <div asp-validation-summary="All" class="=" text-danger"></div>

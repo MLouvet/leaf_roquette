@@ -5,6 +5,21 @@
 
 <h2>Projet:  @Model.Project.Nom</h2>
 
+@switch (Model.Statut)
+{
+    case ProjectsViewModel.StatutEnum.Admin:
+    case ProjectsViewModel.StatutEnum.SuperAdmin:
+    case ProjectsViewModel.StatutEnum.ChefDeProjet:
+        if (Model.IsProjectManager)
+        {
+            <input type="button" onclick="location.href='@Url.Action("ProjectModification", "Projects", null)'" value="Modifier ce projet" />
+        }
+        break;
+    case ProjectsViewModel.StatutEnum.Collaborateur:
+    default:
+        break;
+}
+
 <div>
     Responsable du projet: @Model.Project.ResponsableNavigation.Nom
     <br />

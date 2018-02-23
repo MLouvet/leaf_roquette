@@ -12,6 +12,10 @@ namespace Leaf
     {
         public Leaf.DAL.ScaffoldedModels.Projet Project { get; set; }
 
+        public bool IsModification { get; set; }
+
+        public bool IsProjectManager { get; set; }
+
         //Project's fields for creation and modification
 
         [Required(ErrorMessage = "Un nom est requis pour le projet")]
@@ -35,5 +39,9 @@ namespace Leaf
         [Required(ErrorMessage = "Un client associé est requis")]
         [Display(Name = "Client associé: ")]
         public Client ProjectClient { get; set; }
+
+        public List<Client> ClientList { get; set; }
+
+        public List<Collaborateurs> ProjectManagerList { get; set; }
     }
 }
