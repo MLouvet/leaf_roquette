@@ -166,6 +166,15 @@ namespace Leaf.DAL
             return false;
         }
 
+        /// <summary>
+        /// Get all the people which have the status to manage a project
+        /// </summary>
+        /// <returns>A list of collaborateur containint all project managers (admin and super admin also)</returns>
+        public List<Collaborateurs> getProjectManagers()
+        {
+            return bdd.Collaborateurs.Where(c => c.Statut != "COLLABORATEUR").ToList();
+        }
+
         public Admin GetAdmin(int pId)                        =>              bdd.Admin.Where(a => a.Id == pId).SingleOrDefault();
         public Client GetClient(int id)                       =>              bdd.Client.Where(c => c.Id == id).SingleOrDefault();
         public Collaborateurs GetCollaborateurs(int id)       =>      bdd.Collaborateurs.Where(c => c.Id == id).SingleOrDefault();

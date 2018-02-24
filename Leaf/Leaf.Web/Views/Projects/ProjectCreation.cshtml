@@ -33,20 +33,16 @@
 
             <div class="form-group">
                 <label asp-for="ProjectLeader"></label>
-                <input asp-for="ProjectLeader" class="form-control" />
+                <!--<input asp-for="ProjectLeader" class="form-control" />-->
+                @Html.DropDownListFor(m => m.ProjectLeader, Model.ListCollabro)
                 <span asp-validation-for="ProjectLeader" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProjectClient"></label>
-                <input asp-for="ProjectClient" class="form-control" />
+                @Html.DropDownListFor(m => m.ProjectClient, Model.ListClient)
                 <span asp-validation-for="ProjectClient" class="text-danger"></span>
             </div>
-            <!--
-                <div>
-                    @Html.TextBoxFor(m => m.StartDate, String.Format("{0:d}", DateTime.Today.ToShortDateString()),
-                        new { @class = "datefield", type = "date" }) @*// This will make every input element with the type "date" into a DatePicker element*@
-                </div>
-            -->
+
             <button type="submit" class="btn btn-default">Ajouter le client</button>
             <input type="button" value="Annuler" class="btn btn-default cancel" onclick="location.href='@Url.Action("ClientList", "Clients", null)'" />
         </form>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
@@ -34,14 +36,42 @@ namespace Leaf
         
         [Required(ErrorMessage = "Un chef de projet associé est requis")]
         [Display(Name = "Chef de projet: ")]
-        public Collaborateurs ProjectLeader { get; set; }
+        public int ProjectLeader { get; set; }
 
         [Required(ErrorMessage = "Un client associé est requis")]
         [Display(Name = "Client associé: ")]
-        public Client ProjectClient { get; set; }
+        /*public int ProjectClient { get; set; }*/
+        private int _temp;
 
-        public List<Client> ClientList { get; set; }
+        public int ProjectClient
+        {
+            get { return _temp; }
+            set { _temp = value; }
+        }
 
-        public List<Collaborateurs> ProjectManagerList { get; set; }
+        //For client dropdown list
+        public List<Client> _clients { get; set; }
+
+        public IEnumerable<SelectListItem> ListClient
+        {
+            get
+            {
+                Client client = new Client();
+                return new SelectList(_clients, nameof(client.Id), nameof(client.Compagnie));
+            }
+        }
+
+
+        public List<Collaborateurs> _projectManagerList;
+
+        public IEnumerable<SelectListItem> ListCollabro
+        {
+            get
+            {
+                Collaborateurs collabro = new Collaborateurs();
+                return new SelectList(_projectManagerList, nameof(collabro.Id), nameof(collabro.Identifiant));
+            }
+        }
+
     }
 }

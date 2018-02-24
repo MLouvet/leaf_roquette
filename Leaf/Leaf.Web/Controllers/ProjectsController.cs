@@ -82,7 +82,9 @@ namespace Leaf.Web.Controllers
                 Project = new Leaf.DAL.ScaffoldedModels.Projet(),
                 IsModification = false,
                 StartDate = DateTime.Today,
-                EndDate = DateTime.Today
+                EndDate = DateTime.Today,
+                _clients = dal.GetClients(c),
+                _projectManagerList = dal.getProjectManagers()
             };
 
             return View(model);
@@ -97,7 +99,7 @@ namespace Leaf.Web.Controllers
             Dal dal = new Dal();
             if(ModelState.IsValid)
             {
-                var project = new Leaf.DAL.ScaffoldedModels.Projet { Nom = model.ProjectName, Debut = model.StartDate, Echeance = model.EndDate, Client = model.ProjectClient.Id, Responsable = model.ProjectLeader.Id };
+                var project = new Leaf.DAL.ScaffoldedModels.Projet { Nom = model.ProjectName, Debut = model.StartDate, Echeance = model.EndDate, Client = model.ProjectClient, Responsable = model.ProjectLeader };
 
                 bool result = dal.SaveNewProject(project);
 
@@ -126,10 +128,12 @@ namespace Leaf.Web.Controllers
             var model = new ProjectViewModel
             {
                 Project = projectToModify,
-                ProjectClient = projectToModify.ClientNavigation,
-                ProjectLeader = projectToModify.ResponsableNavigation,
+                ProjectClient = projectToModify.Client,
+                ProjectLeader = projectToModify.Responsable,
                 StartDate = projectToModify.Debut,
-                EndDate = projectToModify.Echeance
+                EndDate = projectToModify.Echeance,
+                _clients = dal.GetClients(c),
+                _projectManagerList = dal.getProjectManagers()
             };
 
             return View(model);
@@ -152,8 +156,8 @@ namespace Leaf.Web.Controllers
                 projectTemp.Debut = model.StartDate;
                 projectTemp.Echeance = model.EndDate;
 
-                projectTemp.Client = model.ProjectClient.Id;
-                projectTemp.Responsable = model.ProjectLeader.Id;
+                projectTemp.Client = model.ProjectClient;
+                projectTemp.Responsable = model.ProjectLeader;
 
                 bool result = dal.ModifyProject(projectTemp);
 
