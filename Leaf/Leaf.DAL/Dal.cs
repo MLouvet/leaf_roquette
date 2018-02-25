@@ -239,6 +239,12 @@ namespace Leaf.DAL
 
             foreach (var projet in bdd.Projet)
             {
+                if(projet.Responsable == collaborateur.Id)
+                {
+                    projetList.Add(projet);
+                    continue;
+                }
+
                 foreach (var tache in bdd.Tache.Where(t => t.IdProj == projet.Id && t.CollabId == collaborateur.Id))
                 {
                     projetList.Add(projet);

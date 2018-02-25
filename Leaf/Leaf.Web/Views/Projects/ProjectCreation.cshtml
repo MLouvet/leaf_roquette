@@ -26,7 +26,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="EndDate"></label>
-                @Html.TextBoxFor(m => m.StartDate, String.Format("{0:d}", DateTime.Today.ToShortDateString()),
+                @Html.TextBoxFor(m => m.EndDate, String.Format("{0:d}", DateTime.Today.ToShortDateString()),
                     new { @class = "form-control", type = "date" })
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>

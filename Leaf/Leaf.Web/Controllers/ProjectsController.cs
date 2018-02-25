@@ -24,12 +24,6 @@ namespace Leaf.Web.Controllers
         // GET: /<controller>/
         public IActionResult ProjectList()
         {
-            //IDal d = new Dal();
-            // TODO changer 2 en numéro actuel du collab connecté
-            //Collaborateurs c = d.GetCollaborateurs(2);
-            //List<DAL.DTO.Projet> p = d.;
-
-            // TODO changer 2 en numéro actuel du collab connecté
             Dal dal = new Dal();
             Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
 
@@ -110,6 +104,11 @@ namespace Leaf.Web.Controllers
                     {
                         projets = dal.GetProjets(c)
                     };
+                    foreach (var projet in returnModel.projets)
+                    {
+                        projet.ClientNavigation = dal.GetClient(projet.Client);
+                        projet.ResponsableNavigation = dal.GetCollaborateurs(projet.Responsable);
+                    }
                     return View("ProjectList", returnModel);
                 }
             };
@@ -128,6 +127,7 @@ namespace Leaf.Web.Controllers
             var model = new ProjectViewModel
             {
                 Project = projectToModify,
+                ProjectName = projectToModify.Nom,
                 ProjectClient = projectToModify.Client,
                 ProjectLeader = projectToModify.Responsable,
                 StartDate = projectToModify.Debut,
@@ -168,7 +168,12 @@ namespace Leaf.Web.Controllers
                     {
                         projets = dal.GetProjets(c)
                     };
-                    return View("Project", returnModel);
+                    foreach (var projet in returnModel.projets)
+                    {
+                        projet.ClientNavigation = dal.GetClient(projet.Client);
+                        projet.ResponsableNavigation = dal.GetCollaborateurs(projet.Responsable);
+                    }
+                    return View("ProjectList", returnModel);
                 }
             }
 

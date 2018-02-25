@@ -12,7 +12,7 @@
     case ProjectsViewModel.StatutEnum.ChefDeProjet:
         if (Model.IsProjectManager)
         {
-            <input type="button" onclick="location.href='@Url.Action("ProjectModification", "Projects", null)'" value="Modifier ce projet" />
+            <input type="button" onclick="location.href='@Url.Action("ProjectModification", "Projects", new { id = Model.Project.Id })'" value="Modifier ce projet" />
         }
         break;
     case ProjectsViewModel.StatutEnum.Collaborateur:

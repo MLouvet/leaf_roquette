@@ -50,7 +50,13 @@ namespace Leaf
         }
 
         //For client dropdown list
-        public List<Client> _clients { get; set; }
+        private List<Client> __clients;
+
+        public List<Client> _clients
+        {
+            get { return __clients ?? new List<Client>(); }
+            set { __clients = value; }
+        }
 
         public IEnumerable<SelectListItem> ListClient
         {
@@ -62,7 +68,15 @@ namespace Leaf
         }
 
 
-        public List<Collaborateurs> _projectManagerList;
+        //public List<Collaborateurs> _projectManagerList;
+        private List<Collaborateurs> __projectManagerList;
+
+        public List<Collaborateurs> _projectManagerList
+        {
+            get { return __projectManagerList ?? new List<Collaborateurs>(); }
+            set { __projectManagerList = value; }
+        }
+
 
         public IEnumerable<SelectListItem> ListCollabro
         {

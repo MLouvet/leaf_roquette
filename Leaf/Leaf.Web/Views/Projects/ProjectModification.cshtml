@@ -21,24 +21,25 @@
             <div class="form-group">
                 <label asp-for="StartDate"></label>
                 @Html.TextBoxFor(m => m.StartDate, String.Format("{0:d}", DateTime.Today.ToShortDateString()),
-                    new { @class = "form-control", type = "date" })
+                new { @class = "form-control", type = "date" })
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate"></label>
-                @Html.TextBoxFor(m => m.StartDate, String.Format("{0:d}", DateTime.Today.ToShortDateString()),
-                    new { @class = "form-control", type = "date" })
+                @Html.TextBoxFor(m => m.EndDate, String.Format("{0:d}", DateTime.Today.ToShortDateString()),
+                new { @class = "form-control", type = "date", value = Model.EndDate })
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="ProjectLeader"></label>
-                <input asp-for="ProjectLeader" class="form-control" />
+                <!--<input asp-for="ProjectLeader" class="form-control" />-->
+                @Html.DropDownListFor(m => m.ProjectLeader, Model.ListCollabro)
                 <span asp-validation-for="ProjectLeader" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProjectClient"></label>
-                <input asp-for="ProjectClient" class="form-control" />
+                @Html.DropDownListFor(m => m.ProjectClient, Model.ListClient)
                 <span asp-validation-for="ProjectClient" class="text-danger"></span>
             </div>
             <!--
