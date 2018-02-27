@@ -44,6 +44,8 @@
         .Build(columns =>
         {
             columns.Add(tache => tache.Nom).Titled("Tâche").RenderedAs(tache => Html.ActionLink(tache.Nom, "Task", "Task", new { tache.Id })).Sortable(true);
+            columns.Add(tache => tache.Debut.Value.ToShortDateString()).Titled("Date de début").Sortable(true);
+            columns.Add(tache => tache.Fin.Value.ToShortDateString()).Titled("Date de fin").Sortable(true);
         })
         .Filterable()
         .Sortable()

@@ -28,6 +28,7 @@ namespace Leaf.Web.Controllers
             {
                 IDal dal = new Dal();
                 Tache taskTemp = dal.GetTache((int)id);
+                Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
 
                 Projet projTemp = dal.GetProjet(taskTemp.IdProj);
                 projTemp.ClientNavigation = dal.GetClient(projTemp.Client);
@@ -38,6 +39,8 @@ namespace Leaf.Web.Controllers
                 var model = new TaskViewModel
                 {
                     Task = taskTemp,
+                    IsProjectManager = (projTemp.Responsable == c.Id),
+                    IsTaskResponsible = (taskTemp.CollabId == c.Id)
                 };
                 return View(model);
             }

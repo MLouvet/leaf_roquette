@@ -28,15 +28,36 @@
     {
         case ClientListViewModel.StatutEnum.Admin:
         case ClientListViewModel.StatutEnum.SuperAdmin:
-            <input type="button" onclick="location.href='@Url.Action("ClientCreation", "Clients", null)'" value="Valider tâche" />
+            <input type="button" onclick="location.href='@Url.Action("ClientCreation", "Clients", null)'" value="Mettre à jour la tâche" />
             break;
         case ClientListViewModel.StatutEnum.ChefDeProjet:
-                break;
+            if (@Model.IsProjectManager)
+            {
+                <input type="button" onclick="location.href='@Url.Action("ClientCreation", "Clients", null)'" value="Mettre à jour tâche" />
+            }
+            break;
         case ClientListViewModel.StatutEnum.Collaborateur:
-                default:
+            if (@Model.IsTaskResponsible)
+            {
+                <input type="button" onclick="location.href='@Url.Action("ClientCreation", "Clients", null)'" value="Mettre à jour la tâche" />
+            }
+            break;
+        default:
             break;
     }
 
+</div>
+
+<div>
+    <br />
+    <p>Charge estimée: @Model.ChargeEstimee</p>
+    <br />
+    <p>Charge consommée: TO BE ADDED TO DATABASE</p>
+    <br />
+    <p>Charge estimée restante: TO BE ADDED TO DATABASE </p>
+    <br />
+    <p>Avancement: @Model.Progres</p>
+    <br />
 </div>
 
 

@@ -341,13 +341,18 @@ namespace Leaf.DAL
         /// </summary>
         /// <param name="projectId">The id of the project linked to the tasks</param>
         /// <returns>The list of all task linked to the project, the id project being the parameter</returns>
-        public List<Leaf.DAL.ScaffoldedModels.Tache> GetTaskByProjects(int projectId)
+        public List<Leaf.DAL.ScaffoldedModels.Tache> GetTaskByProjects(int projectId, int collabId)
         {
             List<Tache> taskList = new List<Tache>();
+            Collaborateurs collabro = this.GetCollaborateurs(collabId);
 
             foreach(var taskTemp in bdd.Tache.Where(t => t.IdProj == projectId))
             {
-                taskList.Add(taskTemp);
+                if (collabro.Statut == "ADMIN" || collabro.Statut == "SUPER_ADMIN" ||
+                   (collabro.Statut == "CHEF_PROJET" && this.GetProjet(projectId).Responsable == collabId) || taskTemp.CollabId == collabId)
+                {
+                    taskList.Add(taskTemp);
+                }
             }
 
             return taskList;

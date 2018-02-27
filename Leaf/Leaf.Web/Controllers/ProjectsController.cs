@@ -40,6 +40,11 @@ namespace Leaf.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Function to prepare the display of a single project
+        /// </summary>
+        /// <param name="id">the id of the project which will be displayed</param>
+        /// <returns>a view with it's view model</returns>
         public IActionResult Project(int? id)
         {
             Dal dal = new Dal();
@@ -49,7 +54,7 @@ namespace Leaf.Web.Controllers
             projectToDisplay.ClientNavigation = dal.GetClient(projectToDisplay.Client);
             projectToDisplay.ResponsableNavigation = dal.GetCollaborateurs(projectToDisplay.Responsable);
 
-            projectToDisplay.Tache = dal.GetTaskByProjects(projectToDisplay.Id);
+            projectToDisplay.Tache = dal.GetTaskByProjects(projectToDisplay.Id, c.Id);
 
             bool IsProjectManagerTemp = dal.IsProjectManager(HttpContext.User.Identity.Name, projectToDisplay.Id);
 
@@ -67,7 +72,10 @@ namespace Leaf.Web.Controllers
             return View("Error");
         }
 
-        //Function call when the creation formular is displayed
+        /// <summary>
+        /// Function called when the creation formular is displayed
+        /// </summary>
+        /// <returns>A view with the ProjectViewModel associated</returns>
         public IActionResult ProjectCreation()
         {
             Dal dal = new Dal();
@@ -126,6 +134,11 @@ namespace Leaf.Web.Controllers
             return View("ProjectCreation", model);
         }
 
+        /// <summary>
+        /// To prepare the display 
+        /// </summary>
+        /// <param name="id">The id of the project to modify</param>
+        /// <returns>A View containing a ProjectViewModel</returns>
         public IActionResult ProjectModification(int? id)
         {
             Dal dal = new Dal();
@@ -149,6 +162,13 @@ namespace Leaf.Web.Controllers
             return View(model);
         }
 
+
+        /// <summary>
+        /// Save in the database the modification
+        /// </summary>
+        /// <param name="model">the model which have the modifications we want</param>
+        /// <param name="id">the id of the project whih we want to save the modification</param>
+        /// <returns>If the save succeeded, return the list of project, else return to the formular</returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
