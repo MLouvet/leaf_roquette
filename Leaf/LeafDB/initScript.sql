@@ -125,15 +125,23 @@ CREATE TABLE [Tache] (
     [IdProj]         INT          NOT NULL,
     [CollabId]       INT          NOT NULL,
     [Super_tache]    INT          NULL,
-    [depends]        INT          NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [Fk_Dependance] FOREIGN KEY ([depends]) REFERENCES [Tache] ([Id]),
     CONSTRAINT [Fk_Sous_Tache] FOREIGN KEY ([Super_tache]) REFERENCES [Tache] ([Id]),
     CONSTRAINT [Fk_Tach_Coll] FOREIGN KEY ([CollabId]) REFERENCES [Collaborateurs] ([Id]),
     CONSTRAINT [Fk_Tach_Proj] FOREIGN KEY ([IdProj]) REFERENCES [Projet] ([Id])
 );
 GO
 
+CREATE TABLE [PreviousTasks]
+(
+    [Id]             INT          IDENTITY (1, 1) NOT NULL,
+    [PreviousTask]   INT        NOT NULL,
+    [Task]		     INT        NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [Fk_PreviousTask] FOREIGN KEY ([PreviousTask]) REFERENCES [Tache] ([Id]),
+    CONSTRAINT [Fk_Task] FOREIGN KEY ([Task]) REFERENCES [Tache] ([Id]),
+);
+GO
 
 CREATE TABLE [Notification] (
     [Id]           INT           IDENTITY (1, 1) NOT NULL,
@@ -186,15 +194,20 @@ INSERT INTO [dbo].[Projet] ([Id], [nom], [debut], [echeance], [client], [respons
 SET IDENTITY_INSERT [Projet] OFF
 
 SET IDENTITY_INSERT [dbo].[Tache] ON
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache], [depends]) VALUES (1, N'Ajout de l''interface', N'2017-09-24', N'2017-09-28', 3, 0, 1, 2, 1, 1)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache], [depends]) VALUES (4, N'Implémenter back-face culling', N'2017-10-01', N'2017-10-09', 2, 1, 1, 2, NULL, NULL)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache], [depends]) VALUES (7, N'Création du moteur de jeu', N'2013-09-15', N'2014-09-15', 3, 100, 2, 3, NULL, NULL)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache], [depends]) VALUES (11, N'Implementation du systeme de chasse', N'2013-09-23', N'2014-02-26', 1, 100, 2, 8, 7, NULL)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache], [depends]) VALUES (14, N'Création du moteur graphique', N'2013-09-23', N'2014-02-26', 1, 100, 2, 3, 7, NULL)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache], [depends]) VALUES (15, N'Implementation du gameplay', N'2014-02-26', N'2014-09-15', 1, 100, 2, 7, 7, 11)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache], [depends]) VALUES (16, N'Création des armes', N'2013-10-15', N'2018-01-26', 1, 100, 2, 3, NULL, NULL)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache], [depends]) VALUES (17, N'Création des armures', N'2013-10-15', N'2018-01-26', 1, 100, 2, 2, NULL, NULL)
+INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (1, N'Ajout de l''interface', N'2017-09-24', N'2017-09-28', 3, 0, 1, 2, 1)
+INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (4, N'Implémenter back-face culling', N'2017-10-01', N'2017-10-09', 2, 1, 1, 2, NULL)
+INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (7, N'Création du moteur de jeu', N'2013-09-15', N'2014-09-15', 3, 100, 2, 3, NULL)
+INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (11, N'Implementation du systeme de chasse', N'2013-09-23', N'2014-02-26', 1, 100, 2, 8, 7)
+INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (14, N'Création du moteur graphique', N'2013-09-23', N'2014-02-26', 1, 100, 2, 3, 7)
+INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (15, N'Implementation du gameplay', N'2014-02-26', N'2014-09-15', 1, 100, 2, 7, 7)
+INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (16, N'Création des armes', N'2013-10-15', N'2018-01-26', 1, 100, 2, 3, NULL)
+INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (17, N'Création des armures', N'2013-10-15', N'2018-01-26', 1, 100, 2, 2, NULL)
 SET IDENTITY_INSERT [dbo].[Tache] OFF
+
+SET IDENTITY_INSERT [dbo].[PreviousTasks] ON
+INSERT INTO [dbo].[PreviousTasks] ([Id], [PreviousTask], [Task]) VALUES (1, 4, 1)
+INSERT INTO [dbo].[PreviousTasks] ([Id], [PreviousTask], [Task]) VALUES (2, 11, 15)
+SET IDENTITY_INSERT [dbo].[PreviousTasks] OFF
 
 SET IDENTITY_INSERT [dbo].[Notification] ON
 INSERT INTO [dbo].[Notification] ([Id], [message], [idProjet], [idTache], [lue], [horodatage], [destinataire]) VALUES (2, N'Tâche en retard', 1, 1, 1, N'2017-09-24 00:00:00', 2)

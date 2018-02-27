@@ -1,19 +1,14 @@
-﻿using Leaf.DAL.ScaffoldedModels;
-using Leaf.Web.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using Leaf.DAL.ScaffoldedModels;
 
-namespace Leaf
+namespace Leaf.Web.ViewModel
 {
     public class ClientCreationViewModel : LoginPartialViewModel
     {
-        public Client clientnew;
+        public Client Clientnew;
 
         //Boolean, if it's a modification, it's true
-        public bool isModification { get; set; }
+        public bool IsModification { get; set; }
 
         //Company info
         [Required(ErrorMessage = "Le nom de la compagnie est requis")]

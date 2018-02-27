@@ -7,6 +7,7 @@ namespace Leaf.DAL.ScaffoldedModels
     {
         public Projet()
         {
+            Notification = new HashSet<Notification>();
             Tache = new HashSet<Tache>();
         }
 
@@ -14,11 +15,12 @@ namespace Leaf.DAL.ScaffoldedModels
         public string Nom { get; set; }
         public DateTime Debut { get; set; }
         public DateTime Echeance { get; set; }
-        public int Client { get; set; }
-        public int Responsable { get; set; }
+        public int? Client { get; set; }
+        public int? Responsable { get; set; }
 
         public Client ClientNavigation { get; set; }
         public Collaborateurs ResponsableNavigation { get; set; }
+        public ICollection<Notification> Notification { get; set; }
         public ICollection<Tache> Tache { get; set; }
     }
 }

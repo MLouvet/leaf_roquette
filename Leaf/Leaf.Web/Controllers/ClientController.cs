@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Leaf.DAL;
+﻿using Leaf.DAL;
 using Leaf.DAL.ScaffoldedModels;
-using Leaf.DAL.Services;
-using Leaf.Web.Models;
-using Microsoft.AspNetCore.Http;
+using Leaf.Web.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Leaf
+namespace Leaf.Web.Controllers
 {
     public class ClientController : Controller
     {
@@ -23,7 +17,7 @@ namespace Leaf
             IDal dal = new Dal();
             var model = new ClientCreationViewModel
             {
-                clientnew = dal.GetClient(/*(int) id*/ 2)
+                Clientnew = dal.GetClient(/*(int) id*/ 2)
             };
 
             return View(model);
