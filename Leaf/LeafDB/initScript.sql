@@ -107,8 +107,8 @@ CREATE TABLE [Projet] (
     [nom]         VARCHAR (50) NOT NULL,
     [debut]       DATE         NOT NULL,
     [echeance]    DATE         NOT NULL,
-    [client]      INT          NULL,
-    [responsable] INT          NULL,
+    [client]      INT          NOT NULL,
+    [responsable] INT          NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [Fk_Repo_Proj] FOREIGN KEY ([responsable]) REFERENCES [Collaborateurs] ([Id]),
     CONSTRAINT [FK_Client_proj] FOREIGN KEY ([client]) REFERENCES [Client] ([Id])
@@ -116,15 +116,18 @@ CREATE TABLE [Projet] (
 GO
 
 CREATE TABLE [Tache] (
-    [Id]             INT          IDENTITY (1, 1) NOT NULL,
-    [nom ]           VARCHAR (50) NOT NULL,
-    [debut]          DATE         NULL,
-    [fin]            DATE         NULL,
-    [charge_estimee] INT          NOT NULL,
-    [progres]        INT          NOT NULL,
-    [IdProj]         INT          NOT NULL,
-    [CollabId]       INT          NOT NULL,
-    [Super_tache]    INT          NULL,
+    [Id]                      INT           IDENTITY (1, 1) NOT NULL,
+    [nom]                     VARCHAR (50)  NOT NULL,
+    [description]             VARCHAR (MAX) NOT NULL,
+    [debut]                   DATE          NULL,
+    [fin]                     DATE          NULL,
+    [charge_estimee]          INT           NOT NULL,
+    [charge_consommee]        INT           NOT NULL,
+    [charge_estimee_restante] INT           NOT NULL,
+    [progres]				  INT           NOT NULL,
+    [IdProj]                  INT           NOT NULL,
+    [CollabId]                INT           NOT NULL,
+    [Super_tache]             INT           NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [Fk_Sous_Tache] FOREIGN KEY ([Super_tache]) REFERENCES [Tache] ([Id]),
     CONSTRAINT [Fk_Tach_Coll] FOREIGN KEY ([CollabId]) REFERENCES [Collaborateurs] ([Id]),
@@ -194,14 +197,14 @@ INSERT INTO [dbo].[Projet] ([Id], [nom], [debut], [echeance], [client], [respons
 SET IDENTITY_INSERT [Projet] OFF
 
 SET IDENTITY_INSERT [dbo].[Tache] ON
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (1, N'Ajout de l''interface', N'2017-09-24', N'2017-09-28', 3, 0, 1, 2, 1)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (4, N'Implémenter back-face culling', N'2017-10-01', N'2017-10-09', 2, 1, 1, 2, NULL)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (7, N'Création du moteur de jeu', N'2013-09-15', N'2014-09-15', 3, 100, 2, 3, NULL)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (11, N'Implementation du systeme de chasse', N'2013-09-23', N'2014-02-26', 1, 100, 2, 8, 7)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (14, N'Création du moteur graphique', N'2013-09-23', N'2014-02-26', 1, 100, 2, 3, 7)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (15, N'Implementation du gameplay', N'2014-02-26', N'2014-09-15', 1, 100, 2, 7, 7)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (16, N'Création des armes', N'2013-10-15', N'2018-01-26', 1, 100, 2, 3, NULL)
-INSERT INTO [dbo].[Tache] ([Id], [nom ], [debut], [fin], [charge_estimee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (17, N'Création des armures', N'2013-10-15', N'2018-01-26', 1, 100, 2, 2, NULL)
+INSERT INTO [dbo].[Tache] ([Id], [nom], [description] ,[debut], [fin], [charge_estimee], [charge_estimee_restante], [charge_consommee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (1, N'Ajout de l''interface', 'L''interface, pour que le joueur puisse jouer et pas juste regarder', N'2017-09-24', N'2017-09-28', 3, 0, 3, 0, 1, 2, 1) --Tâche finie
+INSERT INTO [dbo].[Tache] ([Id], [nom], [description] ,[debut], [fin], [charge_estimee], [charge_estimee_restante], [charge_consommee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (4, N'Implémenter back-face culling', N'Eviter de calculer le rendu des faces arrières', N'2017-10-01', N'2017-10-09', 2, 2, 0, 1, 1, 2, NULL) --Tâche pas commencée
+INSERT INTO [dbo].[Tache] ([Id], [nom], [description] ,[debut], [fin], [charge_estimee], [charge_estimee_restante], [charge_consommee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (7, N'Création du moteur de jeu', N'Le moteur de jeu est nécessaire au gameplay', N'2013-09-15', N'2014-09-15', 3, 0, 4, 100, 2, 3, NULL) --Tâche finie mais dépassée
+INSERT INTO [dbo].[Tache] ([Id], [nom], [description] ,[debut], [fin], [charge_estimee], [charge_estimee_restante], [charge_consommee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (11, N'Implementation du systeme de chasse', N'Le système de chasse est nécessaire à l''économie du jeu', N'2013-09-23', N'2014-02-26', 1, 0, 1, 100, 2, 8, 7) --Tâche finie instantanément
+INSERT INTO [dbo].[Tache] ([Id], [nom], [description] ,[debut], [fin], [charge_estimee], [charge_estimee_restante], [charge_consommee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (14, N'Création du moteur graphique', N'Le moteur graphique est nécessaire à l''affichage', N'2013-09-23', N'2014-02-26', 10, 3, 7, 100, 2, 3, 7) --Tâche en cours, dans les temps
+INSERT INTO [dbo].[Tache] ([Id], [nom], [description] ,[debut], [fin], [charge_estimee], [charge_estimee_restante], [charge_consommee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (15, N'Implementation du gameplay', N'Le gameplay doit être utilisable avec le reste des éléments', N'2014-02-26', N'2014-09-15', 15, 2, 13, 100, 2, 7, 7) --Tâche en cours, dans les temps aussi
+INSERT INTO [dbo].[Tache] ([Id], [nom], [description] ,[debut], [fin], [charge_estimee], [charge_estimee_restante], [charge_consommee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (16, N'Création des armes', N'Armes : Le second amendement est nécessaire à la survie du personnage', N'2013-10-15', N'2018-01-26', 9, 5, 6, 100, 2, 3, NULL) --Tâche en cours, avancée lente
+INSERT INTO [dbo].[Tache] ([Id], [nom], [description] ,[debut], [fin], [charge_estimee], [charge_estimee_restante], [charge_consommee], [progres], [IdProj], [CollabId], [Super_tache]) VALUES (17, N'Création des armures', N'Les armures, réponse au second amendement', N'2013-10-15', N'2018-01-26', 7, 3, 3, 100, 2, 2, NULL) --Tâche en cours, avancée rapide
 SET IDENTITY_INSERT [dbo].[Tache] OFF
 
 SET IDENTITY_INSERT [dbo].[PreviousTasks] ON
