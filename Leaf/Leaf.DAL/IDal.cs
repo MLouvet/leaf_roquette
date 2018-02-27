@@ -120,7 +120,7 @@ namespace Leaf.DAL
         /// <summary>
         /// Gets all the tasks to which a collaborator participates, might be an empty collection.
         /// </summary>
-        /// <param name="collaborateur">Collaborator participating</param>
+        /// <param name="c">Collaborator participating</param>
         /// <returns>Tasks related to collaborator</returns>
         List<Tache> GetTaches(Collaborateurs c);
 

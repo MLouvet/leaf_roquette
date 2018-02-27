@@ -198,11 +198,13 @@ namespace Leaf.DAL.ScaffoldedModels
                 entity.HasOne(d => d.ClientNavigation)
                     .WithMany(p => p.Projet)
                     .HasForeignKey(d => d.Client)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Client_proj");
 
                 entity.HasOne(d => d.ResponsableNavigation)
                     .WithMany(p => p.Projet)
                     .HasForeignKey(d => d.Responsable)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Fk_Repo_Proj");
             });
 
@@ -230,11 +232,20 @@ namespace Leaf.DAL.ScaffoldedModels
 
             modelBuilder.Entity<Tache>(entity =>
             {
+                entity.Property(e => e.ChargeConsommee).HasColumnName("charge_consommee");
+
                 entity.Property(e => e.ChargeEstimee).HasColumnName("charge_estimee");
+
+                entity.Property(e => e.ChargeEstimeeRestante).HasColumnName("charge_estimee_restante");
 
                 entity.Property(e => e.Debut)
                     .HasColumnName("debut")
                     .HasColumnType("date");
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasColumnName("description")
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Fin)
                     .HasColumnName("fin")
@@ -242,7 +253,7 @@ namespace Leaf.DAL.ScaffoldedModels
 
                 entity.Property(e => e.Nom)
                     .IsRequired()
-                    .HasColumnName("nom ")
+                    .HasColumnName("nom")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 

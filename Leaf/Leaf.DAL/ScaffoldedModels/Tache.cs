@@ -15,9 +15,12 @@ namespace Leaf.DAL.ScaffoldedModels
 
         public int Id { get; set; }
         public string Nom { get; set; }
+        public string Description { get; set; }
         public DateTime? Debut { get; set; }
         public DateTime? Fin { get; set; }
         public int ChargeEstimee { get; set; }
+        public int ChargeConsommee { get; set; }
+        public int ChargeEstimeeRestante { get; set; }
         public int Progres { get; set; }
         public int IdProj { get; set; }
         public int CollabId { get; set; }
