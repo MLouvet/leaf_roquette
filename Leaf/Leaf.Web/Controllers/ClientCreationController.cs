@@ -1,8 +1,9 @@
 ﻿using Leaf.DAL;
 using Leaf.DAL.ScaffoldedModels;
+using Leaf.Web.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Leaf
+namespace Leaf.Web.Controllers
 {
     public class ClientCreationController : Controller
     {
@@ -17,7 +18,7 @@ namespace Leaf
             //DAL.DTO.Client clientTemp = new DAL.DTO.Client();
             var model = new ClientCreationViewModel
             {
-                clientnew = new Client()
+                Clientnew = new Client()
             };
 
             return View(model);

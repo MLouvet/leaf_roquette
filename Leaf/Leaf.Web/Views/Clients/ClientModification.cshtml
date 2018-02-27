@@ -1,4 +1,5 @@
-﻿@model ClientCreationViewModel
+﻿@using Leaf.Web.ViewModel
+@model Leaf.Web.ViewModel.ClientCreationViewModel
 @{
     ViewData["Title"] = "Modification Client";
 }
@@ -9,10 +10,10 @@
 
 <div class="row">
     <div class="col-md-6">
-        <form asp-controller="Clients" asp-action="SaveClient" asp-route-id="@Model.clientnew.Id" method="post">
+        <form asp-controller="Clients" asp-action="SaveClient" asp-route-id="@Model.Clientnew.Id" method="post">
             <h4>Compagnie: </h4>
             <hr />
-            <div asp-validation-summary="All" class="=" text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Company"></label>
                 <input asp-for="Company" class="form-control" />

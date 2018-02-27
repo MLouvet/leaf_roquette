@@ -1,5 +1,6 @@
 ﻿@using NonFactors.Mvc.Grid
 @using Leaf.Web.Controllers
+@using Leaf.Web.ViewModel
 @model TaskViewModel
 @{
     ViewData["Title"] = "Task";
@@ -26,13 +27,13 @@
     <h4>Affecté à: @Model.Task.Collab.Prenom @Model.Task.Collab.Nom (@Model.Task.Collab.Identifiant)</h4>
     @switch (Model.Statut)
     {
-        case ClientListViewModel.StatutEnum.Admin:
-        case ClientListViewModel.StatutEnum.SuperAdmin:
+        case LoginPartialViewModel.StatutEnum.Admin:
+        case LoginPartialViewModel.StatutEnum.SuperAdmin:
             <input type="button" onclick="location.href='@Url.Action("ClientCreation", "Clients", null)'" value="Valider tâche" />
             break;
-        case ClientListViewModel.StatutEnum.ChefDeProjet:
+        case LoginPartialViewModel.StatutEnum.ChefDeProjet:
                 break;
-        case ClientListViewModel.StatutEnum.Collaborateur:
+        case LoginPartialViewModel.StatutEnum.Collaborateur:
                 default:
             break;
     }

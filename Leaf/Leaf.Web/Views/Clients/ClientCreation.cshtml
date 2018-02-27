@@ -1,4 +1,5 @@
-﻿@model ClientCreationViewModel
+﻿@using Leaf.Web.ViewModel
+@model Leaf.Web.ViewModel.ClientCreationViewModel
 @{
     ViewData["Title"] = "Client";
 }
@@ -12,7 +13,7 @@
         <form asp-controller="Clients" asp-action="SaveNewClient" method="post">
             <h4>Compagnie: </h4>
             <hr />
-            <div asp-validation-summary="All" class="="text-danger"></div>   
+            <div asp-validation-summary="All" class="text-danger"></div>   
             <div class="form-group">
                 <label asp-for="Company"></label>
                 <input asp-for="Company"  class="form-control" />
@@ -33,8 +34,8 @@
             </div>
             <!--
             <div class="form-group">
-                <label asp-for="clientnew.Prenom"></label>
-                <input asp-for="clientnew.Prenom" class="text-danger" />
+                <label asp-for="Clientnew.Prenom"></label>
+                <input asp-for="Clientnew.Prenom" class="text-danger" />
                 <span asp-validation-for="referentSurname" class="text-danger"></span>
             </div>
             -->

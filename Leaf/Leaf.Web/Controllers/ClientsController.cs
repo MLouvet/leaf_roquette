@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Leaf.DAL.ScaffoldedModels;
 using Leaf.DAL.Services;
 using Leaf.DAL;
+using Leaf.Web.ViewModel;
 
 namespace Leaf.Web.Controllers
 {
@@ -60,8 +61,8 @@ namespace Leaf.Web.Controllers
 
             var model = new ClientCreationViewModel
             {
-                clientnew = new Client(),
-                isModification = false
+                Clientnew = new Client(),
+                IsModification = false
             };
 
             return View(model);
@@ -82,14 +83,14 @@ namespace Leaf.Web.Controllers
 
             var model = new ClientCreationViewModel
             {
-                clientnew = clientModif,
+                Clientnew = clientModif,
                 Company = clientModif.Compagnie,
                 Adress = clientModif.Adresse,
                 ReferentName = clientModif.Nom,
                 //ReferentSurname = clientModif.Prenom,
                 ReferentMail = clientModif.Mail,
                 ReferentPhone = clientModif.Telephone,
-                isModification = true
+                IsModification = true
             };
 
             return View("ClientModification", model);
@@ -145,17 +146,17 @@ namespace Leaf.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                model.clientnew = dal.GetClient((int)id);
+                model.Clientnew = dal.GetClient((int)id);
 
-                model.clientnew.Adresse = model.Adress;
-                model.clientnew.Compagnie = model.Company;
-                model.clientnew.Nom = model.ReferentName;
-                model.clientnew.Telephone = model.ReferentPhone;
-                model.clientnew.Mail = model.ReferentMail;
+                model.Clientnew.Adresse = model.Adress;
+                model.Clientnew.Compagnie = model.Company;
+                model.Clientnew.Nom = model.ReferentName;
+                model.Clientnew.Telephone = model.ReferentPhone;
+                model.Clientnew.Mail = model.ReferentMail;
 
                 bool result;
 
-                result = dal.ModifyClient(model.clientnew);
+                result = dal.ModifyClient(model.Clientnew);
 
                 if (result)
                 {

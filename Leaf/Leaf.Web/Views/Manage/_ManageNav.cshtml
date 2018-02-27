@@ -1,4 +1,4 @@
-﻿@using Leaf.Views.Manage
+﻿@using Leaf.Web.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
