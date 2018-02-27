@@ -16,7 +16,7 @@ namespace Leaf.DAL.Utilities.Translator
                 //Collab = CollaborateursTranslator.DalToDto(pTache.Collab),
                 CollabId = pTache.CollabId,
                 Debut = pTache.Debut,
-                Depends = pTache.Depends,
+                //Depends = pTache.Depends,
                 //DependsNavigation = DalToDto(pTache.DependsNavigation),
                 Fin = pTache.Fin,
                 Id = pTache.Id,

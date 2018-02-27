@@ -7,8 +7,10 @@ namespace Leaf.DAL.ScaffoldedModels
     {
         public Tache()
         {
-            InverseDependsNavigation = new HashSet<Tache>();
             InverseSuperTacheNavigation = new HashSet<Tache>();
+            Notification = new HashSet<Notification>();
+            PreviousTasksPreviousTaskNavigation = new HashSet<PreviousTasks>();
+            PreviousTasksTaskNavigation = new HashSet<PreviousTasks>();
         }
 
         public int Id { get; set; }
@@ -20,13 +22,13 @@ namespace Leaf.DAL.ScaffoldedModels
         public int IdProj { get; set; }
         public int CollabId { get; set; }
         public int? SuperTache { get; set; }
-        public int? Depends { get; set; }
 
         public Collaborateurs Collab { get; set; }
-        public Tache DependsNavigation { get; set; }
         public Projet IdProjNavigation { get; set; }
         public Tache SuperTacheNavigation { get; set; }
-        public ICollection<Tache> InverseDependsNavigation { get; set; }
         public ICollection<Tache> InverseSuperTacheNavigation { get; set; }
+        public ICollection<Notification> Notification { get; set; }
+        public ICollection<PreviousTasks> PreviousTasksPreviousTaskNavigation { get; set; }
+        public ICollection<PreviousTasks> PreviousTasksTaskNavigation { get; set; }
     }
 }
