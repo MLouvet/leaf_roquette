@@ -5,7 +5,7 @@
 }
 
 <div>
-    <h2 style="text-align:center"> Liste de mes clients </h2>
+    <h2 class="pageTitle" style="text-align:center"> Liste de mes clients </h2>
     <br />
     @switch (Model.Statut)
     {
@@ -29,7 +29,7 @@
         .Filterable()
         .Sortable()
         .Pageable()
-        .Empty("Aucune client à afficher")
+        .Empty("Aucun client à afficher")
     )
 
 </div>

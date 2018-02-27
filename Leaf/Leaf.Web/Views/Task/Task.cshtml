@@ -1,0 +1,44 @@
+﻿@using NonFactors.Mvc.Grid
+@using Leaf.Web.Controllers
+@model TaskViewModel
+@{
+    ViewData["Title"] = "Task";
+}
+
+<div>
+    <div style="infoFrame">
+        <h4>@Model.Task.IdProjNavigation.ClientNavigation.Nom</h4>
+    </div>
+    <div style="infoFrame">
+        <h4>Projet: @Model.Task.IdProjNavigation.Nom</h4>
+    </div>
+</div>
+
+<div>
+    <h3 class="subTitle">Tâche: @Model.Nom</h3>
+    <br />
+    <!--TODO ajouter la description dès qu'elle est ajoutée dans la base de donnée pour une tâche-->
+
+</div>
+
+
+<div>
+    <h4>Affecté à: @Model.Task.Collab.Prenom @Model.Task.Collab.Nom (@Model.Task.Collab.Identifiant)</h4>
+    @switch (Model.Statut)
+    {
+        case ClientListViewModel.StatutEnum.Admin:
+        case ClientListViewModel.StatutEnum.SuperAdmin:
+            <input type="button" onclick="location.href='@Url.Action("ClientCreation", "Clients", null)'" value="Valider tâche" />
+            break;
+        case ClientListViewModel.StatutEnum.ChefDeProjet:
+                break;
+        case ClientListViewModel.StatutEnum.Collaborateur:
+                default:
+            break;
+    }
+
+</div>
+
+
+
+

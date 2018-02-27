@@ -182,12 +182,20 @@ namespace Leaf.DAL
         public Projet GetProjet(int id)                       =>              bdd.Projet.Where(p => p.Id == id).SingleOrDefault();
         public Tache GetTache(int id)                         =>               bdd.Tache.Where(t => t.Id == id).SingleOrDefault();
 
+        /// <summary>
+        /// Change notification status to read
+        /// </summary>
+        /// <param name="n">the notification to consider</param>
         public void ReadNotification(Notification n)
         {
             n.Lue = true;
             bdd.SaveChanges();
         }
 
+        /// <summary>
+        /// Change notification status to unread
+        /// </summary>
+        /// <param name="n">The notification to consider</param>
         public void UnreadNotification(Notification n)
         {
             n.Lue = false;
@@ -199,6 +207,11 @@ namespace Leaf.DAL
         #endregion
 
         #region Collections
+        /// <summary>
+        /// Get all notifications for a collaborator
+        /// </summary>
+        /// <param name="c">The collaborator to consider</param>
+        /// <returns>The list of notifications for the collaborator</returns>
         public List<Notification> GetNotifications(Collaborateurs c)
         {
             if (c == null)
@@ -206,7 +219,12 @@ namespace Leaf.DAL
             return bdd.Notification.Where(n => n.DestinataireNavigation.Id == c.Id).ToList();
         }
 
-
+        /// <summary>
+        /// Get the list of the recent notification linked to a collaborator
+        /// </summary>
+        /// <param name="c">The collaborator</param>
+        /// <param name="n">the max number oof notificcation returned, the number of notifications returned can be less than n</param>
+        /// <returns>A list of notifications</returns>
         public List<Notification> GetRecentNotifications(Collaborateurs c, int n)
         {
             if (c == null)
@@ -223,6 +241,11 @@ namespace Leaf.DAL
             return ret;
         }
 
+        /// <summary>
+        /// Get all tasks of a collaborator
+        /// </summary>
+        /// <param name="c">The collaborator form which we want to get the tasks</param>
+        /// <returns>The list of tasks of the collaborator</returns>
         public List<Tache> GetTaches(Collaborateurs c)
         {
             if (c == null)
@@ -230,7 +253,11 @@ namespace Leaf.DAL
             return bdd.Tache.Where(t => t.Collab.Id == c.Id).ToList();
         }
 
-
+        /// <summary>
+        /// Get all the projects linked to a collaborator, by a task or being the project manager
+        /// </summary>
+        /// <param name="collaborateur">The collaborator considered</param>
+        /// <returns>A list of projects</returns>
         public List<Projet> GetProjets(Collaborateurs collaborateur)
         {
             var projetList = new List<Projet>();
@@ -257,6 +284,12 @@ namespace Leaf.DAL
 
         public List<Client> Clients => bdd.Client.ToList();
 
+
+        /// <summary>
+        /// Get all the clients linked by a task or a project to the collaborator
+        /// </summary>
+        /// <param name="collaborateur">the collaborator considered</param>
+        /// <returns>A list of the clients linked one way or another to the collaborator in parameter</returns>
         public List<Client> GetClients(Collaborateurs collaborateur)
         {
             var clientList = new List<Client>();
@@ -301,6 +334,23 @@ namespace Leaf.DAL
             clientList.Distinct().ToList();
 
             return clientList;
+        }
+
+        /// <summary>
+        /// Returns a list containing all tasks linked to a project
+        /// </summary>
+        /// <param name="projectId">The id of the project linked to the tasks</param>
+        /// <returns>The list of all task linked to the project, the id project being the parameter</returns>
+        public List<Leaf.DAL.ScaffoldedModels.Tache> GetTaskByProjects(int projectId)
+        {
+            List<Tache> taskList = new List<Tache>();
+
+            foreach(var taskTemp in bdd.Tache.Where(t => t.IdProj == projectId))
+            {
+                taskList.Add(taskTemp);
+            }
+
+            return taskList;
         }
 
         public List<Projet> Projets => bdd.Projet.ToList();

@@ -49,6 +49,8 @@ namespace Leaf.Web.Controllers
             projectToDisplay.ClientNavigation = dal.GetClient(projectToDisplay.Client);
             projectToDisplay.ResponsableNavigation = dal.GetCollaborateurs(projectToDisplay.Responsable);
 
+            projectToDisplay.Tache = dal.GetTaskByProjects(projectToDisplay.Id);
+
             bool IsProjectManagerTemp = dal.IsProjectManager(HttpContext.User.Identity.Name, projectToDisplay.Id);
 
             if (id.HasValue)
@@ -91,6 +93,14 @@ namespace Leaf.Web.Controllers
         public IActionResult SaveNewProject(ProjectViewModel model)
         {
             Dal dal = new Dal();
+
+            //Verification
+            if(model.StartDate.CompareTo(model.EndDate) < 0)
+            {
+                model.ValidationErrorMessage = "La date de début est après la date de fin";
+                return View("ProjectCreation", model);
+            }
+
             if(ModelState.IsValid)
             {
                 var project = new Leaf.DAL.ScaffoldedModels.Projet { Nom = model.ProjectName, Debut = model.StartDate, Echeance = model.EndDate, Client = model.ProjectClient, Responsable = model.ProjectLeader };

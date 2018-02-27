@@ -48,6 +48,10 @@ namespace Leaf.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Preparation to display the formular for creating a task
+        /// </summary>
+        /// <returns>a ClientCreationViewModel to display the task creation formular</returns>
         public IActionResult ClientCreation()
         {
             Dal dal = new Dal();
@@ -63,6 +67,11 @@ namespace Leaf.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Prepration to display the formular to modify a task
+        /// </summary>
+        /// <param name="id">The id of the task to modify</param>
+        /// <returns>a ClientCreationViewModel to display the task modification formular</returns>
         public IActionResult ClientModification(int? id)
         {
             Dal dal = new Dal();
@@ -86,6 +95,11 @@ namespace Leaf.Web.Controllers
             return View("ClientModification", model);
         }
 
+        /// <summary>
+        /// Action called when the formular is validated
+        /// </summary>
+        /// <param name="model">The model containing the data to be saved as a new task</param>
+        /// <returns>A view, depending if the save failde or not</returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -116,6 +130,12 @@ namespace Leaf.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Action called when submitting the formular for 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -152,6 +172,11 @@ namespace Leaf.Web.Controllers
             return View("ClientModification", model);
         }
 
+        /// <summary>
+        /// Redirect ot the home page
+        /// </summary>
+        /// <param name="returnUrl">the url to return to</param>
+        /// <returns>A redirection action, redirect to another page</returns>
         private IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))

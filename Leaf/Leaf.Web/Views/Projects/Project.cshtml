@@ -5,22 +5,24 @@
 
 <h2>Projet:  @Model.Project.Nom</h2>
 
-@switch (Model.Statut)
-{
-    case ProjectsViewModel.StatutEnum.Admin:
-    case ProjectsViewModel.StatutEnum.SuperAdmin:
-    case ProjectsViewModel.StatutEnum.ChefDeProjet:
-        if (Model.IsProjectManager)
-        {
-            <input type="button" onclick="location.href='@Url.Action("ProjectModification", "Projects", new { id = Model.Project.Id })'" value="Modifier ce projet" />
-        }
-        break;
-    case ProjectsViewModel.StatutEnum.Collaborateur:
-    default:
-        break;
-}
+<div style="margin-right: 10px">
+    @switch (Model.Statut)
+    {
+        case ProjectsViewModel.StatutEnum.Admin:
+        case ProjectsViewModel.StatutEnum.SuperAdmin:
+        case ProjectsViewModel.StatutEnum.ChefDeProjet:
+            if (Model.IsProjectManager)
+            {
+                <input type="button" onclick="location.href='@Url.Action("ProjectModification", "Projects", new { id = Model.Project.Id })'" value="Modifier ce projet" />
+            }
+            break;
+        case ProjectsViewModel.StatutEnum.Collaborateur:
+        default:
+            break;
+    }
+</div>
 
-<div>
+<div style="margin-left: 10px">
     Responsable du projet: @Model.Project.ResponsableNavigation.Nom
     <br />
     Client du projet: @Model.Project.ClientNavigation.Compagnie
@@ -31,5 +33,23 @@
     Date de fin de  projet: @Model.Project.Echeance
     <br />
     <br />
+</div>
+
+<br />
+<div>
+    <h4>Liste des tâches du projet</h4>
+    <div>
+        @(Html
+        .Grid(Model.Project.Tache)
+        .Build(columns =>
+        {
+            columns.Add(tache => tache.Nom).Titled("Tâche").RenderedAs(tache => Html.ActionLink(tache.Nom, "Task", "Task", new { tache.Id })).Sortable(true);
+        })
+        .Filterable()
+        .Sortable()
+        .Pageable()
+        .Empty("Aucune tâche à afficher")
+        )
+    </div>
 </div>
 
