@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Leaf.DAL;
 using Leaf.DAL.ScaffoldedModels;
+using Microsoft.AspNetCore.Authorization;
 using Leaf.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@ namespace Leaf.Web.Controllers
         {
             if(id.HasValue)
             {
-                IDal dal = new Dal();
+                Dal dal = new Dal();
                 Tache taskTemp = dal.GetTache((int)id);
                 Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
 
@@ -53,7 +54,7 @@ namespace Leaf.Web.Controllers
         /// <returns>a taskListViewModel for display</returns>
         public IActionResult TaskList()
         {
-            IDal dal = new Dal();
+            Dal dal = new Dal();
             Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
             var collaborateurs = dal.GetCollaborateurs(c.Id);
 
@@ -69,17 +70,23 @@ namespace Leaf.Web.Controllers
         /// Prepare task creation
         /// </summary>
         /// <returns>a viewModel for a new task </returns>
-        public IActionResult TaskCreation()
+        public IActionResult TaskCreation(int? id)
         {
-            IDal dal = new Dal();
+            Dal dal = new Dal();
             Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
             var collaborateurs = dal.GetCollaborateurs(c.Id);
 
+            List<Collaborateurs> listCollaborator = dal.AllCollaborateurs;
+            List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)id, new List<Tache>(), -1);
+
             var model = new TaskViewModel
             {
-                Nom = "",
+                ProjectId = (int) id,
+                TaskName = "",
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
+                _collaboratorList = listCollaborator,
+                _EligiblePreviousTasks = listEligiblePreviousTasks
             };
 
             return View("TaskCreation", model);
@@ -92,7 +99,7 @@ namespace Leaf.Web.Controllers
         /// <returns>the view to display</returns>
         public IActionResult TaskModification(int? id)
         {
-            IDal dal = new Dal();
+            Dal dal = new Dal();
             Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
             var collaborateurs = dal.GetCollaborateurs(c.Id);
 
@@ -101,7 +108,8 @@ namespace Leaf.Web.Controllers
             var model = new TaskViewModel
             {
                 Task = taskTemp,
-                Nom = taskTemp.Nom,
+                TaskName = taskTemp.Nom,
+                TaskDescription = taskTemp.Description,
                 StartDate = (System.DateTime) taskTemp.Debut,
                 EndDate = (System.DateTime)taskTemp.Fin,
                 ChargeEstimee = taskTemp.ChargeEstimee,
@@ -113,6 +121,56 @@ namespace Leaf.Web.Controllers
             };
 
             return View("TaskModification", model);
+        }
+
+        /// <summary>
+        /// Save the task from the model in the database
+        /// </summary>
+        /// <param name="model">the model containing the datas to be saved</param>
+        /// <returns>the view to be displayed, depending if the save failed or not</returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult SaveNewTask(TaskViewModel model, int? projectId)
+        {
+            Dal dal = new Dal();
+
+            //Verification
+            if(! (dal.VerifyNewTask((int) projectId) == ""))
+            {
+                return View("TaskCreation", model);
+            }
+
+            if(ModelState.IsValid)
+            {
+                Tache newTask = new Leaf.DAL.ScaffoldedModels.Tache
+                {
+                    Nom = model.TaskName,
+                    Description = model.TaskDescription,
+                    Debut = model.StartDate,
+                    Fin = model.EndDate,
+                    ChargeEstimee = model.ChargeEstimee,
+                    Progres = model.Progres,
+                    CollabId = model.CollabId,
+                    SuperTache = model.SuperTache,
+                    //TODO Depends = model.Depends
+                };
+            }
+
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+            var collaborateurs = dal.GetCollaborateurs(c.Id);
+
+            List<Collaborateurs> listCollaborator = dal.AllCollaborateurs;
+            List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)projectId, new List<Tache>(), -1);
+
+            model.ProjectId = (int)projectId;
+            model.TaskName = "";
+            model.StartDate = DateTime.Now;
+            model.EndDate = DateTime.Now;
+            model._collaboratorList = listCollaborator;
+            model._EligiblePreviousTasks = listEligiblePreviousTasks;
+
+            return View("TaskCreation", model);
         }
 
         // GET: Task

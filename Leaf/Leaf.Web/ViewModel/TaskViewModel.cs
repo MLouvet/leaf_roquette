@@ -17,12 +17,20 @@ namespace Leaf
 
         public bool IsProjectManager { get; set; }
 
+        public string ValidationErrorMessage { get; set; }
+
+        public int ProjectId { get; set; }
+
         //Fields to use while creating or modifying a task
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Un nom est requis pour la tâche")]
         [Display(Name = "Nom de la tâche: *")]
-        public string Nom { get; set; }
+        public string TaskName { get; set; }
+
+        [Required(ErrorMessage = "Un nom est requis pour la tâche")]
+        [Display(Name = "Nom de la tâche: *")]
+        public string TaskDescription { get; set; }
 
         [Required(ErrorMessage = "Une date de démarrage est requise pour le projet")]
         [Display(Name = "Date de départ du projet: *")]
@@ -71,6 +79,23 @@ namespace Leaf
 
         [Display(Name = "Tâches précédentes: ")]
         public List<int> Depends { get; set; }
+
+        private List<Tache> __EligiblePreviousTasks;
+
+        public List<Tache> _EligiblePreviousTasks
+        {
+            get { return __EligiblePreviousTasks ?? new List<Tache>(); }
+            set { __EligiblePreviousTasks = value; }
+        }
+
+        public IEnumerable<SelectListItem> ListEligiblePreviousTask
+        {
+            get
+            {
+                Tache taskTemp = new Tache();
+                return new SelectList(_EligiblePreviousTasks, nameof(taskTemp.Id), nameof(taskTemp.Nom));
+            }
+        }
 
     }
 }

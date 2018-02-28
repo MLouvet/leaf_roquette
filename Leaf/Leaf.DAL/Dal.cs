@@ -282,8 +282,16 @@ namespace Leaf.DAL
             return projetList;
         }
 
+        /// <summary>
+        /// Get all the clients in the database
+        /// </summary>
         public List<Client> Clients => bdd.Client.ToList();
 
+        /// <summary>
+        /// Get all the collaborators in the database
+        /// </summary>
+        /// <returns>A list of all the collaborators in the database</returns>
+        public List<Collaborateurs> AllCollaborateurs => bdd.Collaborateurs.ToList();
 
         /// <summary>
         /// Get all the clients linked by a task or a project to the collaborator
@@ -356,6 +364,54 @@ namespace Leaf.DAL
             }
 
             return taskList;
+        }
+
+        /// <summary>
+        /// Get a list of the task that eligible to be a previous task of the one currently considered
+        /// </summary>
+        /// <param name="projectId">THe id of the project</param>
+        /// <param name="currentTaskId">The id of the task we consider</param>
+        /// <returns>A list of tasks, which are suitable to be a previous task</returns>
+        public List<Leaf.DAL.ScaffoldedModels.Tache> GetPotentialPreviousTasks(int projectId,  List<Tache> CurrentPrecedingTasks, int currentTaskId = -1)
+        {
+            List<Tache> potentialPreviousTasks = new List<Tache>();
+
+            Tache currentTask = new Tache();
+            if (currentTaskId == -1)
+            {
+                foreach (var taskTemp in bdd.Tache.Where(t => t.IdProj == projectId))
+                {
+                    potentialPreviousTasks.Add(taskTemp);
+                }
+            }
+            else
+            {
+                currentTask = this.GetTache(currentTaskId);
+                foreach (var taskTemp in bdd.Tache.Where(t => t.IdProj == projectId
+                    && t.Id != currentTaskId
+                    && (((DateTime)t.Fin) - ((DateTime)currentTask.Debut)).Milliseconds < 0))
+                {
+                    potentialPreviousTasks.Add(taskTemp);
+                }
+            }
+
+            foreach(var t in CurrentPrecedingTasks)
+            {
+                potentialPreviousTasks.Remove(t);
+            }
+
+            return potentialPreviousTasks;
+        }
+
+        /// <summary>
+        /// Do the verification before adding the task to the database
+        /// </summary>
+        /// <param name="projectId">the id of the project in whih the task will be added</param>
+        /// <returns>the result of the verification</returns>
+        public string VerifyNewTask(int projectId)
+        {
+            // TODO
+            return "";
         }
 
         public List<Projet> Projets => bdd.Projet.ToList();

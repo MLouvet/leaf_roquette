@@ -9,17 +9,14 @@
 <div>
     <div style="infoFrame">
         <h4>@Model.Task.IdProjNavigation.ClientNavigation.Nom</h4>
-    </div>
-    <div style="infoFrame">
         <h4>Projet: @Model.Task.IdProjNavigation.Nom</h4>
     </div>
 </div>
 
 <div>
-    <h3 class="subTitle">Tâche: @Model.Nom</h3>
+    <h3 class="subTitle">Tâche: @Model.TaskName</h3>
     <br />
-    <!--TODO ajouter la description dès qu'elle est ajoutée dans la base de donnée pour une tâche-->
-
+    <p class="description"> @Model.Task.Description </p>    
 </div>
 
 
@@ -29,18 +26,18 @@
     {
         case ClientListViewModel.StatutEnum.Admin:
         case ClientListViewModel.StatutEnum.SuperAdmin:
-            <input type="button" onclick="location.href='@Url.Action("ClientCreation", "Clients", null)'" value="Mettre à jour la tâche" />
+            <input type="button" onclick="location.href='@Url.Action("TaskModification", "Task", new { id = Model.Task.Id })'" value="Mettre à jour la tâche" />
             break;
         case ClientListViewModel.StatutEnum.ChefDeProjet:
             if (@Model.IsProjectManager)
             {
-                <input type="button" onclick="location.href='@Url.Action("ClientCreation", "Clients", null)'" value="Mettre à jour tâche" />
+                <input type="button" onclick="location.href='@Url.Action("TaskModification", "Task", new { id = Model.Task.Id })'" value="Mettre à jour tâche" />
             }
             break;
         case ClientListViewModel.StatutEnum.Collaborateur:
             if (@Model.IsTaskResponsible)
             {
-                <input type="button" onclick="location.href='@Url.Action("ClientCreation", "Clients", null)'" value="Mettre à jour la tâche" />
+                <input type="button" onclick="location.href='@Url.Action("TaskModification", "Task", new { id = Model.Task.Id })'" value="Mettre à jour la tâche" />
             }
             break;
         default:
@@ -50,14 +47,12 @@
 </div>
 
 <div>
+    <h3>Informations d'avancement de la tâche</h3>
     <br />
-    <p>Charge estimée: @Model.ChargeEstimee</p>
-    <br />
-    <p>Charge consommée: TO BE ADDED TO DATABASE</p>
-    <br />
-    <p>Charge estimée restante: TO BE ADDED TO DATABASE </p>
-    <br />
-    <p>Avancement: @Model.Progres</p>
+    <p>Charge estimée: @Model.Task.ChargeEstimee</p>
+    <p>Charge consommée: @Model.Task.ChargeConsommee</p>
+    <p>Charge estimée restante: @Model.Task.ChargeEstimeeRestante </p>
+    <p>Avancement: @Model.Task.Progres</p>
     <br />
 </div>
 

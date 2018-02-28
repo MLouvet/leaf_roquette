@@ -37,6 +37,8 @@
 
 <br />
 <div>
+    <input type="button" onclick="location.href='@Url.Action("Taskcreation", "Task", new { id = Model.Project.Id })'" value="Ajouter une tâche" />
+    <br />
     <h4>Liste des tâches du projet</h4>
     <div>
         @(Html
