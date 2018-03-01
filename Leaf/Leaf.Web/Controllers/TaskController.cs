@@ -77,7 +77,7 @@ namespace Leaf.Web.Controllers
             var collaborateurs = dal.GetCollaborateurs(c.Id);
 
             List<Collaborateurs> listCollaborator = dal.AllCollaborateurs;
-            List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)id, new List<Tache>(), -1);
+            List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)id, new List<int>(), -1);
 
             var model = new TaskViewModel
             {
@@ -103,6 +103,9 @@ namespace Leaf.Web.Controllers
             Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
             var collaborateurs = dal.GetCollaborateurs(c.Id);
 
+            List<Collaborateurs> listCollaborator = dal.AllCollaborateurs;
+            List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)id, new List<int>(), -1);
+
             Tache taskTemp = dal.GetTache((int)id);
 
             var model = new TaskViewModel
@@ -117,7 +120,9 @@ namespace Leaf.Web.Controllers
                 IdProj = taskTemp.IdProj,
                 CollabId = taskTemp.CollabId,
                 SuperTache = (int) taskTemp.SuperTache,
-                //TODO add depends list task
+                //TODO add depends list task,
+                _collaboratorList = listCollaborator,
+                _EligiblePreviousTasks = listEligiblePreviousTasks
             };
 
             return View("TaskModification", model);
@@ -135,9 +140,20 @@ namespace Leaf.Web.Controllers
         {
             Dal dal = new Dal();
 
+            string validationMesg = dal.VerifyNewTask((int)projectId);
+
+            List<Collaborateurs> listCollaborator = dal.AllCollaborateurs;
+            List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)projectId, new List<int>(), (model.SuperTache == null ? -1 : model.SuperTache));
+
+            model._collaboratorList = listCollaborator;
+            model._EligiblePreviousTasks = listEligiblePreviousTasks;
+
             //Verification
-            if(! (dal.VerifyNewTask((int) projectId) == ""))
+            if (! (validationMesg == ""))
             {
+                model.ValidationErrorMessage = validationMesg;
+                model._collaboratorList = listCollaborator;
+                model._EligiblePreviousTasks = listEligiblePreviousTasks;
                 return View("TaskCreation", model);
             }
 
@@ -153,15 +169,15 @@ namespace Leaf.Web.Controllers
                     Progres = model.Progres,
                     CollabId = model.CollabId,
                     SuperTache = model.SuperTache,
-                    //TODO Depends = model.Depends
+                    
                 };
+
+                //TODO don't forget to add previousTasks
+
             }
 
             Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
             var collaborateurs = dal.GetCollaborateurs(c.Id);
-
-            List<Collaborateurs> listCollaborator = dal.AllCollaborateurs;
-            List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)projectId, new List<Tache>(), -1);
 
             model.ProjectId = (int)projectId;
             model.TaskName = "";

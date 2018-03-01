@@ -52,10 +52,16 @@
                 @Html.DropDownListFor(m => m.CollabId, Model.ListCollabro)
                 <span asp-validation-for="CollabId" class="text-danger"></span>
             </div>
+            <!--Here comes the complex part-->
             <div>
                 <label asp-for="Depends"></label>
                 @Html.ListBoxFor(m => m.Depends, Model.ListEligiblePreviousTask)
                 <span asp-validation-for="Depends" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="SuperTache"></label>
+
+                <span asp-validation-for="SuperTache" class="text-danger"></span>
             </div>
 
             <button type="submit" class="btn btn-default">Ajouter la tâche</button>

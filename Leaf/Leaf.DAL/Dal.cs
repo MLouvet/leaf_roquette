@@ -366,13 +366,64 @@ namespace Leaf.DAL
             return taskList;
         }
 
+        public List<Leaf.DAL.ScaffoldedModels.Tache> GetTaskByProjects(int projectId)
+        {
+            List<Tache> taskList = new List<Tache>();
+            foreach(Tache tache in bdd.Tache.Where(t => t.IdProj == projectId))
+            {
+                taskList.Add(tache);
+            }
+            return taskList;
+        }
+
+        /// <summary>
+        /// Remove from the second parameter the task mother of the one considered
+        /// </summary>
+        /// <param name="motherTask">The id of the the mother task to consider</param>
+        /// <param name="potentialPreviousTasks">The current list of </param>
+        /// <returns>The list where the mother tasks have been removed</returns>
+        public List<Tache> RemoveMotherTasks(int currentTask, List<Tache> potentialPreviousTasks, int motherMaxRank = 3)
+        {
+            Tache currentT = this.GetTache(currentTask);
+            if (motherMaxRank > 0 && currentT.SuperTache != null)
+            {
+                potentialPreviousTasks = RemoveMotherTasks((int) currentT.SuperTache, potentialPreviousTasks, motherMaxRank - 1);
+                potentialPreviousTasks.Remove(this.GetTache((int)currentT.SuperTache));
+            }
+
+            return potentialPreviousTasks;
+        }
+
+        /// <summary>
+        /// Return a list of the potential supertask for the current task
+        /// </summary>
+        /// <param name="idCurrentTask">the id of the current task</param>
+        /// <param name="projectId">the id of the project the task is in</param>
+        /// <returns>a list of potential super task for the  current task</returns>
+        public List<Tache> GetPotentialSuperTache(int projectId, List<int> previousTasksIDInViewModel = null, int idCurrentTask = -1)
+        {
+            List<Tache> listPotentialSuperTache = this.GetTaskByProjects(projectId);
+
+            foreach(PreviousTasks pt in bdd.PreviousTasks.Where(pt => pt.Task == idCurrentTask).ToList())
+            {
+                listPotentialSuperTache.Remove(this.GetTache(pt.PreviousTask));
+            }
+
+            foreach(int previousTaskID in previousTasksIDInViewModel)
+            {
+                listPotentialSuperTache.Remove(this.GetTache(previousTaskID));
+            }
+            
+            return listPotentialSuperTache;
+        }
+
         /// <summary>
         /// Get a list of the task that eligible to be a previous task of the one currently considered
         /// </summary>
         /// <param name="projectId">THe id of the project</param>
         /// <param name="currentTaskId">The id of the task we consider</param>
         /// <returns>A list of tasks, which are suitable to be a previous task</returns>
-        public List<Leaf.DAL.ScaffoldedModels.Tache> GetPotentialPreviousTasks(int projectId,  List<Tache> CurrentPrecedingTasks, int currentTaskId = -1)
+        public List<Leaf.DAL.ScaffoldedModels.Tache> GetPotentialPreviousTasks(int projectId, List<int> PreviousTaskInViewModel, int? motherTaskInViewModel = -1, int currentTaskId = -1)
         {
             List<Tache> potentialPreviousTasks = new List<Tache>();
 
@@ -393,14 +444,41 @@ namespace Leaf.DAL
                 {
                     potentialPreviousTasks.Add(taskTemp);
                 }
+
+                potentialPreviousTasks = RemoveMotherTasks(currentTaskId, potentialPreviousTasks, 3);
             }
 
-            foreach(var t in CurrentPrecedingTasks)
+            foreach(var t in PreviousTaskInViewModel)
             {
-                potentialPreviousTasks.Remove(t);
+                potentialPreviousTasks.Remove(this.GetTache(t));
             }
+            potentialPreviousTasks.Remove(this.GetTache((int) motherTaskInViewModel));
 
             return potentialPreviousTasks;
+        }
+
+        /// <summary>
+        /// Save all the id in the list as previous task of the current task
+        /// </summary>
+        /// <param name="previousTasksId">the list of the task to be added as previous tasks</param>
+        /// <param name="currentTask">the task which have the taks n the lists as previous task</param>
+        /// <returns>A boolean telling if the save succeded</returns>
+        public bool SavePreviousTaskSet(List<int> previousTasksId, int currentTask)
+        {
+            foreach (int taskId in previousTasksId)
+            {
+                PreviousTasks newPrevious = new PreviousTasks
+                {
+                    PreviousTask = taskId,
+                    Task = currentTask
+                };
+
+                bdd.PreviousTasks.Add(newPrevious);
+                bdd.SaveChanges();
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

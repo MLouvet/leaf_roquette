@@ -75,7 +75,7 @@ namespace Leaf
         }
 
         [Display(Name = "Tâche mère: ")]
-        public int SuperTache { get; set; }
+        public int? SuperTache { get; set; }
 
         [Display(Name = "Tâches précédentes: ")]
         public List<int> Depends { get; set; }
