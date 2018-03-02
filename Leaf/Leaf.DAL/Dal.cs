@@ -203,10 +203,17 @@ namespace Leaf.DAL
         }
 
 
- 
+
         #endregion
 
         #region Collections
+
+        /// <summary>
+        /// Get all the collaborators in the database
+        /// </summary>
+        /// <returns>A list of all the collaborators in the database</returns>
+        public List<Collaborateurs> AllCollaborateurs => bdd.Collaborateurs.ToList();
+
         /// <summary>
         /// Get all notifications for a collaborator
         /// </summary>
@@ -288,12 +295,6 @@ namespace Leaf.DAL
         public List<Client> Clients => bdd.Client.ToList();
 
         /// <summary>
-        /// Get all the collaborators in the database
-        /// </summary>
-        /// <returns>A list of all the collaborators in the database</returns>
-        public List<Collaborateurs> AllCollaborateurs => bdd.Collaborateurs.ToList();
-
-        /// <summary>
         /// Get all the clients linked by a task or a project to the collaborator
         /// </summary>
         /// <param name="collaborateur">the collaborator considered</param>
@@ -344,6 +345,7 @@ namespace Leaf.DAL
             return clientList;
         }
 
+        #region TaskRelatedFunctions
         /// <summary>
         /// Returns a list containing all tasks linked to a project
         /// </summary>
@@ -366,6 +368,11 @@ namespace Leaf.DAL
             return taskList;
         }
 
+        /// <summary>
+        /// Get a list of all the tasks associated with a project
+        /// </summary>
+        /// <param name="projectId">the id of the project</param>
+        /// <returns>The list of the tasks</returns>
         public List<Leaf.DAL.ScaffoldedModels.Tache> GetTaskByProjects(int projectId)
         {
             List<Tache> taskList = new List<Tache>();
@@ -374,6 +381,23 @@ namespace Leaf.DAL
                 taskList.Add(tache);
             }
             return taskList;
+        }
+
+        /// <summary>
+        /// Get the hierarchy level of a task
+        /// </summary>
+        /// <param name="taskId">the task we want the level of hierarchy</param>
+        /// <param name="hierarchyLevel">the current hierarchy level</param>
+        /// <returns></returns>
+        public int GetTaskLevelOfHierarchy(int taskId, int hierarchyLevel = 1)
+        {
+            Tache taskTemp = this.GetTache(taskId);
+            if (taskTemp.SuperTache != null && taskTemp.SuperTache != taskTemp.Id)
+            {
+                hierarchyLevel = GetTaskLevelOfHierarchy((int) taskTemp.SuperTache, ++hierarchyLevel);
+            }
+
+            return hierarchyLevel;
         }
 
         /// <summary>
@@ -400,18 +424,28 @@ namespace Leaf.DAL
         /// <param name="idCurrentTask">the id of the current task</param>
         /// <param name="projectId">the id of the project the task is in</param>
         /// <returns>a list of potential super task for the  current task</returns>
-        public List<Tache> GetPotentialSuperTache(int projectId, List<int> previousTasksIDInViewModel = null, int idCurrentTask = -1)
+        public List<Tache> GetPotentialSuperTache(int projectId, List<int> previousTasksIDInViewModel, int idCurrentTask = -1)
         {
             List<Tache> listPotentialSuperTache = this.GetTaskByProjects(projectId);
 
+            //Remove all the task that are currently saved as previous tasks for the idCurrentTask
             foreach(PreviousTasks pt in bdd.PreviousTasks.Where(pt => pt.Task == idCurrentTask).ToList())
             {
                 listPotentialSuperTache.Remove(this.GetTache(pt.PreviousTask));
             }
 
+            //Remove the task that are currenty in the previous task list in the view model
             foreach(int previousTaskID in previousTasksIDInViewModel)
             {
                 listPotentialSuperTache.Remove(this.GetTache(previousTaskID));
+            }
+
+            //Remove the task that have currently 3 level of hierarchy
+            foreach(Tache taskTemp in listPotentialSuperTache)
+            {
+                if (this.GetTaskLevelOfHierarchy(taskTemp.Id) > 3)
+                    listPotentialSuperTache.Remove(taskTemp);
+
             }
             
             return listPotentialSuperTache;
@@ -457,6 +491,8 @@ namespace Leaf.DAL
             return potentialPreviousTasks;
         }
 
+
+
         /// <summary>
         /// Save all the id in the list as previous task of the current task
         /// </summary>
@@ -465,17 +501,20 @@ namespace Leaf.DAL
         /// <returns>A boolean telling if the save succeded</returns>
         public bool SavePreviousTaskSet(List<int> previousTasksId, int currentTask)
         {
-            foreach (int taskId in previousTasksId)
+            if(previousTasksId != null)
             {
-                PreviousTasks newPrevious = new PreviousTasks
+                foreach (int taskId in previousTasksId)
                 {
-                    PreviousTask = taskId,
-                    Task = currentTask
-                };
+                    PreviousTasks newPrevious = new PreviousTasks
+                    {
+                        PreviousTask = taskId,
+                        Task = currentTask
+                    };
 
-                bdd.PreviousTasks.Add(newPrevious);
-                bdd.SaveChanges();
-                return true;
+                    bdd.PreviousTasks.Add(newPrevious);
+                    bdd.SaveChanges();
+                    return true;
+                }
             }
 
             return false;
@@ -491,6 +530,34 @@ namespace Leaf.DAL
             // TODO
             return "";
         }
+
+        /// <summary>
+        /// Save a new task in the database
+        /// </summary>
+        /// <param name="newTask">the new Task To be saved</param>
+        /// <returns>the id of the saved task</returns>
+        public int? SaveNewTask(Tache newTask, List<int> previousTaskSetId)
+        {
+            if (newTask != null)
+            {
+                bdd.Tache.Add(newTask);
+                bdd.SaveChanges();
+
+                SavePreviousTaskSet(previousTaskSetId, newTask.Id);
+
+                return newTask.Id;
+            }
+
+            return null;
+        }
+
+
+        public bool ModifyTask(Tache newTask, List<int> previousTaskSetId)
+        {
+            return false;
+        }
+
+        #endregion
 
         public List<Projet> Projets => bdd.Projet.ToList();
         #endregion

@@ -60,7 +60,7 @@
             </div>
             <div>
                 <label asp-for="SuperTache"></label>
-
+                @Html.DropDownListFor(m => m.SuperTache, Model.ListEligibleSuperTask)
                 <span asp-validation-for="SuperTache" class="text-danger"></span>
             </div>
 

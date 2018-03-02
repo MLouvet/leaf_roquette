@@ -78,6 +78,7 @@ namespace Leaf.Web.Controllers
 
             List<Collaborateurs> listCollaborator = dal.AllCollaborateurs;
             List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)id, new List<int>(), -1);
+            List<Tache> potentialSuperTask = dal.GetPotentialSuperTache((int)id, new List<int>());
 
             var model = new TaskViewModel
             {
@@ -86,7 +87,8 @@ namespace Leaf.Web.Controllers
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
                 _collaboratorList = listCollaborator,
-                _EligiblePreviousTasks = listEligiblePreviousTasks
+                _EligiblePreviousTasks = listEligiblePreviousTasks,
+                _superTaskList = potentialSuperTask,
             };
 
             return View("TaskCreation", model);
@@ -106,6 +108,8 @@ namespace Leaf.Web.Controllers
             List<Collaborateurs> listCollaborator = dal.AllCollaborateurs;
             List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)id, new List<int>(), -1);
 
+            List<Tache> potentialSuperTask = dal.GetPotentialSuperTache((int)id, new List<int>());
+
             Tache taskTemp = dal.GetTache((int)id);
 
             var model = new TaskViewModel
@@ -120,7 +124,7 @@ namespace Leaf.Web.Controllers
                 IdProj = taskTemp.IdProj,
                 CollabId = taskTemp.CollabId,
                 SuperTache = (int) taskTemp.SuperTache,
-                //TODO add depends list task,
+                _superTaskList = potentialSuperTask,
                 _collaboratorList = listCollaborator,
                 _EligiblePreviousTasks = listEligiblePreviousTasks
             };
@@ -141,6 +145,8 @@ namespace Leaf.Web.Controllers
             Dal dal = new Dal();
 
             string validationMesg = dal.VerifyNewTask((int)projectId);
+
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
 
             List<Collaborateurs> listCollaborator = dal.AllCollaborateurs;
             List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)projectId, new List<int>(), (model.SuperTache == null ? -1 : model.SuperTache));
@@ -165,18 +171,39 @@ namespace Leaf.Web.Controllers
                     Description = model.TaskDescription,
                     Debut = model.StartDate,
                     Fin = model.EndDate,
+                    ChargeConsommee = 0,
                     ChargeEstimee = model.ChargeEstimee,
                     Progres = model.Progres,
+                    IdProj = (int) projectId,
                     CollabId = model.CollabId,
                     SuperTache = model.SuperTache,
                     
                 };
 
-                //TODO don't forget to add previousTasks
+                //Save the new task and the associated previous tasks
+                int? newTaskID = dal.SaveNewTask(newTask, model.Depends);
+
+                if(newTaskID != null)
+                {
+                    Projet projectToDisplay = dal.GetProjet((int)projectId);
+                    projectToDisplay.ClientNavigation = dal.GetClient(projectToDisplay.Client);
+                    projectToDisplay.ResponsableNavigation = dal.GetCollaborateurs(projectToDisplay.Responsable);
+
+                    projectToDisplay.Tache = dal.GetTaskByProjects(projectToDisplay.Id, c.Id);
+
+                    bool IsProjectManagerTemp = dal.IsProjectManager(HttpContext.User.Identity.Name, projectToDisplay.Id);
+
+                    ProjectViewModel project = new ProjectViewModel
+                    {
+                        Project = projectToDisplay,
+                        IsProjectManager = IsProjectManagerTemp
+                    };
+
+                    return View("../Projects/Project", project);
+                }
 
             }
 
-            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
             var collaborateurs = dal.GetCollaborateurs(c.Id);
 
             model.ProjectId = (int)projectId;
