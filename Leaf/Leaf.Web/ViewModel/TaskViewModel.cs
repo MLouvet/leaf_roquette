@@ -21,6 +21,8 @@ namespace Leaf
 
         public int ProjectId { get; set; }
 
+        public int? TaskId { get; set; }
+
         //Fields to use while creating or modifying a task
         public int Id { get; set; }
 

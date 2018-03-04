@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Leaf.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Leaf.Web.Controllers
 {
@@ -83,6 +84,7 @@ namespace Leaf.Web.Controllers
             var model = new TaskViewModel
             {
                 ProjectId = (int) id,
+                TaskId = -1,
                 TaskName = "",
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
@@ -115,6 +117,7 @@ namespace Leaf.Web.Controllers
             var model = new TaskViewModel
             {
                 Task = taskTemp,
+                TaskId = (int) id,
                 TaskName = taskTemp.Nom,
                 TaskDescription = taskTemp.Description,
                 StartDate = (System.DateTime) taskTemp.Debut,
@@ -216,8 +219,129 @@ namespace Leaf.Web.Controllers
             return View("TaskCreation", model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult ModifyTask(TaskViewModel model, int? projectId)
+        {
+            Dal dal = new Dal();
+
+            string validationMesg = dal.VerifyNewTask((int)projectId);
+
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+
+            List<Collaborateurs> listCollaborator = dal.AllCollaborateurs;
+            List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)projectId, new List<int>(), (model.SuperTache == null ? -1 : model.SuperTache));
+
+            model._collaboratorList = listCollaborator;
+            model._EligiblePreviousTasks = listEligiblePreviousTasks;
+
+            //Verification
+            if (!(validationMesg == ""))
+            {
+                model.ValidationErrorMessage = validationMesg;
+                model._collaboratorList = listCollaborator;
+                model._EligiblePreviousTasks = listEligiblePreviousTasks;
+                return View("TaskCreation", model);
+            }
+
+            if (ModelState.IsValid)
+            {
+                Tache newTask = new Leaf.DAL.ScaffoldedModels.Tache
+                {
+                    Nom = model.TaskName,
+                    Description = model.TaskDescription,
+                    Debut = model.StartDate,
+                    Fin = model.EndDate,
+                    ChargeConsommee = 0,
+                    ChargeEstimee = model.ChargeEstimee,
+                    Progres = model.Progres,
+                    IdProj = (int)projectId,
+                    CollabId = model.CollabId,
+                    SuperTache = model.SuperTache,
+
+                };
+
+                //Save the new task and the associated previous tasks
+                int? newTaskID = dal.ModifyTask(newTask, model.Depends);
+
+                if (newTaskID != null)
+                {
+                    Projet projectToDisplay = dal.GetProjet((int)projectId);
+                    projectToDisplay.ClientNavigation = dal.GetClient(projectToDisplay.Client);
+                    projectToDisplay.ResponsableNavigation = dal.GetCollaborateurs(projectToDisplay.Responsable);
+
+                    projectToDisplay.Tache = dal.GetTaskByProjects(projectToDisplay.Id, c.Id);
+
+                    bool IsProjectManagerTemp = dal.IsProjectManager(HttpContext.User.Identity.Name, projectToDisplay.Id);
+
+                    ProjectViewModel project = new ProjectViewModel
+                    {
+                        Project = projectToDisplay,
+                        IsProjectManager = IsProjectManagerTemp
+                    };
+
+                    return View("../Projects/Project", project);
+                }
+
+            }
+
+            var collaborateurs = dal.GetCollaborateurs(c.Id);
+
+            model.ProjectId = (int)projectId;
+            model.TaskName = "";
+            model.StartDate = DateTime.Now;
+            model.EndDate = DateTime.Now;
+            model._collaboratorList = listCollaborator;
+            model._EligiblePreviousTasks = listEligiblePreviousTasks;
+
+            return View("TaskCreation", model);
+        }
+
+        /// <summary>
+        /// Called on a change in the previous task List
+        /// </summary>
+        /// <param name="model">the current model</param>
+        /// <param name="taskId">the current taskId, if it set</param>
+        /// <returns>An actualized list of the previous task</returns>
+        public JsonResult LoadEligibleSuperTaskOnPreviousTaskChange(TaskViewModel model, int taskId = -1)
+        {
+            Dal dal = new Dal();
+            List<Tache> PotentialSuperTacheList = dal.GetPotentialSuperTache(model.ProjectId, model.Depends, taskId);
+            List<SelectListItem> PotentialSuperTacheListSelectItem = new List<SelectListItem>();
+            PotentialSuperTacheListSelectItem.Clear();
+
+            foreach(var task in PotentialSuperTacheList)
+            {
+                PotentialSuperTacheListSelectItem.Add(new SelectListItem { Text = task.Nom, Value = task.Id.ToString() });
+            }
+
+            return Json(PotentialSuperTacheListSelectItem);
+        }
+
+        /// <summary>
+        /// Called on a change on the super task in the viewModel
+        /// </summary>
+        /// <param name="model">The current state of the model</param>
+        /// <param name="taskId">The id of the task if it is set</param>
+        /// <returns>the actualized list of the potential previous tache</returns>
+        public JsonResult LoadEligiblePreviousTaskOnSuperTaskChange(TaskViewModel model, int taskId = -1)
+        {
+            Dal dal = new Dal();
+            List<Tache> PotentialSuperTacheList = dal.GetPotentialPreviousTasks(model.ProjectId, model.Depends, model.SuperTache, taskId);
+            List<SelectListItem> PotentialPreviousTacheListSelectItem = new List<SelectListItem>();
+            PotentialPreviousTacheListSelectItem.Clear();
+
+            foreach (var task in PotentialSuperTacheList)
+            {
+                PotentialPreviousTacheListSelectItem.Add(new SelectListItem { Text = task.Nom, Value = task.Id.ToString() });
+            }
+
+            return Json(PotentialPreviousTacheListSelectItem);
+        }
+
         // GET: Task
-        public ActionResult Index()
+        /*public ActionResult Index()
         {
             return View();
         }
@@ -304,6 +428,6 @@ namespace Leaf.Web.Controllers
             {
                 return View();
             }
-        }
+        }*/
     }
 }

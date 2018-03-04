@@ -551,10 +551,36 @@ namespace Leaf.DAL
             return null;
         }
 
-
-        public bool ModifyTask(Tache newTask, List<int> previousTaskSetId)
+        /// <summary>
+        /// Modify a task and it's associated previous task set in the database
+        /// </summary>
+        /// <param name="newTask">The task to save</param>
+        /// <param name="previousTaskSetId">The list of id to save for the previous task</param>
+        /// <returns></returns>
+        public int? ModifyTask(Tache newTask, List<int> previousTaskSetId)
         {
-            return false;
+            //TODO ENVOYER DES NOTIFICATIONS
+            if (newTask != null)
+            {
+                Tache entity = bdd.Tache.Find(newTask.Id);
+                if (entity == null)
+                    return null;
+
+                bdd.Entry(entity).CurrentValues.SetValues(newTask);
+                
+
+                foreach(var previous in  bdd.PreviousTasks.Where(p => p.Task == newTask.Id))
+                {
+                    PreviousTasks previousEntity = bdd.PreviousTasks.Find(previous.Id);
+                    bdd.PreviousTasks.Remove(previousEntity);
+                }
+
+                SavePreviousTaskSet(previousTaskSetId, newTask.Id);
+                bdd.SaveChanges();
+                return newTask.Id;
+            }
+
+            return null;
         }
 
         #endregion
