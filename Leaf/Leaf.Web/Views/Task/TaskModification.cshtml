@@ -1,7 +1,103 @@
-﻿
+﻿@using NonFactors.Mvc.Grid
+@using Leaf.Web.Controllers
+@model TaskViewModel
 @{
-    ViewData["Title"] = "TaskModification";
+    ViewData["Title"] = "TaskCreation";
 }
 
-<h2>TaskModification</h2>
+<h2>Créer une nouvelle tâche</h2>
 
+<div class="row">
+    <div class="col-md-6">
+        <h3>@Model.ValidationErrorMessage</h3>
+
+        <form asp-controller="Task" asp-action="ModifyTask" asp-route-projectId="@Model.ProjectId" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="TaskName"></label>
+                <input asp-for="TaskName" class="form-control" />
+                <span asp-validation-for="TaskName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TaskDescription"></label>
+                <input asp-for="TaskDescription" class="form-control" />
+                <span asp-validation-for="TaskDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate"></label>
+                @Html.TextBoxFor(m => m.StartDate, String.Format("{0:d}", DateTime.Today.ToShortDateString()),
+                    new { @class = "form-control", type = "date" })
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate"></label>
+                @Html.TextBoxFor(m => m.EndDate, String.Format("{0:d}", DateTime.Today.ToShortDateString()),
+                    new { @class = "form-control", type = "date" })
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChargeEstimee"></label>
+                <input asp-for="ChargeEstimee" class="form-control" />
+                <span asp-validation-for="ChargeEstimee" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Progres"></label>
+                <input asp-for="Progres" class="form-control" />
+                <span asp-validation-for="Progres" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CollabId"></label>
+                <!--<input asp-for="ProjectLeader" class="form-control" />-->
+                @Html.DropDownListFor(m => m.CollabId, Model.ListCollabro)
+                <span asp-validation-for="CollabId" class="text-danger"></span>
+            </div>
+            <!--Here comes the complex part-->
+            <div>
+                <label asp-for="Depends"></label>
+                @Html.ListBoxFor(m => m.Depends, Model.ListEligiblePreviousTask, new { @id = "eligiblePreviousTaskList" })
+                <span asp-validation-for="Depends" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="SuperTache"></label>
+                @Html.DropDownListFor(m => m.SuperTache, Model.ListEligibleSuperTask, "Selection super tâche", new { @class = "form-control", @id = "eligibleSuperTaskList" })
+                <span asp-validation-for="SuperTache" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-default">Ajouter la tâche</button>
+            <input type="button" value="Annuler" class="btn btn-default cancel" onclick="location.href='@Url.Action("Project", "Projects", new { id = Model.ProjectId })'" />
+        </form>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    //On previous task change
+    $(document).ready(function () {
+        $("#eligiblePreviousTaskList").change(function () {
+            $.getJSON("/Controllers/Task/LoadEligibleSuperTaskOnPreviousTaskChange", { model: @Model, taskId: @Model.TaskId },
+                function (data) {
+                    var select = $("#eligibleSuperTaskList");
+                    select.empty();
+                    select.append($('<option/>', { value: 0, text: "Selection super tâche" }));
+                    $.each(data, function (index, itemData) {
+                        select.append($('<option/>', { value: itemData.Value, text: itemData.Text }));
+                    });
+                });
+        });
+    });
+
+    //On super task change
+    $(document).ready(function () {
+        $("#eligibleSuperTaskList").change(function () {
+            $.getJSON("/Controllers/Task/LoadEligiblePreviousTaskOnSuperTaskChange", { model: @Model, taskId: @Model.TaskId },
+                function (data) {
+                    var select = $("#eligiblePreviousTaskList");
+                    select.empty();
+                    $.each(data, function (index, itemData) {
+                        select.append($('<option/>', { value: itemData.Value, text: itemData.Text }));
+                    });
+                });
+        });
+    });
+</script>

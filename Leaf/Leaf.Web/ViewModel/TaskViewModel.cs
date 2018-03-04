@@ -21,6 +21,8 @@ namespace Leaf
 
         public int ProjectId { get; set; }
 
+        public int? TaskId { get; set; }
+
         //Fields to use while creating or modifying a task
         public int Id { get; set; }
 
@@ -29,7 +31,7 @@ namespace Leaf
         public string TaskName { get; set; }
 
         [Required(ErrorMessage = "Un nom est requis pour la tâche")]
-        [Display(Name = "Nom de la tâche: *")]
+        [Display(Name = "Description de la tâche: *")]
         public string TaskDescription { get; set; }
 
         [Required(ErrorMessage = "Une date de démarrage est requise pour le projet")]
@@ -76,6 +78,23 @@ namespace Leaf
 
         [Display(Name = "Tâche mère: ")]
         public int? SuperTache { get; set; }
+
+        private List<Tache> __superTaskList;
+
+        public List<Tache> _superTaskList
+        {
+            get { return __superTaskList ?? new List<Tache>();  }
+            set { __superTaskList = value;  }
+        }
+
+        public IEnumerable<SelectListItem> ListEligibleSuperTask
+        {
+            get
+            {
+                Tache task = new Tache();
+                return new SelectList(_superTaskList, nameof(task.Id), nameof(task.Nom));
+            }
+        }
 
         [Display(Name = "Tâches précédentes: ")]
         public List<int> Depends { get; set; }

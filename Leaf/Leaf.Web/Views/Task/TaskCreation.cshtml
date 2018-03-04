@@ -55,12 +55,12 @@
             <!--Here comes the complex part-->
             <div>
                 <label asp-for="Depends"></label>
-                @Html.ListBoxFor(m => m.Depends, Model.ListEligiblePreviousTask)
+                @Html.ListBoxFor(m => m.Depends, Model.ListEligiblePreviousTask, new { @id = "eligiblePreviousTaskList" })
                 <span asp-validation-for="Depends" class="text-danger"></span>
             </div>
             <div>
                 <label asp-for="SuperTache"></label>
-
+                @Html.DropDownListFor(m => m.SuperTache, Model.ListEligibleSuperTask, "Selection super tâche", new { @class="form-control", @id = "eligibleSuperTaskList" })
                 <span asp-validation-for="SuperTache" class="text-danger"></span>
             </div>
 
@@ -70,3 +70,34 @@
 
     </div>
 </div>
+
+<script type="text/javascript">
+    //On previous task change
+    $(document).ready(function () {
+        $("#eligiblePreviousTaskList").change(function () {
+            $.getJSON("../Task/LoadEligibleSuperTaskOnPreviousTaskChange", { model: @Model, taskId: @Model.TaskId },
+                function (data) {
+                    var select = $("#eligibleSuperTaskList");
+                    select.empty();
+                    select.append($('<option/>', { value: 0, text: "Selection super tâche" }));
+                    $.each(data, function (index, itemData) {
+                        select.append($('<option/>', { value: itemData.Value, text: itemData.Text }));
+                    });
+                });
+        });
+    });
+
+    //On super task change
+    $(document).ready(function () {
+        $("#eligibleSuperTaskList").change(function () {
+            $.getJSON("../Task/LoadEligiblePreviousTaskOnSuperTaskChange", { model: @Model, taskId: @Model.TaskId },
+                function (data) {
+                    var select = $("#eligiblePreviousTaskList");
+                    select.empty();
+                    $.each(data, function (index, itemData) {
+                        select.append($('<option/>', { value: itemData.Value, text: itemData.Text }));
+                    });
+                });
+        });
+    });
+</script>
