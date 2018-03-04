@@ -1,0 +1,26 @@
+﻿@using NonFactors.Mvc.Grid;
+@model CollaborateursViewModel
+@{ 
+    ViewData["Title"] = "Liste des Collaborateurs";
+}
+<div>
+    <h2 style="text-align:center">Collaborateurs </h2>
+    <br />
+    <input type="button" onclick="location.href='@Url.Action("CollabCreation","Account", null)'" value="Ajouter un collaborateur" />
+    <br />
+    <br />
+
+    @(Html
+        .Grid(Model.Collaborateurs)
+        .Build(columns =>
+        {
+            columns.Add(collaborateur => collaborateur.Nom).Titled("Nom").Sortable(true);
+            columns.Add(c => c.Prenom).Titled("Prenom").Sortable(true);
+            columns.Add(c => c.Mail).Titled("@mail").Sortable(true);
+            columns.Add(c => c.Statut).Titled("Staut").Sortable(true);
+        })
+        .Sortable()
+        .Pageable()
+       )
+</div>
+

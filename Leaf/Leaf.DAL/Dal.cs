@@ -21,7 +21,7 @@ namespace Leaf.DAL
         private static ProjetService projetService;
         private static TacheService tacheService;
 
-      
+
 
         public Dal()
         {
@@ -73,7 +73,7 @@ namespace Leaf.DAL
         /// <returns> True if the object has been added, else false</returns>
         public bool SaveNewClient(Client c)
         {
-            if(c.Compagnie != null && c.Adresse != null && c.Mail != null && c.Telephone != null
+            if (c.Compagnie != null && c.Adresse != null && c.Mail != null && c.Telephone != null
                 && c.Nom != null)
             {
                 bdd.Client.Add(c);
@@ -107,7 +107,7 @@ namespace Leaf.DAL
         /// <returns>true if adding was successful, false in an other case</returns>
         public bool SaveNewProject(Projet project)
         {
-            if(project.Nom != null && project.Debut != null && project.Echeance != null
+            if (project.Nom != null && project.Debut != null && project.Echeance != null
                 && bdd.Client.Find(project.Client) != null && bdd.Collaborateurs.Find(project.Responsable) != null)
             {
                 project.ClientNavigation = bdd.Client.Find(project.Client);
@@ -122,6 +122,11 @@ namespace Leaf.DAL
             return false;
         }
 
+        public bool MakeNewCollab(Collaborateurs c)
+        {
+            bdd.Collaborateurs.Add(c);
+            return bdd.SaveChanges() > 0;
+        }
         /// <summary>
         /// Modify existing values for a project in the DB based on the ID
         /// </summary>
@@ -167,6 +172,13 @@ namespace Leaf.DAL
         }
 
         /// <summary>
+        /// Tells if the current user is a SuperAdmin
+        /// </summary>
+        public bool IsSuperAdmin(string name)
+        {
+            return bdd.SuperAdmin.Any(s => s.Id == GetCollaborateurs(name).Id);
+        }
+        /// <summary>
         /// Get all the people which have the status to manage a project
         /// </summary>
         /// <returns>A list of collaborateur containint all project managers (admin and super admin also)</returns>
@@ -175,12 +187,12 @@ namespace Leaf.DAL
             return bdd.Collaborateurs.Where(c => c.Statut != "COLLABORATEUR").ToList();
         }
 
-        public Admin GetAdmin(int pId)                        =>              bdd.Admin.Where(a => a.Id == pId).SingleOrDefault();
-        public Client GetClient(int id)                       =>              bdd.Client.Where(c => c.Id == id).SingleOrDefault();
-        public Collaborateurs GetCollaborateurs(int id)       =>      bdd.Collaborateurs.Where(c => c.Id == id).SingleOrDefault();
+        public Admin GetAdmin(int pId) => bdd.Admin.Where(a => a.Id == pId).SingleOrDefault();
+        public Client GetClient(int id) => bdd.Client.Where(c => c.Id == id).SingleOrDefault();
+        public Collaborateurs GetCollaborateurs(int id) => bdd.Collaborateurs.Where(c => c.Id == id).SingleOrDefault();
         public Collaborateurs GetCollaborateurs(string email) => bdd.Collaborateurs.Where(c => c.Mail == email).SingleOrDefault();
-        public Projet GetProjet(int id)                       =>              bdd.Projet.Where(p => p.Id == id).SingleOrDefault();
-        public Tache GetTache(int id)                         =>               bdd.Tache.Where(t => t.Id == id).SingleOrDefault();
+        public Projet GetProjet(int id) => bdd.Projet.Where(p => p.Id == id).SingleOrDefault();
+        public Tache GetTache(int id) => bdd.Tache.Where(t => t.Id == id).SingleOrDefault();
 
         /// <summary>
         /// Change notification status to read
@@ -203,7 +215,7 @@ namespace Leaf.DAL
         }
 
 
- 
+
         #endregion
 
         #region Collections
@@ -266,7 +278,7 @@ namespace Leaf.DAL
 
             foreach (var projet in bdd.Projet)
             {
-                if(projet.Responsable == collaborateur.Id)
+                if (projet.Responsable == collaborateur.Id)
                 {
                     projetList.Add(projet);
                     continue;
@@ -308,7 +320,7 @@ namespace Leaf.DAL
             var inTemp = temp.Count;
 
             //Si c'est un admin ou un chef de projet, on retourne tous les clients
-            if(collaborateur.Statut == "ADMIN" || collaborateur.Statut == "CHEF_PROJET")
+            if (collaborateur.Statut == "ADMIN" || collaborateur.Statut == "CHEF_PROJET")
             {
                 foreach (var client in bdd.Client)
                     clientList.Add(client);
@@ -354,7 +366,7 @@ namespace Leaf.DAL
             List<Tache> taskList = new List<Tache>();
             Collaborateurs collabro = this.GetCollaborateurs(collabId);
 
-            foreach(var taskTemp in bdd.Tache.Where(t => t.IdProj == projectId))
+            foreach (var taskTemp in bdd.Tache.Where(t => t.IdProj == projectId))
             {
                 if (collabro.Statut == "ADMIN" || collabro.Statut == "SUPER_ADMIN" ||
                    (collabro.Statut == "CHEF_PROJET" && this.GetProjet(projectId).Responsable == collabId) || taskTemp.CollabId == collabId)
@@ -369,7 +381,7 @@ namespace Leaf.DAL
         public List<Leaf.DAL.ScaffoldedModels.Tache> GetTaskByProjects(int projectId)
         {
             List<Tache> taskList = new List<Tache>();
-            foreach(Tache tache in bdd.Tache.Where(t => t.IdProj == projectId))
+            foreach (Tache tache in bdd.Tache.Where(t => t.IdProj == projectId))
             {
                 taskList.Add(tache);
             }
@@ -387,7 +399,7 @@ namespace Leaf.DAL
             Tache currentT = this.GetTache(currentTask);
             if (motherMaxRank > 0 && currentT.SuperTache != null)
             {
-                potentialPreviousTasks = RemoveMotherTasks((int) currentT.SuperTache, potentialPreviousTasks, motherMaxRank - 1);
+                potentialPreviousTasks = RemoveMotherTasks((int)currentT.SuperTache, potentialPreviousTasks, motherMaxRank - 1);
                 potentialPreviousTasks.Remove(this.GetTache((int)currentT.SuperTache));
             }
 
@@ -404,16 +416,16 @@ namespace Leaf.DAL
         {
             List<Tache> listPotentialSuperTache = this.GetTaskByProjects(projectId);
 
-            foreach(PreviousTasks pt in bdd.PreviousTasks.Where(pt => pt.Task == idCurrentTask).ToList())
+            foreach (PreviousTasks pt in bdd.PreviousTasks.Where(pt => pt.Task == idCurrentTask).ToList())
             {
                 listPotentialSuperTache.Remove(this.GetTache(pt.PreviousTask));
             }
 
-            foreach(int previousTaskID in previousTasksIDInViewModel)
+            foreach (int previousTaskID in previousTasksIDInViewModel)
             {
                 listPotentialSuperTache.Remove(this.GetTache(previousTaskID));
             }
-            
+
             return listPotentialSuperTache;
         }
 
@@ -448,11 +460,11 @@ namespace Leaf.DAL
                 potentialPreviousTasks = RemoveMotherTasks(currentTaskId, potentialPreviousTasks, 3);
             }
 
-            foreach(var t in PreviousTaskInViewModel)
+            foreach (var t in PreviousTaskInViewModel)
             {
                 potentialPreviousTasks.Remove(this.GetTache(t));
             }
-            potentialPreviousTasks.Remove(this.GetTache((int) motherTaskInViewModel));
+            potentialPreviousTasks.Remove(this.GetTache((int)motherTaskInViewModel));
 
             return potentialPreviousTasks;
         }
@@ -528,7 +540,7 @@ namespace Leaf.DAL
                 var clientList = new List<Client>();
                 var projetList = new List<Projet>();
 
-                
+
 
                 foreach (var projet in _context.Projet.ToList())
                 {

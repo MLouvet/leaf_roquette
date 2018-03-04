@@ -466,5 +466,75 @@ namespace Leaf.Web.Controllers
         }
 
         #endregion
+
+
+        public IActionResult CollabList()
+        {
+            Dal dal = new Dal();
+            var model = new CollaborateursViewModel
+            {
+                Collaborateurs = dal.AllCollaborateurs
+            };
+            return View("CollabList", model);
+        }
+
+        public IActionResult CollabCreation()
+        {
+            Dal dal = new Dal();
+            var model = new CollabViewModel
+            {
+                Collaborateur = new Collaborateurs(),
+                IsSuperAdmin = dal.IsSuperAdmin(HttpContext.User.Identity.Name)
+            };
+            return View("CollabCreation",model);
+        }
+
+        public IActionResult CollabModif(int? id)
+        {
+            Dal dal = new Dal();
+            Collaborateurs c = dal.GetCollaborateurs((int)id);
+            var model = new CollabViewModel
+            {
+                CollabFirstName = c.Prenom,
+                CollabId = c.Identifiant,
+                CollabLastName = c.Nom,
+                CollabMail = c.Mail,
+                CollabPasswrd = c.Mdp,
+                Collaborateur = c
+            };
+            return View("CollabCreation", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult SaveNewCollab(CollabViewModel model)
+        {
+            Dal dal = new Dal();
+            string h = "";
+            for (int i = 0; i < model.CollabStatus.Length; i++)
+                h += Char.ToUpper(model.CollabStatus[i]);
+            Collaborateurs nCollab = new Collaborateurs
+            {
+                Identifiant = model.CollabId,
+                Nom = model.CollabLastName,
+                Prenom = model.CollabFirstName,
+                Mail = model.CollabMail,
+                Mdp = model.CollabPasswrd,
+                Statut =  h
+            };
+
+            bool saved = dal.MakeNewCollab(nCollab);
+            if (saved)
+            {
+                var listmodel = new CollaborateursViewModel
+                {
+                    Collaborateurs = dal.AllCollaborateurs
+                };
+                return View("CollabList", listmodel);
+            }
+
+            return View("CollabCreation", model);
+        }
     }
 }
