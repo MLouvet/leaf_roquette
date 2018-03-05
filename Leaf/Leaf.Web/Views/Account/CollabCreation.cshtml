@@ -9,48 +9,91 @@
 
 <div class="row">
     <div class="col-md-6">
+        @if (!Model.isMod)
+        {
+            <form asp-controller="Account" asp-action="SaveNewCollab" method="post">
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="CollabFirstName"></label>
+                    <input asp-for="CollabFirstName" class="form-control" />
+                    <span asp-validation-for="CollabFirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CollabLastName"></label>
+                    <input asp-for="CollabLastName" class="form-control" />
+                    <span asp-validation-for="CollabLastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CollabId"></label>
+                    <input asp-for="CollabId" class="form-control" />
+                    <span asp-validation-for="CollabId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CollabMail"></label>
+                    <input asp-for="CollabMail" class="form-control" />
+                    <span asp-validation-for="CollabMail" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CollabPasswrd"></label>
+                    <input asp-for="CollabPasswrd" class="form-control" />
+                    <span asp-validation-for="CollabPasswrd" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CollabStatus"></label>
+                    @Html.DropDownListFor(m => m.CollabStatus, Model.ListStatus)
+                    <span asp-validation-for="CollabStatus" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-default">Ajouter le Collaborateur</button>}
+                <input type="button" value="Annuler" class="btn btn-default cancel" onclick="location.href='@Url.Action("CollabList", "Account", null)'" />
+            </form>
+        }
+        else
+        { 
+            <form asp-controller="Account" asp-action="ModCollab"  asp-route-id="@Model.Collaborateur.Id" method="post">
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="CollabFirstName"></label>
+                    <input asp-for="CollabFirstName" class="form-control" />
+                    <span asp-validation-for="CollabFirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CollabLastName"></label>
+                    <input asp-for="CollabLastName" class="form-control" />
+                    <span asp-validation-for="CollabLastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CollabId"></label>
+                    <input asp-for="CollabId" class="form-control" />
+                    <span asp-validation-for="CollabId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CollabMail"></label>
+                    <input asp-for="CollabMail" class="form-control" />
+                    <span asp-validation-for="CollabMail" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CollabPasswrd"></label>
+                    <input asp-for="CollabPasswrd" class="form-control" />
+                    <span asp-validation-for="CollabPasswrd" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CollabStatus"></label>
+                    @Html.DropDownListFor(m => m.CollabStatus, Model.ListStatus)
+                    <span asp-validation-for="CollabStatus" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-danger">Modifier le Collaborateur</button>
+                <input type="button" value="Annuler" class="btn btn-default cancel" onclick="location.href='@Url.Action("CollabList", "Account", null)'" />
+            </form>
+        }
         <h3>@Model.ValidationErrorMessage</h3>
-        <form asp-controller="Account" asp-action="SaveNewCollab" method="post">
 
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CollabFirstName"></label>
-                <input asp-for="CollabFirstName" class="form-control" />
-                <span asp-validation-for="CollabFirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CollabLastName"></label>
-                <input asp-for="CollabLastName" class="form-control" />
-                <span asp-validation-for="CollabLastName" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="CollabId"></label>
-                <input asp-for="CollabId" class="form-control" />
-                <span asp-validation-for="CollabId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CollabMail"></label>
-                <input asp-for="CollabMail" class="form-control" />
-                <span asp-validation-for="CollabMail" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CollabPasswrd"></label>
-                <input asp-for="CollabPasswrd" class="form-control" />
-                <span asp-validation-for="CollabPasswrd" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CollabStatus"></label>
-                @Html.DropDownListFor(m=>m.CollabStatus, Model.ListStatus)
-                <span asp-validation-for="CollabStatus" class="text-danger"></span>
-            </div>
-
-            <button type="submit" class="btn btn-default">Ajouter le Collaborateur</button>
-            <input type="button" value="Annuler" class="btn btn-default cancel" onclick="location.href='@Url.Action("CollabList", "Account", null)'" />
-        </form>
     </div>
 </div>
 
-@section Scripts{ 
+@section Scripts{
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }

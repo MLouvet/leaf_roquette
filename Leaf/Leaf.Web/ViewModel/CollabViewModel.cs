@@ -13,8 +13,7 @@ namespace Leaf
     public class CollabViewModel: LoginPartialViewModel
     {
         public Collaborateurs Collaborateur { get; set; }
-
-        public bool IsAdmin { get; set; }
+        public int CollabIdn { get; set; }
         public bool IsSuperAdmin { get; set; }
         public string ValidationErrorMessage { get; set; }
 
@@ -32,6 +31,7 @@ namespace Leaf
 
         [Required(ErrorMessage = "Un mot de passe est requis pour un collaborateur")]
         [Display(Name = "Mot de passe du collaborateur")]
+        [DataType(DataType.Password)]
         public string CollabPasswrd { get; set; }
 
         [Required(ErrorMessage = "Une adresse email est requise pour un collaborateur")]
@@ -40,11 +40,13 @@ namespace Leaf
 
         [Required(ErrorMessage = "Un statut est requise pour un collaborateur")]
         [Display(Name = "Statut du collaborateur")]
-        public string CollabStatus;
+        public string CollabStatus { get; set; }
 
         private List<string> __status = new List<string> { "Chef_Projet", "Collaborateur" };
 
         public List<string> _status { get => __status; set => __status = value; }
+
+        public bool isMod;
 
         public CollabViewModel()
         {

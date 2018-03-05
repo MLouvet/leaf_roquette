@@ -14,10 +14,12 @@
         .Grid(Model.Collaborateurs)
         .Build(columns =>
         {
-            columns.Add(collaborateur => collaborateur.Nom).Titled("Nom").Sortable(true);
+            columns.Add(c => c.Nom).Titled("Nom").Sortable(true);
             columns.Add(c => c.Prenom).Titled("Prenom").Sortable(true);
             columns.Add(c => c.Mail).Titled("@mail").Sortable(true);
             columns.Add(c => c.Statut).Titled("Staut").Sortable(true);
+            columns.Add().Titled("&#128393;").RenderedAs(c => Html.ActionLink("\uD83D\uDD89", "CollabModif", "Account", new { Id = c.Id }));
+            //columns.Add().Titled("&#128393;").RenderedAs(c => Html.ActionLink("\u1F5D1", "CollabModif", "Account", new { Id = c.Id }));
         })
         .Sortable()
         .Pageable()

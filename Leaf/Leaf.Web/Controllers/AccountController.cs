@@ -471,11 +471,17 @@ namespace Leaf.Web.Controllers
         public IActionResult CollabList()
         {
             Dal dal = new Dal();
-            var model = new CollaborateursViewModel
+            var p = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+            if (p.Statut == "SUPERADMIN")
             {
-                Collaborateurs = dal.AllCollaborateurs
-            };
-            return View("CollabList", model);
+                var modlist = new CollaborateursViewModel { Collaborateurs = dal.AllCollaborateurs };
+                return View("CollabList", modlist);
+            }
+            else
+            {
+                var modlist = new CollaborateursViewModel { Collaborateurs = dal.AllCollaborateurs.FindAll(c => !c.Statut.Contains("ADMIN")) };
+                return View("CollabList", modlist);
+            }
         }
 
         public IActionResult CollabCreation()
@@ -484,7 +490,8 @@ namespace Leaf.Web.Controllers
             var model = new CollabViewModel
             {
                 Collaborateur = new Collaborateurs(),
-                IsSuperAdmin = dal.IsSuperAdmin(HttpContext.User.Identity.Name)
+                IsSuperAdmin = dal.IsSuperAdmin(HttpContext.User.Identity.Name),
+                isMod = false,
             };
             return View("CollabCreation",model);
         }
@@ -495,13 +502,49 @@ namespace Leaf.Web.Controllers
             Collaborateurs c = dal.GetCollaborateurs((int)id);
             var model = new CollabViewModel
             {
+                isMod = true,
                 CollabFirstName = c.Prenom,
                 CollabId = c.Identifiant,
+                IsSuperAdmin = dal.IsSuperAdmin(HttpContext.User.Identity.Name),
                 CollabLastName = c.Nom,
                 CollabMail = c.Mail,
-                CollabPasswrd = c.Mdp,
+                CollabIdn =(int) id,
                 Collaborateur = c
             };
+
+            return View("CollabCreation", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult ModCollab(CollabViewModel model, int? id)
+        {
+            Dal dal = new Dal();
+            string h = "";
+            var m = dal.GetCollaborateurs((int)id);
+            for (int i = 0; i < model.CollabStatus.Length; i++)
+                h += Char.ToUpper(model.CollabStatus[i]);
+            m.Statut = h;
+            m.Identifiant = model.CollabId;
+            m.Nom = model.CollabLastName;
+            m.Prenom = model.CollabFirstName;
+            m.Mail = model.CollabMail;
+            m.Mdp = model.CollabPasswrd;
+            bool s = dal.ModifyCollab(m);
+            if (s)
+            {
+                if (model.Statut == ViewModel.LoginPartialViewModel.StatutEnum.SuperAdmin)
+                {
+                    var modlist = new CollaborateursViewModel { Collaborateurs = dal.AllCollaborateurs };
+                    return View("CollabList", modlist);
+                }
+                else
+                {
+                    var modlist = new CollaborateursViewModel { Collaborateurs = dal.AllCollaborateurs.FindAll(c => !c.Statut.Contains("ADMIN")) };
+                    return View("CollabList", modlist);
+                }
+            }
             return View("CollabCreation", model);
         }
 
@@ -527,11 +570,16 @@ namespace Leaf.Web.Controllers
             bool saved = dal.MakeNewCollab(nCollab);
             if (saved)
             {
-                var listmodel = new CollaborateursViewModel
+                if (model.Statut == ViewModel.LoginPartialViewModel.StatutEnum.SuperAdmin)
                 {
-                    Collaborateurs = dal.AllCollaborateurs
-                };
-                return View("CollabList", listmodel);
+                    var modlist = new CollaborateursViewModel { Collaborateurs = dal.AllCollaborateurs };
+                    return View("CollabList", modlist);
+                }
+                else
+                {
+                    var modlist = new CollaborateursViewModel { Collaborateurs = dal.AllCollaborateurs.FindAll(c => !c.Statut.Contains("ADMIN")) };
+                    return View("CollabList", modlist);
+                }
             }
 
             return View("CollabCreation", model);

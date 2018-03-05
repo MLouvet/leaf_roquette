@@ -127,6 +127,17 @@ namespace Leaf.DAL
             bdd.Collaborateurs.Add(c);
             return bdd.SaveChanges() > 0;
         }
+
+        public bool ModifyCollab(Collaborateurs c)
+        {
+
+            Collaborateurs k = bdd.Collaborateurs.Find(c.Id);
+            if (k == null) return false;
+
+            bdd.Entry(k).CurrentValues.SetValues(c);
+            bdd.SaveChanges();
+            return true;
+        }
         /// <summary>
         /// Modify existing values for a project in the DB based on the ID
         /// </summary>
