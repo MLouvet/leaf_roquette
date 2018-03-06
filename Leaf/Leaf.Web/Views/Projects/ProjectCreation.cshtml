@@ -54,3 +54,24 @@
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
+
+$(document).ready(function () {
+         $("#Typeid").change(function () {
+             var dID = $('#Typeid option:selected').val();
+             $.getJSON("../Manage/GETSubType", { Typeid: dID },
+                    function (data) {
+                        var select = $("#subtypeid");
+                        select.empty();
+                        select.append($('<option />', {
+                            value: 0,
+                            text: "Select project sub-types"
+                        }));
+                        $.each(data, function (index, itemData) {
+                            select.append($('<option />', {
+                                value: itemData.Value,
+                                text: itemData.Text
+                            }));
+                        });
+                    });
+         });
+});

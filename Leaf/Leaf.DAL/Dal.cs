@@ -428,6 +428,8 @@ namespace Leaf.DAL
         {
             List<Tache> listPotentialSuperTache = this.GetTaskByProjects(projectId);
 
+            listPotentialSuperTache.Remove(GetTache(idCurrentTask));
+
             //Remove all the task that are currently saved as previous tasks for the idCurrentTask
             foreach(PreviousTasks pt in bdd.PreviousTasks.Where(pt => pt.Task == idCurrentTask).ToList())
             {
@@ -473,10 +475,10 @@ namespace Leaf.DAL
             {
                 currentTask = this.GetTache(currentTaskId);
                 foreach (var taskTemp in bdd.Tache.Where(t => t.IdProj == projectId
-                    && t.Id != currentTaskId
-                    && (((DateTime)t.Fin) - ((DateTime)currentTask.Debut)).Milliseconds < 0))
+                    && t.Id != currentTaskId))
                 {
-                    potentialPreviousTasks.Add(taskTemp);
+                    if((((DateTime)taskTemp.Fin) - ((DateTime)currentTask.Debut)).TotalMilliseconds < 0)
+                        potentialPreviousTasks.Add(taskTemp);
                 }
 
                 potentialPreviousTasks = RemoveMotherTasks(currentTaskId, potentialPreviousTasks, 3);
@@ -491,7 +493,22 @@ namespace Leaf.DAL
             return potentialPreviousTasks;
         }
 
+        /// <summary>
+        /// Get all the previous task related to the current taskId
+        /// </summary>
+        /// <param name="taskId">The id of the task we want to relate</param>
+        /// <returns>a list of the previous task id's</returns>
+        public List<int> GetPreviousTask(int taskId)
+        {
+            List<int> listPreviousTaskId = new List<int>();
 
+            foreach(var previousTache in bdd.PreviousTasks.Where(pt => pt.Task == taskId))
+            {
+                listPreviousTaskId.Add(previousTache.PreviousTask);
+            }
+
+            return listPreviousTaskId;
+        }
 
         /// <summary>
         /// Save all the id in the list as previous task of the current task
@@ -503,6 +520,11 @@ namespace Leaf.DAL
         {
             if(previousTasksId != null)
             {
+                foreach(var pt in bdd.PreviousTasks.Where(t => t.Task == currentTask))
+                {
+                    bdd.PreviousTasks.Remove(pt);
+                }
+
                 foreach (int taskId in previousTasksId)
                 {
                     PreviousTasks newPrevious = new PreviousTasks
@@ -567,13 +589,6 @@ namespace Leaf.DAL
                     return null;
 
                 bdd.Entry(entity).CurrentValues.SetValues(newTask);
-                
-
-                foreach(var previous in  bdd.PreviousTasks.Where(p => p.Task == newTask.Id))
-                {
-                    PreviousTasks previousEntity = bdd.PreviousTasks.Find(previous.Id);
-                    bdd.PreviousTasks.Remove(previousEntity);
-                }
 
                 SavePreviousTaskSet(previousTaskSetId, newTask.Id);
                 bdd.SaveChanges();

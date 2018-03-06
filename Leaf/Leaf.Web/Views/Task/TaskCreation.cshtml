@@ -55,7 +55,7 @@
             <!--Here comes the complex part-->
             <div>
                 <label asp-for="Depends"></label>
-                @Html.ListBoxFor(m => m.Depends, Model.ListEligiblePreviousTask, new { @id = "eligiblePreviousTaskList" })
+                @Html.ListBoxFor(m => m.Depends, this.ViewBag.Depends as MultiSelectList, new { @id = "eligiblePreviousTaskList" })
                 <span asp-validation-for="Depends" class="text-danger"></span>
             </div>
             <div>

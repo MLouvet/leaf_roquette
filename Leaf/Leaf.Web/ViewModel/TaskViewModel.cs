@@ -112,9 +112,12 @@ namespace Leaf
             get
             {
                 Tache taskTemp = new Tache();
-                return new SelectList(_EligiblePreviousTasks, nameof(taskTemp.Id), nameof(taskTemp.Nom));
+                return new MultiSelectList(_EligiblePreviousTasks, nameof(taskTemp.Id), nameof(taskTemp.Nom));
             }
         }
+        
+        [Display(Name = "Tâche précédentes: ")]
+        public List<int> DependsMod { get; set; }
 
     }
 }

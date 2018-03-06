@@ -26,18 +26,18 @@
     {
         case ClientListViewModel.StatutEnum.Admin:
         case ClientListViewModel.StatutEnum.SuperAdmin:
-            <input type="button" onclick="location.href='@Url.Action("TaskModification", "Task", new { id = Model.Task.Id })'" value="Mettre à jour la tâche" />
+            <input type="button" onclick="location.href='@Url.Action("TaskModification", "Task", new { id = Model.Task.Id, projId = Model.Task.IdProj })'" value="Mettre à jour la tâche" />
             break;
         case ClientListViewModel.StatutEnum.ChefDeProjet:
             if (@Model.IsProjectManager)
             {
-                <input type="button" onclick="location.href='@Url.Action("TaskModification", "Task", new { id = Model.Task.Id })'" value="Mettre à jour tâche" />
+                <input type="button" onclick="location.href='@Url.Action("TaskModification", "Task", new { id = Model.Task.Id, projId = Model.Task.IdProj })'" value="Mettre à jour tâche" />
             }
             break;
         case ClientListViewModel.StatutEnum.Collaborateur:
             if (@Model.IsTaskResponsible)
             {
-                <input type="button" onclick="location.href='@Url.Action("TaskModification", "Task", new { id = Model.Task.Id })'" value="Mettre à jour la tâche" />
+                <input type="button" onclick="location.href='@Url.Action("TaskModification", "Task", new { id = Model.Task.Id, projId = Model.Task.IdProj })'" value="Mettre à jour la tâche" />
             }
             break;
         default:

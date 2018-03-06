@@ -93,6 +93,8 @@ namespace Leaf.Web.Controllers
                 _superTaskList = potentialSuperTask,
             };
 
+            this.ViewBag.Depends = model.ListEligiblePreviousTask;
+
             return View("TaskCreation", model);
         }
 
@@ -101,16 +103,16 @@ namespace Leaf.Web.Controllers
         /// </summary>
         /// <param name="id">The id of the task to modify</param>
         /// <returns>the view to display</returns>
-        public IActionResult TaskModification(int? id)
+        public IActionResult TaskModification(int? id, int? projId)
         {
             Dal dal = new Dal();
             Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
             var collaborateurs = dal.GetCollaborateurs(c.Id);
 
             List<Collaborateurs> listCollaborator = dal.AllCollaborateurs;
-            List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)id, new List<int>(), -1);
+            List<Tache> listEligiblePreviousTasks = dal.GetPotentialPreviousTasks((int)projId, new List<int>(), -1, (int) id);
 
-            List<Tache> potentialSuperTask = dal.GetPotentialSuperTache((int)id, new List<int>());
+            List<Tache> potentialSuperTask = dal.GetPotentialSuperTache((int)projId, new List<int>(), (int) id);
 
             Tache taskTemp = dal.GetTache((int)id);
 
@@ -126,11 +128,22 @@ namespace Leaf.Web.Controllers
                 Progres = taskTemp.Progres,
                 IdProj = taskTemp.IdProj,
                 CollabId = taskTemp.CollabId,
-                SuperTache = (int) taskTemp.SuperTache,
+                SuperTache = taskTemp.SuperTache,
+                Depends = dal.GetPreviousTask((int) id),
                 _superTaskList = potentialSuperTask,
                 _collaboratorList = listCollaborator,
-                _EligiblePreviousTasks = listEligiblePreviousTasks
+                _EligiblePreviousTasks = listEligiblePreviousTasks,
             };
+
+            var selected = dal.GetPreviousTask((int)id);
+
+            this.ViewBag.DependsMod = new MultiSelectList(listEligiblePreviousTasks, "Id", "Nom", selected);
+            model.DependsMod = new List<int>();
+
+            foreach(var pt in selected)
+            {
+                model.DependsMod.Add(pt);
+            }
 
             return View("TaskModification", model);
         }
@@ -222,7 +235,7 @@ namespace Leaf.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public IActionResult ModifyTask(TaskViewModel model, int? projectId)
+        public IActionResult ModifyTask(TaskViewModel model, int? projectId, int? taskId)
         {
             Dal dal = new Dal();
 
@@ -247,8 +260,10 @@ namespace Leaf.Web.Controllers
 
             if (ModelState.IsValid)
             {
+
                 Tache newTask = new Leaf.DAL.ScaffoldedModels.Tache
                 {
+                    Id = (int) taskId,
                     Nom = model.TaskName,
                     Description = model.TaskDescription,
                     Debut = model.StartDate,
@@ -263,7 +278,16 @@ namespace Leaf.Web.Controllers
                 };
 
                 //Save the new task and the associated previous tasks
-                int? newTaskID = dal.ModifyTask(newTask, model.Depends);
+                List<int> previousTaskId = new List<int>();
+               if(model.DependsMod != null)
+                {
+                    foreach (var pt in model.DependsMod)
+                    {
+                        previousTaskId.Add(pt);
+                    }
+                }
+
+                int? newTaskID = dal.ModifyTask(newTask, previousTaskId);
 
                 if (newTaskID != null)
                 {
