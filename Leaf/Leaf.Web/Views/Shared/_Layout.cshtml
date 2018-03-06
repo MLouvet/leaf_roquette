@@ -43,6 +43,10 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    @if (Model?.Statut == LoginPartialViewModel.StatutEnum.Admin)
+                    {
+                        <li><a asp-area="" asp-controller="Account" asp-action="CollabList">Gerer les Collab</a></li>
+                    }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial", Model);
             </div>
