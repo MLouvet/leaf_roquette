@@ -240,8 +240,8 @@ namespace Leaf.Web.Controllers
 
         public JsonResult Data()
         {
-            IDal dal = new Dal();
-            var tasks = dal.GetProjet(pId).Tache;
+            Dal dal = new Dal();
+            var tasks = dal.GetTaskByProjects(pId);
             var dataList = new List<Tuple<int, string, DateTime, int, int, float, int?>>();
             var linkDataList = new List<Tuple<int, int, int, string>>();
 
