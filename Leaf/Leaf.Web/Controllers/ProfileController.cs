@@ -28,13 +28,20 @@ namespace Leaf.Web.Controllers
             ProfileViewModel model = new ProfileViewModel
             {
                 notifications = dal.GetNotifications(c).ToList(),
-                taches = dal.GetTaches(c).ToList()
+                taches = dal.GetTaches(c).ToList(),
+                projet = dal.GetProjets(c).ToList()
             };
 
-            /*foreach (Tache t in model.taches)
+            foreach (Tache t in model.taches)
             {
-                t.IdProjNavigation = d.GetProjet(t.IdProj);
-            }*/
+                t.IdProjNavigation = dal.GetProjet(t.IdProj);
+            }
+
+            foreach (Notification n in model.notifications)
+            {
+                if (n.IdProjet != null)
+                    n.IdProjetNavigation = dal.GetProjet((int) n.IdProjet);
+            }
 
             /*foreach (Notification n in model.notifications)
             {

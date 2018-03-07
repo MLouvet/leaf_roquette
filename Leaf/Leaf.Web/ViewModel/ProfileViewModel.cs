@@ -7,6 +7,7 @@ namespace Leaf
     public class ProfileViewModel : LoginPartialViewModel
     {
         public List<Notification> notifications;
+        public List<Projet> projet;
         public List<Tache> taches;
     }
 }

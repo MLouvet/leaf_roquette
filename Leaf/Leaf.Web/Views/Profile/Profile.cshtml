@@ -21,8 +21,8 @@
                 {
                     columns.Add(notif => notif.Message).Titled("Message").Sortable(true);
                     columns.Add(notif => notif.Horodatage).Titled("Date de réception").Sortable(true);
-                    //columns.Add(notif => notif.ProjetNavigation.Nom).Titled("Projet").Sortable(true).RenderedAs(notif=> (notif.IdProjet == null)? String.Empty : notif.ProjetNavigation.Nom);
-                    //columns.Add(notif => notif.TacheNavigation.Nom).Titled("Tâche").Sortable(true).RenderedAs(notif => (notif.IdTache == null)? String.Empty : notif.TacheNavigation.Nom);
+                    columns.Add(notif => notif.IdProjetNavigation.Nom).Titled("Projet").Sortable(true).RenderedAs(notif=> (notif.IdProjet == null)? String.Empty : notif.IdProjetNavigation.Nom);
+                    columns.Add(notif => notif.IdTacheNavigation.Nom).Titled("Tâche").Sortable(true).RenderedAs(notif => (notif.IdTacheNavigation == null)? String.Empty : notif.IdTacheNavigation.Nom);
                     columns.Add(notif => notif.Lue).Titled("Lue?").Sortable(true).RenderedAs(notif => (notif.Lue)? "Lue" : "Non-lue");
                 })
                 .Filterable()
