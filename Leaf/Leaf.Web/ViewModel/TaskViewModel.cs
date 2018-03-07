@@ -46,7 +46,7 @@ namespace Leaf
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (EndDate < StartDate)
+            if ((EndDate - StartDate).TotalMilliseconds < 0)
             {
                 yield return
                   new ValidationResult(errorMessage: "La date de début doit être avant la date de fin",

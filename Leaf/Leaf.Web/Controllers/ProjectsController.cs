@@ -101,13 +101,7 @@ namespace Leaf.Web.Controllers
         public IActionResult SaveNewProject(ProjectViewModel model)
         {
             Dal dal = new Dal();
-
-            //Verification
-            if(model.StartDate.CompareTo(model.EndDate) < 0)
-            {
-                model.ValidationErrorMessage = "La date de début est après la date de fin";
-                return View("ProjectCreation", model);
-            }
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
 
             if(ModelState.IsValid)
             {
@@ -117,7 +111,6 @@ namespace Leaf.Web.Controllers
 
                 if(result)
                 {
-                    Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
                     var returnModel = new ProjectsViewModel
                     {
                         projets = dal.GetProjets(c)
@@ -146,6 +139,10 @@ namespace Leaf.Web.Controllers
                     return View("ProjectList", returnModel);
                 }
             };
+
+            
+            model._clients = dal.GetClients(c);
+            model._projectManagerList = dal.getProjectManagers();
 
             return View("ProjectCreation", model);
         }
