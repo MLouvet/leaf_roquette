@@ -16,6 +16,7 @@ namespace Leaf.Web.Controllers
 {
     public class ProjectsController : Controller
     {
+        private static int pId = -1;
         public ProjectsController(LeafContext context)
         {
             Dal.SetBDD(context);
@@ -31,7 +32,7 @@ namespace Leaf.Web.Controllers
             {
                 projets = dal.GetProjets(c).ToList()
             };
-            foreach(var projet in model.projets)
+            foreach (var projet in model.projets)
             {
                 projet.ClientNavigation = dal.GetClient(projet.Client);
                 projet.ResponsableNavigation = dal.GetCollaborateurs(projet.Responsable);
@@ -60,6 +61,7 @@ namespace Leaf.Web.Controllers
 
             if (id.HasValue)
             {
+                pId = (int)id;
                 var model = new ProjectViewModel
                 {
                     Project = projectToDisplay,
@@ -103,19 +105,19 @@ namespace Leaf.Web.Controllers
             Dal dal = new Dal();
 
             //Verification
-            if(model.StartDate.CompareTo(model.EndDate) < 0)
+            if (model.StartDate.CompareTo(model.EndDate) < 0)
             {
                 model.ValidationErrorMessage = "La date de début est après la date de fin";
                 return View("ProjectCreation", model);
             }
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var project = new Leaf.DAL.ScaffoldedModels.Projet { Nom = model.ProjectName, Debut = model.StartDate, Echeance = model.EndDate, Client = model.ProjectClient, Responsable = model.ProjectLeader };
 
                 bool result = dal.SaveNewProject(project);
 
-                if(result)
+                if (result)
                 {
                     Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
                     var returnModel = new ProjectsViewModel
@@ -176,11 +178,11 @@ namespace Leaf.Web.Controllers
         {
             Dal dal = new Dal();
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 Projet projectTemp = new Projet();
 
-                projectTemp.Id = (int) id;
+                projectTemp.Id = (int)id;
                 projectTemp.Nom = model.ProjectName;
 
                 projectTemp.Debut = model.StartDate;
@@ -191,7 +193,7 @@ namespace Leaf.Web.Controllers
 
                 bool result = dal.ModifyProject(projectTemp);
 
-                if(result)
+                if (result)
                 {
                     Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
                     var returnModel = new ProjectsViewModel
@@ -215,5 +217,67 @@ namespace Leaf.Web.Controllers
             Dal dal = new Dal();
             return dal.IsProjectManager(HttpContext.User.Identity.Name, projectId);
         }
+
+        public JsonResult Data()
+        {
+            IDal dal = new Dal();
+            var tasks = dal.GetProjet(pId).Tache;
+            var dataList = new List<Tuple<int, string, DateTime, int, int, float, int?>>();
+            var linkDataList = new List<Tuple<int, int, int, string>>();
+
+            //building data list
+            foreach (Tache task in tasks)
+            {
+                dataList.Add(new Tuple<int, string, DateTime, int, int, float, int?>(task.Id, task.Nom,
+                    ((DateTime)task.Debut), task.ChargeEstimee, 1,
+                    (float)(task.ChargeConsommee) / (float)(task.ChargeConsommee + task.ChargeEstimeeRestante) / 100f, //consommé / (consommé + reste à faire)
+                    task.SuperTache
+                    ));
+            }
+
+            //Building links
+            foreach (Tache tache in tasks)
+            {
+                if (tache.SuperTache.HasValue)
+                {
+                    linkDataList.Add(new Tuple<int, int, int, string>(linkDataList.Count, tache.Id, (int)tache.SuperTache, "0"));
+                }
+            }
+
+
+            var jsonData = new
+            {
+                // create tasks array
+                data = (
+                    from t in dataList
+                    select new
+                    {
+                        id = t.Item1,
+                        text = t.Item2,
+                        start_date = t.Item3.ToString("u"),
+                        duration = t.Item4,
+                        order = 1,
+                        progress = t.Item6, //consommé / (consommé + reste à faire)
+                        open = true,
+                        parent = t.Item7,
+                        type = string.Empty
+                    }
+                ).ToArray(),
+                // create links array
+                links = (
+                    from l in linkDataList
+                    select new
+                    {
+                        id = l.Item1,
+                        source = l.Item2,
+                        target = l.Item3,
+                        type = l.Item4
+                    }
+                ).ToArray()
+            };
+
+            return new JsonResult(jsonData);
+        }
+
     }
 }
