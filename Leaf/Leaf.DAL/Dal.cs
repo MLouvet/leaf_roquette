@@ -356,7 +356,7 @@ namespace Leaf.DAL
             var inTemp = temp.Count;
 
             //Si c'est un admin ou un chef de projet, on retourne tous les clients
-            if (collaborateur.Statut == "ADMIN" || collaborateur.Statut == "CHEF_PROJET")
+            if (collaborateur.Statut == "SUPER_ADMIN" || collaborateur.Statut == "ADMIN" || collaborateur.Statut == "CHEF_PROJET")
             {
                 foreach (var client in bdd.Client)
                     clientList.Add(client);
