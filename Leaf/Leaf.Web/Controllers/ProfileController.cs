@@ -13,7 +13,6 @@ namespace Leaf.Web.Controllers
 {
     public class ProfileController : Controller
     {
-
         public ProfileController(LeafContext context)
         {
             Dal.SetBDD(context);
@@ -66,6 +65,21 @@ namespace Leaf.Web.Controllers
             ViewData["Message"] = "Your contact page.";
 
             return View();
+        }
+
+        public IActionResult SwitchVue(Notification notif)
+        {
+            IDal dal = new Dal();
+            if (notif.Lue) dal.UnreadNotification(notif);
+            else dal.ReadNotification(notif);
+            return RedirectToAction("Profile");
+        }
+
+        public IActionResult DeleteNotif(Notification notif)
+        {
+            IDal dal = new Dal();
+            dal.DeleteNotification(dal.GetCollaborateurs(HttpContext.User.Identity.Name), notif);
+            return RedirectToAction("Profile");
         }
 
         public IActionResult Error()

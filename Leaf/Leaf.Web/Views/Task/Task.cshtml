@@ -51,8 +51,12 @@
     <br />
     <p>Charge estimée: @Model.Task.ChargeEstimee</p>
     <p>Charge consommée: @Model.Task.ChargeConsommee</p>
-    <p>Charge estimée restante: @Model.Task.ChargeEstimeeRestante </p>
+    <p>Charge estimée restante: @Model.Task.ChargeEstimeeRestante</p>
     <p>Avancement: @Model.Task.Progres</p>
+    @if (@Model.Task.Debut != null && @Model.Task.Fin  != null)
+    {
+        <p>Dates: du @Model.Task.Debut.Value.ToString("yyyy-MM-dd") au @Model.Task.Fin.Value.ToString("yyyy-MM-dd")</p>
+    }
     <br />
 </div>
 

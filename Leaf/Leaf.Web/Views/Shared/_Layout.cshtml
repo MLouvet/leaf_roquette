@@ -43,9 +43,9 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @if (Model?.Statut == LoginPartialViewModel.StatutEnum.Admin)
-                    {
-                        <li><a asp-area="" asp-controller="Account" asp-action="CollabList">Gerer les Collab</a></li>
-                    }
+    {
+                <li><a asp-area="" asp-controller="Account" asp-action="CollabList">Gerer les Collab</a></li>
+}
                 </ul>
                 @await Html.PartialAsync("_LoginPartial", Model);
             </div>
