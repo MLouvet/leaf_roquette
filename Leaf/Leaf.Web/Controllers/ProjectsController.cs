@@ -103,6 +103,7 @@ namespace Leaf.Web.Controllers
         public IActionResult SaveNewProject(ProjectViewModel model)
         {
             Dal dal = new Dal();
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
 
             //Verification
             if (model.StartDate.CompareTo(model.EndDate) < 0)
