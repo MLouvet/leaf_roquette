@@ -75,11 +75,35 @@ namespace Leaf.Web.Controllers
             return RedirectToAction("Profile");
         }
 
-        public IActionResult DeleteNotif(Notification notif)
+        public IActionResult DeleteNotif(int notifId)
         {
             IDal dal = new Dal();
-            dal.DeleteNotification(dal.GetCollaborateurs(HttpContext.User.Identity.Name), notif);
+
+
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+            ProfileViewModel model = new ProfileViewModel
+            {
+                notifications = dal.GetNotifications(c).ToList(),
+                taches = dal.GetTaches(c).ToList(),
+                projet = dal.GetProjets(c).ToList()
+            };
+
+            foreach (Tache t in model.taches)
+            {
+                t.IdProjNavigation = dal.GetProjet(t.IdProj);
+            }
+
+            foreach (Notification n in model.notifications)
+            {
+                if (n.IdProjet != null)
+                    n.IdProjetNavigation = dal.GetProjet((int)n.IdProjet);
+                if (n.Id == notifId)
+                {
+                    dal.DeleteNotification(c, n);
+                }
+            }
             return RedirectToAction("Profile");
+
         }
 
         public IActionResult Error()
