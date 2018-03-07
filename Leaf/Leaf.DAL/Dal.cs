@@ -245,7 +245,7 @@ namespace Leaf.DAL
         /// <param name="idTacheTemp">the id of the task concerned</param>
         /// <param name="messageTemp">The message to be displayed</param>
         /// <param name="dateTimeTemp">The time the notification is added</param>
-        public void AddNotification(int destinataTemp, int idProjetTemp, int idTacheTemp, string messageTemp, DateTime dateTimeTemp)
+        public void AddNotification(int destinataTemp, int? idProjetTemp, int? idTacheTemp, string messageTemp, DateTime dateTimeTemp)
         {
             Notification newNotif = new Notification
             {

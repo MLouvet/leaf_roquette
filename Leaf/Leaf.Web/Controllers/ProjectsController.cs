@@ -127,6 +127,22 @@ namespace Leaf.Web.Controllers
                         projet.ClientNavigation = dal.GetClient(projet.Client);
                         projet.ResponsableNavigation = dal.GetCollaborateurs(projet.Responsable);
                     }
+                    if(c.Id == project.Responsable)
+                    {
+                        dal.AddNotification(project.Responsable, project.Id, null, "Votre nouveau projet a bien été créé.", DateTime.Now);
+                    }
+                    else
+                    {
+                        if (dal.IsProjectManager(c.Mail, project.Id))
+                        {
+                            dal.AddNotification(project.Responsable, project.Id, null, "Vous avez été assigné à un nouveau projet par son chef :  " + c.Prenom + " " + c.Nom + ".", DateTime.Now);
+                        }
+                        else
+                        {
+                            dal.AddNotification(project.Responsable, project.Id, null, "Vous avez été assigné à un nouveau projet par un administrateur.", DateTime.Now);
+                        }
+                    }
+
                     return View("ProjectList", returnModel);
                 }
             };

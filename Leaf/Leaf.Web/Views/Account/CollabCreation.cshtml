@@ -45,7 +45,7 @@
                     @Html.DropDownListFor(m => m.CollabStatus, Model.ListStatus)
                     <span asp-validation-for="CollabStatus" class="text-danger"></span>
                 </div>
-                <button type="submit" class="btn btn-default">Ajouter le Collaborateur</button>}
+                <button type="submit" class="btn btn-default">Ajouter le Collaborateur</button>
                 <input type="button" value="Annuler" class="btn btn-default cancel" onclick="location.href='@Url.Action("CollabList", "Account", null)'" />
             </form>
         }

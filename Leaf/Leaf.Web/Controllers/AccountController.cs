@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -472,7 +473,7 @@ namespace Leaf.Web.Controllers
         {
             Dal dal = new Dal();
             var p = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
-            if (p.Statut == "SUPERADMIN")
+            if (p.Statut == "SUPER_ADMIN")
             {
                 var modlist = new CollaborateursViewModel { Collaborateurs = dal.AllCollaborateurs };
                 return View("CollabList", modlist);
@@ -493,6 +494,7 @@ namespace Leaf.Web.Controllers
                 IsSuperAdmin = dal.IsSuperAdmin(HttpContext.User.Identity.Name),
                 isMod = false,
             };
+            
             return View("CollabCreation",model);
         }
 
@@ -570,6 +572,8 @@ namespace Leaf.Web.Controllers
             bool saved = dal.MakeNewCollab(nCollab);
             if (saved)
             {
+
+                dal.AddNotification(nCollab.Id, null, null, "Bienvenue sur Leaf ! N'hésitez pas à contacter un administrateur en cas de problèmes ou si vous avez des questions", DateTime.Now);
                 if (model.Statut == ViewModel.LoginPartialViewModel.StatutEnum.SuperAdmin)
                 {
                     var modlist = new CollaborateursViewModel { Collaborateurs = dal.AllCollaborateurs };
