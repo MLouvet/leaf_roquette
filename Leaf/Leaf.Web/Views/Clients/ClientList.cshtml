@@ -24,7 +24,7 @@
         .Grid(Model.clients)
         .Build(columns =>
         {
-            columns.Add(client => client.Nom).Titled("Client").RenderedAs(client => Html.ActionLink(client.Compagnie, "Client", "Clients", new { client.Id })).Sortable(true);
+            columns.Add(client => client.Nom).Titled("Client").RenderedAs(client => Html.ActionLink(client.Compagnie, "Profile", "Profile", new { client.Id })).Sortable(true);
         })
         .Filterable()
         .Sortable()

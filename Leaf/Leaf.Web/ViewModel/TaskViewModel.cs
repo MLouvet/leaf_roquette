@@ -44,6 +44,16 @@ namespace Leaf
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime EndDate { get; set; }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if ((EndDate - StartDate).TotalMilliseconds < 0)
+            {
+                yield return
+                  new ValidationResult(errorMessage: "La date de début doit être avant la date de fin",
+                                       memberNames: new[] { "EndDate" });
+            }
+        }
+
         [Required(ErrorMessage = "Une charge estimée est requise")]
         [Display(Name = "Charge estimée: *")]
         public int ChargeEstimee { get; set; }

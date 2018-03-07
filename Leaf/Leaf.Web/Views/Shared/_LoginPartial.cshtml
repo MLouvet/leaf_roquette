@@ -10,6 +10,13 @@
 {
     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
+            @switch (Model.Statut)
+            {
+                case LoginPartialViewModel.StatutEnum.Admin:
+                case LoginPartialViewModel.StatutEnum.SuperAdmin:
+                    <li><a asp-area="" asp-controller="Account" asp-action="CollabList">Gestion des utilisateurs</a></li>
+                    break;
+            }
             <li><a asp-area="" asp-controller="Clients" asp-action="ClientList">Clients</a></li>
             <li><a asp-area="" asp-controller="Projects" asp-action="ProjectList">Projets</a></li>
             <li><a asp-area="" asp-controller="Profile" asp-action="Profile">Notifications</a></li>

@@ -37,7 +37,17 @@ namespace Leaf
         [Display(Name = "Date de fin du projet: *")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime EndDate { get; set; }
-        
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if ((EndDate - StartDate).TotalMilliseconds < 0)
+            {
+                yield return
+                  new ValidationResult(errorMessage: "La date de début doit être avant la date de fin",
+                                       memberNames: new[] { "EndDate" });
+            }
+        }
+
         [Required(ErrorMessage = "Un chef de projet associé est requis")]
         [Display(Name = "Chef de projet: *")]
         public int ProjectLeader { get; set; }
