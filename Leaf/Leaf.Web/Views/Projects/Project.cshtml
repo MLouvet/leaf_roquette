@@ -38,7 +38,7 @@
 <br />
 <div>
     <input type="button" onclick="location.href = '@Url.Action("Taskcreation", "Task", new {id = Model.Project.Id})'" value="Ajouter une tâche" />
-    @*<br />
+    <br />
         <h4>Liste des tâches du projet</h4>
         <div>
             @(Html
@@ -54,7 +54,7 @@
                           .Pageable()
                           .Empty("Aucune tâche à afficher")
             )
-        </div>*@
+        </div>
 </div>
 <div id="ganttContainer" style="width: 100%; height: 600px;"></div>
 

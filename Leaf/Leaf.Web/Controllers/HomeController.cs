@@ -56,7 +56,7 @@ namespace Leaf.Web.Controllers
 
                 Statut = status,
                 displayName = collaborateurs.Prenom + " " + collaborateurs.Nom,
-                notifications = dal.GetRecentNotifications(collaborateurs, 3),
+                notifications = dal.GetRecentNotifications(collaborateurs, 5),
                 taches = dal.GetTaches(collaborateurs)
             };
 
