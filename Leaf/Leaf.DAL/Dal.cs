@@ -238,6 +238,30 @@ namespace Leaf.DAL
         public List<Collaborateurs> AllCollaborateurs => bdd.Collaborateurs.ToList();
 
         /// <summary>
+        /// Create and add a new notification to the bdd
+        /// </summary>
+        /// <param name="destinataTemp">The id of the collaborator</param>
+        /// <param name="idProjetTemp">the id of the project which is concerned by the notification</param>
+        /// <param name="idTacheTemp">the id of the task concerned</param>
+        /// <param name="messageTemp">The message to be displayed</param>
+        /// <param name="dateTimeTemp">The time the notification is added</param>
+        public void AddNotification(int destinataTemp, int idProjetTemp, int idTacheTemp, string messageTemp, DateTime dateTimeTemp)
+        {
+            Notification newNotif = new Notification
+            {
+                Destinataire = destinataTemp,
+                IdProjet = idProjetTemp,
+                IdTache = idTacheTemp,
+                Lue = false,
+                Message = messageTemp,
+                Horodatage = dateTimeTemp
+            };
+
+            bdd.Notification.Add(newNotif);
+            bdd.SaveChanges();
+        }
+
+        /// <summary>
         /// Get all notifications for a collaborator
         /// </summary>
         /// <param name="c">The collaborator to consider</param>
@@ -589,7 +613,7 @@ namespace Leaf.DAL
                 bdd.SaveChanges();
 
                 SavePreviousTaskSet(previousTaskSetId, newTask.Id);
-
+                this.AddNotification(newTask.CollabId, newTask.IdProj, newTask.Id, "This task has been created and assigned to you.", DateTime.Now);
                 return newTask.Id;
             }
 
@@ -615,6 +639,9 @@ namespace Leaf.DAL
 
                 SavePreviousTaskSet(previousTaskSetId, newTask.Id);
                 bdd.SaveChanges();
+
+                this.AddNotification(newTask.CollabId, newTask.IdProj, newTask.Id, "The task has been modified", DateTime.Now);
+
                 return newTask.Id;
             }
 
