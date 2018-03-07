@@ -25,6 +25,8 @@
 
     <script src="~/lib/jquery-ui-combined/jquery-ui-1.12.1.js" type="text/javascript"></script>
     <script src="~/js/DatePickerReady.js" type="text/javascript"></script>
+    <script src="~/lib/dhtmlx.gantt/5.1.0/content/Scripts/dhtmlxgantt/dhtmlxgantt.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="~/lib/dhtmlx.gantt/5.1.0/content/Content/dhtmlxgantt/dhtmlxgantt_meadow.css" type="text/css" /> 
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -41,12 +43,14 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <!--
+    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+    -->
                     @if (Model?.Statut == LoginPartialViewModel.StatutEnum.Admin)
-                    {
-                        <li><a asp-area="" asp-controller="Account" asp-action="CollabList">Gerer les Collab</a></li>
-                    }
+    {
+                <li><a asp-area="" asp-controller="Account" asp-action="CollabList">Gerer les Collab</a></li>
+}
                 </ul>
                 @await Html.PartialAsync("_LoginPartial", Model);
             </div>
@@ -56,6 +60,7 @@
         @RenderBody()
         <hr />
         <footer>
+            <!--
             <p>
                 &copy; 2018 - Leaf - <a href="#"> À propos</a>
                 @if (User.Identity.IsAuthenticated)
@@ -64,6 +69,11 @@
                 }
                 else
                 {<a href="#" style="float:right">Signaler un problème - "Not logged"</a>}
+            </p>
+            -->
+            <p>
+                &copy; 2018 — Leaf
+                <div style="float:right">Polytech — ɥɔǝʇʎloԀ</div>
             </p>
         </footer>
     </div>

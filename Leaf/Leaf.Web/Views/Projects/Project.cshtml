@@ -37,23 +37,60 @@
 
 <br />
 <div>
-    <input type="button" onclick="location.href='@Url.Action("Taskcreation", "Task", new { id = Model.Project.Id })'" value="Ajouter une tâche" />
-    <br />
-    <h4>Liste des tâches du projet</h4>
-    <div>
-        @(Html
-        .Grid(Model.Project.Tache)
-        .Build(columns =>
-        {
-            columns.Add(tache => tache.Nom).Titled("Tâche").RenderedAs(tache => Html.ActionLink(tache.Nom, "Task", "Task", new { tache.Id })).Sortable(true);
-            columns.Add(tache => tache.Debut.Value.ToShortDateString()).Titled("Date de début").Sortable(true);
-            columns.Add(tache => tache.Fin.Value.ToShortDateString()).Titled("Date de fin").Sortable(true);
-        })
-        .Filterable()
-        .Sortable()
-        .Pageable()
-        .Empty("Aucune tâche à afficher")
-        )
-    </div>
+    <input type="button" onclick="location.href = '@Url.Action("Taskcreation", "Task", new {id = Model.Project.Id})'" value="Ajouter une tâche" />
+    @*<br />
+        <h4>Liste des tâches du projet</h4>
+        <div>
+            @(Html
+                          .Grid(Model.Project.Tache)
+                          .Build(columns =>
+                          {
+                              columns.Add(tache => tache.Nom).Titled("Tâche").RenderedAs(tache => Html.ActionLink(tache.Nom, "Task", "Task", new { tache.Id })).Sortable(true);
+                              columns.Add(tache => tache.Debut.Value.ToShortDateString()).Titled("Date de début").Sortable(true);
+                              columns.Add(tache => tache.Fin.Value.ToShortDateString()).Titled("Date de fin").Sortable(true);
+                          })
+                          .Filterable()
+                          .Sortable()
+                          .Pageable()
+                          .Empty("Aucune tâche à afficher")
+            )
+        </div>*@
 </div>
+<div id="ganttContainer" style="width: 100%; height: 600px;"></div>
 
+@section Scripts{
+
+    <script>
+        (function () {
+            // add month scale
+            gantt.config.scale_unit = "month";
+            gantt.config.step = 1;
+            gantt.templates.date_scale = function (date) {
+                var dateToStr = gantt.date.date_to_str("%d %M");
+                var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
+                return dateToStr(date) + " - " + dateToStr(endDate);
+            };
+            gantt.config.subscales = [
+                { unit: "day", step: 1, date: "%D" }
+            ];
+            gantt.config.scale_height = 50;
+
+            // configure milestone description
+            gantt.templates.rightside_text = function (start, end, task) {
+                if (task.type == gantt.config.types.milestone) {
+                    return task.text;
+                }
+                return "";
+            };
+            // add section to type selection: task, project or milestone
+            gantt.config.lightbox.sections = [
+                { name: "description", height: 70, map_to: "text", type: "textarea", focus: true },
+                { name: "type", type: "typeselect", map_to: "type" },
+                { name: "time", height: 72, type: "duration", map_to: "auto" }
+            ];
+
+            gantt.config.xml_date = "%Y-%m-%d %H:%i:%s"; // format of dates in XML
+            gantt.load("/Projects/Data", "json");
+            gantt.init("ganttContainer"); // initialize gantt
+        })();
+    </script>}
