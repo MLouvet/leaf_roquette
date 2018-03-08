@@ -67,19 +67,69 @@ namespace Leaf.Web.Controllers
             return View();
         }
 
-        public IActionResult SwitchVue(Notification notif)
+        /// <summary>
+        /// Switch vue to nonvu and reverse
+        /// </summary>
+        /// <param name="notifTemp"></param>
+        /// <returns></returns>
+        public IActionResult SwitchVue(int? notifTemp)
         {
-            IDal dal = new Dal();
+            Dal dal = new Dal();
+            Notification notif = dal.GetNotification((int) notifTemp);
             if (notif.Lue) dal.UnreadNotification(notif);
             else dal.ReadNotification(notif);
-            return RedirectToAction("Profile");
+
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+            ProfileViewModel model = new ProfileViewModel
+            {
+                notifications = dal.GetNotifications(c).ToList(),
+                taches = dal.GetTaches(c).ToList(),
+                projet = dal.GetProjets(c).ToList()
+            };
+
+            foreach (Tache t in model.taches)
+            {
+                t.IdProjNavigation = dal.GetProjet(t.IdProj);
+            }
+
+            foreach (Notification n in model.notifications)
+            {
+                if (n.IdProjet != null)
+                    n.IdProjetNavigation = dal.GetProjet((int)n.IdProjet);
+            }
+            return View("Profile", model);
         }
 
-        public IActionResult DeleteNotif(Notification notif)
+        /// <summary>
+        /// Delete a notification from the list and from the BDD
+        /// </summary>
+        /// <param name="notifTemp">The id of the notif to delete</param>
+        /// <returns>the new view to diplay</returns>
+        public IActionResult DeleteNotif(int? notifTemp)
         {
-            IDal dal = new Dal();
-            dal.DeleteNotification(dal.GetCollaborateurs(HttpContext.User.Identity.Name), notif);
-            return RedirectToAction("Profile");
+            Dal dal = new Dal();
+            if(notifTemp != null)
+                dal.DeleteNotification(dal.GetCollaborateurs(HttpContext.User.Identity.Name), dal.GetNotification((int)notifTemp));
+
+            Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
+            ProfileViewModel model = new ProfileViewModel
+            {
+                notifications = dal.GetNotifications(c).ToList(),
+                taches = dal.GetTaches(c).ToList(),
+                projet = dal.GetProjets(c).ToList()
+            };
+
+            foreach (Tache t in model.taches)
+            {
+                t.IdProjNavigation = dal.GetProjet(t.IdProj);
+            }
+
+            foreach (Notification n in model.notifications)
+            {
+                if (n.IdProjet != null)
+                    n.IdProjetNavigation = dal.GetProjet((int)n.IdProjet);
+            }
+            return View("Profile", model);
         }
 
         public IActionResult Error()

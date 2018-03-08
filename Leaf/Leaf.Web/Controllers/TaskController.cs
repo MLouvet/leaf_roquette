@@ -314,6 +314,7 @@ namespace Leaf.Web.Controllers
 
                     if(c.Id == newTask.CollabId)
                     {
+                        newTask.IdProjNavigation = dal.GetProjet(newTask.IdProj);
                         dal.AddNotification(newTask.IdProjNavigation.Responsable, newTask.IdProj, newTaskID, c.Prenom + " " + c.Nom + "a mis à jour une de ses tâches.", DateTime.Now);
                     }
                     else if (IsProjectManagerTemp)

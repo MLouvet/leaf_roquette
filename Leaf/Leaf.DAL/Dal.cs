@@ -61,7 +61,8 @@ namespace Leaf.DAL
             if (c == null || !c.Notification.Contains(n))
                 return false;
 
-            c.Notification.Remove(n);
+
+            bdd.Notification.Remove(n);
             bdd.SaveChanges();
             return true;
         }
@@ -212,6 +213,9 @@ namespace Leaf.DAL
         public void ReadNotification(Notification n)
         {
             n.Lue = true;
+            Notification entry = bdd.Notification.Find(n.Id);
+
+            bdd.Entry(entry).CurrentValues.SetValues(n);
             bdd.SaveChanges();
         }
 
@@ -222,6 +226,9 @@ namespace Leaf.DAL
         public void UnreadNotification(Notification n)
         {
             n.Lue = false;
+            Notification entry = bdd.Notification.Find(n.Id);
+
+            bdd.Entry(entry).CurrentValues.SetValues(n);
             bdd.SaveChanges();
         }
 
@@ -271,6 +278,16 @@ namespace Leaf.DAL
             if (c == null)
                 return new List<Notification>();
             return bdd.Notification.Where(n => n.DestinataireNavigation.Id == c.Id).ToList();
+        }
+
+        /// <summary>
+        /// Get a notification  by it's id
+        /// </summary>
+        /// <param name="id">The id of the notification to get</param>
+        /// <returns>a notification</returns>
+        public Notification GetNotification(int id)
+        {
+            return bdd.Notification.Where(n => n.Id == id).SingleOrDefault();
         }
 
         /// <summary>
