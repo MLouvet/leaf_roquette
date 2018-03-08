@@ -216,12 +216,13 @@ namespace Leaf.Web.Controllers
                         IsProjectManager = IsProjectManagerTemp
                     };
 
+                    /*
                     dal.AddNotification(newTask.CollabId, newTask.IdProj, newTaskID, "Une nouvelle tâche vous a été attribuée.", DateTime.Now);
                     if (!IsProjectManagerTemp)
                     {
                         dal.AddNotification(newTask.IdProjNavigation.Responsable, newTask.IdProj, newTaskID, "Une nouvelle tâche a été attribuée à un de vos projet.", DateTime.Now);
                     }
-
+                    */
                     return View("../Projects/Project", project);
                 }
 
@@ -267,6 +268,11 @@ namespace Leaf.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                if (model.StartDate == null)
+                    model.StartDate = (DateTime) dal.GetTache((int)taskId).Debut;
+
+                if (model.EndDate == null)
+                    model.EndDate = (DateTime)dal.GetTache((int)taskId).Fin;
 
                 Tache newTask = new Leaf.DAL.ScaffoldedModels.Tache
                 {
@@ -311,7 +317,7 @@ namespace Leaf.Web.Controllers
                         Project = projectToDisplay,
                         IsProjectManager = IsProjectManagerTemp
                     };
-
+                    /*
                     if(c.Id == newTask.CollabId)
                     {
                         newTask.IdProjNavigation = dal.GetProjet(newTask.IdProj);
@@ -325,7 +331,7 @@ namespace Leaf.Web.Controllers
                     {
                         dal.AddNotification(newTask.CollabId, newTask.IdProj, newTaskID, "Une de vos tâche a été modifiée par l'administrateur.", DateTime.Now);
                     }
-
+                    */
                     return View("../Projects/Project", project);
                 }
 

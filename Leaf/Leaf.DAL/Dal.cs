@@ -630,7 +630,7 @@ namespace Leaf.DAL
                 bdd.SaveChanges();
 
                 SavePreviousTaskSet(previousTaskSetId, newTask.Id);
-                this.AddNotification(newTask.CollabId, newTask.IdProj, newTask.Id, "This task has been created and assigned to you.", DateTime.Now);
+                this.AddNotification(newTask.CollabId, newTask.IdProj, newTask.Id, "Une tâche a été créée et vous a été assignée", DateTime.Now);
                 return newTask.Id;
             }
 
@@ -657,7 +657,8 @@ namespace Leaf.DAL
                 SavePreviousTaskSet(previousTaskSetId, newTask.Id);
                 bdd.SaveChanges();
 
-                this.AddNotification(newTask.CollabId, newTask.IdProj, newTask.Id, "The task has been modified", DateTime.Now);
+                this.AddNotification(newTask.CollabId, newTask.IdProj, newTask.Id, "La tache a été modifiée", DateTime.Now);
+                this.AddNotification(this.GetProjet(this.GetTache(newTask.Id).IdProj).Responsable, newTask.IdProj, newTask.Id, "La tache a été modifiée", DateTime.Now);
 
                 return newTask.Id;
             }
