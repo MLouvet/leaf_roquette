@@ -105,13 +105,6 @@ namespace Leaf.Web.Controllers
             Dal dal = new Dal();
             Collaborateurs c = dal.GetCollaborateurs(HttpContext.User.Identity.Name);
 
-            //Verification
-            if (model.StartDate.CompareTo(model.EndDate) < 0)
-            {
-                model.ValidationErrorMessage = "La date de début est après la date de fin";
-                return View("ProjectCreation", model);
-            }
-
             if (ModelState.IsValid)
             {
                 var project = new Leaf.DAL.ScaffoldedModels.Projet { Nom = model.ProjectName, Debut = model.StartDate, Echeance = model.EndDate, Client = model.ProjectClient, Responsable = model.ProjectLeader };
